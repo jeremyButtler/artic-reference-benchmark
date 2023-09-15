@@ -1,0 +1,176 @@
+set confirm off
+#break stich.c:45
+#break stichMinimapFun.c:416 if refEndUL > 29400
+#break stichMinimapFun.c:1215 if DELETEUL > 23530
+#break stichMinimapFun.c:1215 if DELETEUL > 28500
+break stichMinimapFun.c:1267
+break stichMinimapFun.c:1313
+break stichMinimapFun.c:1371
+break stichMinimapFun.c:1383
+break stichMinimapFun.c:1425
+break stichMinimapFun.c:1435
+
+define runcmd
+  run > ../../del.fa
+end
+
+runcmd
+
+# Print out a consensus for a stichAmpST struct
+define pcon
+   set $tmpST = $arg0
+   set $iBase = 0
+
+   # I want to print out this forward to back, so I need
+   # to find the first base
+   while($tmpST->lastBase != 0)
+      set $tmpST = $tmpST->lastBase
+   end
+
+   while($tmpST != 0)
+      printf "%c", $tmpST->baseC
+      set $tmpST = $tmpST->nextBase
+      set $iBase = $iBase + 1
+   end
+
+   printf "\n%i\n", $iBase
+end
+
+# Print out every base after position X
+define pconpos
+   set $tmpST = $arg0
+   set $iBase = 0
+
+   while($tmpST != 0)
+      printf "%c", $tmpST->baseC
+      set $tmpST = $tmpST->nextBase
+      set $iBase = $iBase + 1
+   end
+
+   printf "\n%i\n", $iBase
+end
+
+
+# Find how far way deep the stichAmpST is from the end
+define poverlap
+   set $tmpST = $arg0
+   set $iBase = 0
+
+   # I want to print out this forward to back, so I need
+   # to find the first base
+   while($tmpST != 0)
+      printf "%c", $tmpST->baseC
+      set $tmpST = $tmpST->nextBase
+      set $iBase = $iBase + 1
+   end
+
+   printf "\n%i\n", $iBase
+end
+
+
+# Print number of gaps/snps/matches in alignment
+define sumaln
+   set $alnStr = $arg0
+   set $noBaseI = 0
+   set $softMaskI = 0
+   set $gapsI = 0
+   set $snpsI = 0
+   set $matchesI = 0
+
+   # Get of leading zeros
+   while(*$alnStr == 0)
+      set $alnStr = $alnStr + 1
+   end
+
+   # Count till end of alignment
+   while(*$alnStr != 0)
+      if *$alnStr == 0
+         set $noBaseI = $noBaseI + 1
+      end
+
+      if *$alnStr == 1
+         set $softMaskI = $softMaskI + 1
+      end
+
+      if *$alnStr == 2
+         set $gapsI = $gapsI + 1
+      end
+
+      if *$alnStr == 3
+         set $snpsI = $snpsI + 1
+      end
+
+      if *$alnStr == 4
+         set $matchesI = $matchesI + 1
+      end
+
+      set $alnStr = $alnStr + 1
+   end
+
+   printf "noBase:  %i\n", $noBaseI
+   printf "sMasks:  %i\n", $softMaskI
+   printf "gaps:    %i\n", $gapsI
+   printf "snps:    %i\n", $snpsI
+   printf "matches: %i\n", $matchesI
+
+   set $totalI = $noBaseI + $softMaskI + $gapsI
+   set $totalI = $totalI + $snpsI + $matchesI
+
+   printf "total:   %i\n", $totalI
+end
+     
+
+# Print out the hirschberg reverse and forward score rows
+define pscores
+  printf "%3li", forwardIndelColL
+  set $iIndex = 0
+
+  while($iIndex < refLenUL)
+    printf " %3li", *(forwardScoreRowL +refStartUL+$iIndex)
+    set $iIndex = $iIndex + 1
+  end
+
+  printf "\n"
+  set $iIndex = 0
+ 
+  while($iIndex < refLenUL)
+    printf "%3li ", *(reverseScoreRowL +refStartUL+$iIndex)
+    set $iIndex = $iIndex + 1
+  end
+
+  printf "%3li\n", reverseIndelColL
+
+  set $iIndex = 0
+  set $sumI =  *(reverseScoreRowL + refStartUL)
+  set $sumI = $sumI + forwardIndelColL
+
+  printf "%3li ", $sumI
+
+  while($iIndex < refLenUL - 1)
+    set $sumI = *(forwardScoreRowL + refStartUL +$iIndex)
+    set $iIndex = $iIndex + 1
+
+    set $sumI=$sumI+*(reverseScoreRowL+refStartUL+$iIndex)
+    printf "%3li ", $sumI
+  end
+
+  set $sumI =  *(forwardScoreRowL + refLenUL - 1)
+  set $sumI = $sumI + reverseIndelColL
+
+  printf "%3li\n", $sumI
+end
+
+# Quick function to get length of a string
+define lenstr
+  set $tmpStr = $arg0
+  set $lenI = 0
+
+  while(*$tmpStr != '\0')
+    set $tmpStr = $tmpStr + 1
+    set $lenI = $lenI + 1
+  end
+
+  p $lenI
+end
+
+#break hirschberg.c:464 if midPointUI - 1 + refOffsetUI < refOffsetUI
