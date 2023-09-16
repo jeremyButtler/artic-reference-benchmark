@@ -712,16 +712,15 @@ while [[ "$repI" -gt 0 ]]; do
          for iPercMut in ${percMutAryI[*]}; do
          # Loop: though mutating the references
             conPrefStr="$prefixStr-rep$repI-Depth$iDepth";
-            conPrefStr="$conPrefStr-$percMut$IpercMut";
+            conPrefStr="$conPrefStr-percMut$IpercMut";
             conPrefStr="$conPrefStr-$schemeStr-V$strVer";
 
-            numMutateI="$(((iPerMut * lenSeqI) / 10000))";
+            numMutateI="$(((iPercMut * lenSeqI) / 10000))";
               # allowing for 0.01% to be used
             mv "$refStr" "$backUpRefStr" || exit;
-
             trueRefStr="$backUpRefStr";
 
-            if [[ "$percMutateI" -gt 0 ]]; then
+            if [[ "$iPercMut" -gt 0 ]]; then
             # If I am mutated the reference sequence
                "$scriptDirStr/mutateSeq.sh" \
                   -seq "$backUpRefStr" \

@@ -636,6 +636,13 @@ rm "07-artic-1st-bench/07-artic-1st-bench"*.fasta;
 The stats will be output to
    07-artic-1st-bench/07-artic-1st-bench-stats.tsv.
 
+I did some quick filtering to remove failures
+`awk '{if($0~/Com/){getline; next;}; print $0}' stats.tsv`.
+
+I also had to remove one really odd early entry. The output
+   file was saved as
+   07-artic-1st-bench/07-artic-1st-bench-stats-filter.tsv.
+
 # Testing bulidCon (08-buildCon)
 
 **This section is me muddling around to get things working.
