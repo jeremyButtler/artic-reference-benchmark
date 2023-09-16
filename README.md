@@ -7,6 +7,32 @@ The goal of this repository is to see how a poor choice in
 We are also comparing the accuracy of artic to the accuracy
   of LILO, which does not do reference based polishing.
 
+# License
+
+This repository is under a dual license consisting of the
+  CC-0 or MIT license. Take your pick of the one you prefer
+  to work with.
+
+The code in 00-programs and 00-scripts is my own and so,
+  are under the dual license.
+However, the code downloaded with the makefile in
+  00-programs (LILO and Porechop) are not my own and so,
+  are not covered by the any license.
+You can remove all complied programs and downloaded code
+  with `cd 00-programs && make removeall`.
+
+# Extra steps
+
+LILO can be installed with the make file in 00-programs
+  `cd 00-programs && make`.
+This build will call sudo and require you to enter a
+  password (for porechop, required by LILO).
+
+You will need to install the artic pipeline (by conda) and
+  minimap2 on your own.
+I should add these to the Makefile at some point, but will
+  probably never bother to.
+
 # Methods:
 
 These are very rough, but should give you an idea of what I
