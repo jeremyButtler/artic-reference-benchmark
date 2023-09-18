@@ -21,6 +21,7 @@ minDepthI=20; # Min bin depth to build consensus
 threadsI=3;
 medakaModelStr="r941_prom_high_g344"; # Model for medaka
 useMedakaBl=1;   # 0 is do not use medaka
+noMajCon=0;    # disable majcon step
 
 scriptDirStr="$(dirname "$0" | sed 's/^\.\///;')";
 prefStr="";         # Temporary prefix
@@ -67,6 +68,10 @@ Input:
    -use-medaka: [Yes]
      o Use medaka with buildCon
      o This is disabled by -disable-medaka
+   -disable-majcon: [No]
+     o Disables the majority consensus step
+     o Enables medaka
+     o Can be disabled with -use-majcon
    -t: [$threadsI]
      o Number of threads to use
 Output:
@@ -106,6 +111,8 @@ while [[ $# -gt 0 ]]; do
       -model) medakaModelStr="$2"; useMedakaBl=1; shift;;
       -use-medaka) useMedakaBl=1;;
       -disable-medaka) useMedakaBl=0;;
+      -disable-majcon) noMajCon=0;;
+      -use-majcon) noMajCon=1; useMedakaBl=1;;
       -t) threadsI="$2"; shift;;
       -threads) threadsI="$2"; shift;;
       -h) printf "%s\n" "$helpStr"; exit;;
@@ -208,6 +215,10 @@ if [[ "$useMedakaBl" -eq 1 ]]; then
 else
    extraOptions="-threads $threadsI";
 fi # Check if using medaka
+
+if [[ "$noMajCon" -gt 1 ]]; then
+   extraOptions="$extraOptions -disable-majority-consensus";
+fi  # Check if disabling majcon
 
 ampStatsFileStr="$inPrefStr-amp-stats.tsv";
 

@@ -21,6 +21,9 @@ After this you will need to install the artic pipeline and
 
 # Getting data (01-input)
 
+Go to JUMP-RETRY (at bottom) to see how you might do this.
+  I acidently wiped the data and had to redownload it.
+
 ## Download the data (01)
 
 I download twist (a synthetic SARS-CoV 2 sequence) from
@@ -109,6 +112,7 @@ mv \
    -fastq 01-input/01-SRR21813677-all-twist.fq \
    -out 01-input/01-SRR21813677-twist.fq;
 ```
+
 
 ## Find the list of Medaka models (01)
 
@@ -903,3 +907,46 @@ bash 00-scripts/benchAll.sh \
     -prefix 09-benchmark/09-benchAll\
     -rep 5;
 ```
+
+# Redownload data and rerun (JUMP-RETRY)
+
+On Sep, 15th 2023 I had to redownloaad the data. This time
+  I did it correctly and was able to get all the data.
+
+`prefetch SRR21813677 && fasterq-dump SRR21813677`
+
+I removed the prefetch download to save some space.
+
+`rm -r SRR21813677`
+
+`mv SRR21813677.fastq 01-input/01-SRR21813677.fastq`;
+
+```
+00-programs/fqGetIds \
+    -f 01-input/01-SRR21813677-ids.txt \
+    -fastq 01-input/01-SRR21813677.fastq \
+  > tmp.fq;
+
+minimap2 \
+    --eqx \
+    -a \
+    01-input/01-primer-schemes/SARS-CoV-2/V5.3.2/SARS-CoV-2.reference.fasta \
+    tmp.fq \
+  > tmp.sam;
+awk \
+    -f 00-scripts/extReadsByTbl.awk \
+    -v extTbl=04-read-table/04-buildConTbl.md \
+    -v prefix=05-amplicon-reads/05-500bp-reads \
+  < tmp.sam 
+
+rm tmp.fq;
+rm tmp.sam;
+
+# Rerunning the benchmark
+bash 00-scripts/benchAll.sh \
+   -prefix 09-benchmark/09-bench-all-2 \
+   -rep 5;
+```
+
+
+

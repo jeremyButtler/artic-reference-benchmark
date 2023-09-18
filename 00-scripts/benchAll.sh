@@ -93,6 +93,10 @@
 #  o sec-01 sub-02:
 #    - Variables unique to artic
 #  o sec-01 sub-03:
+#    - Variables unique to buildCon
+#  o sec-01 sub-04:
+#    - Booleans to disable tests
+#  o sec-01 sub-05:
 #    - Help message
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -119,7 +123,6 @@ percMutAryI=(0 100 200 500 1000);
 doNotMutateStr="06-alt-schemes/06-no-mutate-regions.tsv";
   # Regions to not mutate
 
-
 #**********************************************************
 # Sec-01 Sub-02:
 #  - Variables unique to artic
@@ -145,7 +148,18 @@ runDepthI=0;   # acutal depth running
 useMedakaBl=1;
 
 #**********************************************************
-# Sec-01 Sub-03:
+# Sec-01 Sub-04:
+#  - Booleans to disable tests
+#**********************************************************
+
+articlBl=1;     # 1: Run the artic test
+buildConMajconMedakaBl=1; # 1: run the buildCon test with medaka
+buildConMajconBl=1;  # 1: Run the buildCon test without medaka
+buildConMedakaBl=1; # 1: Run buildCon test without majcon
+liloBl=1;      # 1: Run LILO tests
+
+#**********************************************************
+# Sec-01 Sub-05:
 #  - Variables not changed by user
 #**********************************************************
 
@@ -165,8 +179,11 @@ mutantRefStatsStr=""; # Number of differences in mutant ref
 subSampDirStr=""; # Directory subsamples saved in
 trueRefStr="";
 
+testAleadyRunBl=0;
+    # This holds if the test has already been run (1)
+
 #**********************************************************
-# Sec-01 Sub-03:
+# Sec-01 Sub-06:
 #  - Help message
 #**********************************************************
 
@@ -201,6 +218,22 @@ General Input:
      o The actual seed input is seed * replicate.
    -t or -threads: [$threadsI]
      o Number of threads to use
+Disable tests:
+   -no-artic: [-artic]
+     o Disables the artic pipeline tests
+     o Artic can be enabled by -artic
+   -no-LILO: [-LILO]
+     o Disables the LILO tests
+     o LILO can be enabled with -LILO
+   -no-buildCon-majcon-medaka: [-buildCon-majcon-medaka]
+     o Disabled buildCon using majcon and Medaka test
+     o This can be enabled with -buildCon-majcon-medaka
+   -no-buildCon-majcon: [-buildCon-majcon]
+     o Disabled buildCon with only majcon test
+     o This can be enabled with -buildCon-majcon
+   -no-buildCon-medaka: [-buildCon-medaka]
+     o Disable buildCon with only Medaka test
+     o This can be enabled with -buildCon-medaka
 Artic Unique Input:
    -scheme-dir: [$schemeDirStr]
      o Directory holding your scheme for artic.
@@ -219,6 +252,14 @@ Artic Unique Input:
        - file-name.reference.fasta: The reference sequence
          o Make sure there is only one file with a
            .reference.fasta ending.
+BuidCon Input:
+   -minDepth: [$minDepthI]
+     o Min read depth to required for buld con to build a
+       consensus
+     o If amplicon read depth is beneath this, then it is
+       set to amplicon depth / 3.
+   -min-len: [$minLenI]
+     o Min length to keep reads/consensus.
 Output:
     - prefix-stats.tsv
       o Tsv file with stats from the alignment 
@@ -277,6 +318,8 @@ while [ $# -gt 0 ]; do
      -model) medakaModelStr="$2"; shift;;
      -t) threadsI="$2"; shift;;
      -threads) threadsI="$2"; shift;;
+     -minDepth) minDepthI="$2"; shift;;
+     -min-len) minLenI="$2"; shift;;
      -scheme-dir) schemeDirStr="$2"; shift;;
      -scheme) schemeStr="$2"; shift;;
      -scheme-version) 
@@ -288,6 +331,16 @@ while [ $# -gt 0 ]; do
         fi # Check if this is the first version input
         shift;; # Move to the argument ($2)
      -prefix) prefixStr="$2"; shift;;
+     -no-artic) articlBl=0;;
+     -artic) articlBl=1;;
+     -no-LILO) liloBl=0;;
+     -LILO) liloBl=1;;
+     -no-buildCon-majcon) buildConMajconBl=0;;
+     -buildCon-majcon) buildConMajconBl=1;;
+     -no-buildCon-majcon-medaka) buildConMajconMedakaBl=0;;
+     -buildCon-majcon-medaka) buildConMajconMedakaBl=1;;
+     -no-buildCon-medaka) buildConMedakaBl=0;;
+     -buildCon-medaka) buildConMedakaBl=1;;
      -h) printf "%s\n" "$helpStr"; exit;;
      --h) printf "%s\n" "$helpStr"; exit;;
      -help) printf "%s\n" "$helpStr"; exit;;
@@ -585,8 +638,10 @@ if [[ ! -f "$statsFileStr" ]]; then
       printf "\tsnp\tins\tdel\tNs";
       printf "\telpTime\tsysTime\tUserTime\tmemKb";
       printf "\tpercCPU\tseed\tusedSeed\tmedakaModel";
-      printf "\tusedMedaka\tminLen\tminDepth\tfastq";
-      printf "\tschemeDir\tscheme\tschemeVer\tprefix\n";
+      printf "\tusedMedaka\tusedMajCon\tminLen\tminDepth";
+      printf "\tfastq\tschemeDir\tscheme\tschemeVer";
+      printf "\tprefix\tconDef\tconScaffoldBuilder";
+      printf "\tconStich\n";
    } > "$statsFileStr"
 fi
 
@@ -603,7 +658,21 @@ fi
 #    - Mutate the reference
 #  o sec-04 sub-05:
 #    - Get stats for artic
-#  o sec-04 sub-0?:
+#  o sec-04 sub-06:
+#    - Get stats for buildCon
+#  o sec-04 sub-07:
+#    - Get stats for buildCon no medaka
+#  o sec-04 sub-08:
+#    - stats for buildCon just medaka (no majcon)
+#  o sec-04 sub-09:
+#    - Run LILO
+#  o sec-04 sub-10:
+#    - Get stats for fixed LILO (auto)
+#  o sec-04 sub-11:
+#    - stats for separate scaffold_builer LILO
+#  o sec-04 sub-12:
+#    - Get stats for LiloAndStich
+#  o sec-04 sub-13:
 #    - Clean up and move to next replicate
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -638,6 +707,7 @@ while [[ "$repI" -gt 0 ]]; do
       readsStr="$readsStr-rep$repI.fastq";
 
       subSampDirStr="$prefixStr-tmp-subsamples";
+      mkdir "$subSampDirStr";
 
       for strAmpFq in "$ampDirStr/"*.f*q; do
       # Loop: Subsample all amplicon fastq files
@@ -744,406 +814,621 @@ while [[ "$repI" -gt 0 ]]; do
             #  - Get stats for artic
             #**********************************************
 
-            /usr/bin/time \
-                -f "%e\t%S\t%U\t%M\t%P" \
-                -o "tmp.tsv" \
-               bash "$scriptDirStr/benchArticNoMut.sh" \
-                 -fastq "$readsStr" \
-                 -scheme-dir "$schemeDirStr" \
-                 -scheme "$schemeStr" \
-                 -scheme-version "$strVer" \
-                 -model "$medakaModelStr" \
-                 -t "$threadsI" \
-                 -prefix "$prefixStr";
+            testAlreadyRunBl="$( \
+              awk \
+                  -f "$scriptDirStr/checkIfRunTest.awk" \
+                  -v progamStr="artic" \
+                  -v depthI="$iDepth" \
+                  -v percMutI="$iPercMut" \
+                  -v seedI="$inputSeedI" \
+                  -v modelStr="$medakaModelStr" \
+                  -v usedMedakaBl="true" \
+                  -v usedMajConBl="false" \
+                  -v minDepthI="NA" \
+                  -v minLenI="NA" \
+                  -v fqDirStr="$ampDirStr" \
+                  -v schemeDirStr="$schemeDirStr" \
+                  -v schemeStr="$schemeStr" \
+                  -v verStr="$strVer" \
+                  -v prefixStr="$prefixStr" \
+                  < "$statsFileStr" \
+            )";
 
-            if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
-               statsLineStr="ERR	ERR	ERR	ERR	ERR";
-            else
-               statsLineStr="$(
-                  "$scriptDirStr/getStats.sh" \
-                      "$trueRefStr" \
-                      "$prefixStr-scaffold.fa" \
-               )";
-               rm "$prefixStr-scaffold.fa";
-            fi
+            if [[ "$articlBl" -gt 0 ]]; then
+             if [[ "$testAlreadyRunBl" -eq 0 ]]; then
+               /usr/bin/time \
+                   -f "%e\t%S\t%U\t%M\t%P" \
+                   -o "tmp.tsv" \
+                  bash "$scriptDirStr/benchArticNoMut.sh" \
+                    -fastq "$readsStr" \
+                    -scheme-dir "$schemeDirStr" \
+                    -scheme "$schemeStr" \
+                    -scheme-version "$strVer" \
+                    -model "$medakaModelStr" \
+                    -t "$threadsI" \
+                    -prefix "$prefixStr";
 
-            statsLineStr="$statsLineStr   $(\
-               cat tmp.tsv |
-                 awk \
+               if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                  statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold.fa" \
+                  )";
+                  rm "$prefixStr-scaffold.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
                      ' # Check if this command failed
-                       {  if($0 ~ /Com/)
-                          {
-                             print "NA","NA","NA","NA","NA";
-                             exit;
-                          }
-                          else print $0;
+                       {if($0 ~ /Com/)
+                        {
+                           print "NA","NA","NA","NA","NA";
+                           exit;
+                        }
+                        else print $0;
                        }
                      ' \
-            )";
-            rm "tmp.tsv";
+               )";
+               rm "tmp.tsv";
 
-            { # Print out the stats
-               printf \
-                  "artic\t%s\t%s\t%s\t%s\t%s\t%s" \
-                  "$repI" \
-                  "$iDepth" \
-                  "$numReadsI" \
-                  "$iPercMut" \
-                  "$numMutateI" \
-                  "$mutantRefStatsStr";
-               printf \
-                  "\t%s\t%s\t%s\t%s" \
-                  "$statsLineStr" \
-                  "$inputSeedI" \
-                  "$seedI" \
-                  "$medakaModelStr";
-              printf "\tNA\tNA\tNA"; # unqiue to buildCon
-              printf \
-                  "\t%s\t%s\t%s\t%s\t%s\n" \
-                  "$ampDirStr" \
-                  "$schemeDirStr" \
-                  "$schemeStr" \
-                  "$strVer" \
-                  "$prefixStr";
-            } >> "$statsFileStr" # Print out the stats
+               { # Print out the stats
+                  printf \
+                     "artic\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf "\ttrue\tfalse\tNA\tNA";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\ttrue\tfalse\tfalse\n";
+               } >> "$statsFileStr" # Print out the stats
+             fi # If I have not already run this test
+		      fi # If running artic
 
             #**********************************************
             # Sec-04 Sub-06:
             #  - Get stats for buildCon
             #**********************************************
 
-            /usr/bin/time \
-               -f "%e\t%S\t%U\t%M\t%P" \
-               -o "tmp.tsv" \
-               bash "$scriptDirStr/buildAmpCons.sh" \
-                 -fastq "$readsStr" \
-                 -ref "$refStr" \
-                 -primer-scheme "$primersStr" \
-                 -min-length "$minLenI" \
-                 -min-depth "$runDepthI" \
-                 -model "$medakaModelStr" \
-                 -t "$threadsI" \
-                 -prefix "$prefixStr";
-
-            if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
-               statsLineStr="ERR	ERR	ERR	ERR	ERR";
-            else
-               statsLineStr="$(
-                  "$scriptDirStr/getStats.sh" \
-                      "$trueRefStr" \
-                      "$prefixStr-scaffold.fa" \
-               )";
-               rm "$prefixStr-scaffold.fa";
-            fi
-
-            statsLineStr="$statsLineStr   $(\
-               cat tmp.tsv |
-                 awk \
-                     ' # Check if this command failed
-                       {  if($0 ~ /Com/)
-                          {
-                             print "NA","NA","NA","NA","NA";
-                             exit;
-                          }
-                          else print $0;
-                       }
-                     ' \
+            testAlreadyRunBl="$( \
+              awk \
+                  -f "$scriptDirStr/checkIfRunTest.awk" \
+                  -v progamStr="buildCon" \
+                  -v depthI="$iDepth" \
+                  -v percMutI="$iPercMut" \
+                  -v seedI="$inputSeedI" \
+                  -v modelStr="$medakaModelStr" \
+                  -v usedMedakaBl="true" \
+                  -v usedMajConBl="true" \
+                  -v minLenI="$minLenI" \
+                  -v minDepthI="$runDepthI" \
+                  -v fqDirStr="$ampDirStr" \
+                  -v schemeDirStr="$schemeDirStr" \
+                  -v schemeStr="$schemeStr" \
+                  -v verStr="$strVer" \
+                  -v prefixStr="$prefixStr" \
+                  < "$statsFileStr" \
             )";
 
-            rm "tmp.tsv";
-            rm "$prefixStr-amps-cons.fa";
+            if [[ "$buildConMajconMedakaBl" -gt 0 ]]; then
+             if [[ "$testAlreadyRunBl" -eq 0 ]]; then
+               /usr/bin/time \
+                  -f "%e\t%S\t%U\t%M\t%P" \
+                  -o "tmp.tsv" \
+                  bash "$scriptDirStr/buildAmpCons.sh" \
+                    -fastq "$readsStr" \
+                    -ref "$refStr" \
+                    -primer-scheme "$primersStr" \
+                    -min-length "$minLenI" \
+                    -min-depth "$runDepthI" \
+                    -model "$medakaModelStr" \
+                    -t "$threadsI" \
+                    -prefix "$prefixStr";
 
-            { # Print out the stats
-               printf \
-                  "buildCon\t%s\t%s\t%s\t%s\t%s\t%s" \
-                  "$repI" \
-                  "$iDepth" \
-                  "$numReadsI" \
-                  "$iPercMut" \
-                  "$numMutateI" \
-                  "$mutantRefStatsStr";
-               printf \
-                  "\t%s\t%s\t%s\t%s" \
-                  "$statsLineStr" \
-                  "$inputSeedI" \
-                  "$seedI" \
-                  "$medakaModelStr";
-              printf \
-                 "\t%s\t%s\t%s" \
-                 "Yes" \
-                 "$minLenI" \
-                 "$runDepthI";
-              printf \
-                  "\t%s\t%s\t%s\t%s\t%s\n" \
-                  "$ampDirStr" \
-                  "$schemeDirStr" \
-                  "$schemeStr" \
-                  "$strVer" \
-                  "$prefixStr";
-            } >> "$statsFileStr" # Print out the stats
+               if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                  statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold.fa" \
+                  )";
+                  rm "$prefixStr-scaffold.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
+                      ' # Check if this command failed
+                        {if($0 ~ /Com/)
+                         {
+                            print "NA","NA","NA","NA","NA";
+                            exit;
+                         }
+                         else print $0;
+                        }
+                      ' \
+               )";
+
+               rm "tmp.tsv";
+               rm "$prefixStr-amps-cons.fa";
+
+               { # Print out the stats
+                  printf \
+                     "buildCon\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf \
+                    "\t%s\t%s\t%s\t%s" \
+                    "true" \
+                    "true" \
+                    "$minLenI" \
+                    "$runDepthI";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\tfalse\tfalse\ttrue\n";
+               } >> "$statsFileStr" # Print out the stats
+             fi # If I have not run this test
+            fi # If testing buildCon with medaka and majcon
 
             #**********************************************
             # Sec-04 Sub-07:
-            #  - Run LILO
-            #**********************************************
-
-            /usr/bin/time \
-               -f "%e\t%S\t%U\t%M\t%P" \
-               -o "tmp.tsv" \
-               bash "$scriptDirStr/benchLILO.sh" \
-                 -fastq "$readsStr" \
-                 -ref "$refStr" \
-                 -primer-scheme "$primersStr" \
-                 -model "$medakaModelStr" \
-                 -t "$threadsI" \
-                 -prefix "$prefixStr";
-
-            #**********************************************
-            # Sec-04 Sub-08:
-            #  - Get stats for fixed LILO (auto)
-            #**********************************************
-
-            if [[ ! -f "$prefixStr-scaffold-auto.fa" ]];
-            then
-               statsLineStr="ERR	ERR	ERR	ERR	ERR";
-            else
-               statsLineStr="$(
-                  "$scriptDirStr/getStats.sh" \
-                      "$trueRefStr" \
-                      "$prefixStr-scaffold-auto.fa" \
-               )";
-               rm "$prefixStr-scaffold-auto.fa";
-            fi
-
-            statsLineStr="$statsLineStr   $(\
-               cat tmp.tsv |
-                 awk \
-                     ' # Check if this command failed
-                       {  if($0 ~ /Com/)
-                          {
-                             print "NA","NA","NA","NA","NA";
-                             exit;
-                          }
-                          else print $0;
-                       }
-                     ' \
-            )";
-
-            rm "$prefixStr-LILO-amps.fa";
-
-            { # Print out the stats
-               printf \
-                  "LiloAuto\t%s\t%s\t%s\t%s\t%s\t%s" \
-                  "$repI" \
-                  "$iDepth" \
-                  "$numReadsI" \
-                  "$iPercMut" \
-                  "$numMutateI" \
-                  "$mutantRefStatsStr";
-               printf \
-                  "\t%s\t%s\t%s\t%s" \
-                  "$statsLineStr" \
-                  "$inputSeedI" \
-                  "$seedI" \
-                  "$medakaModelStr";
-              printf "\tNA\tNA\tNA"; # buildCon only
-              printf \
-                  "\t%s\t%s\t%s\t%s\t%s\n" \
-                  "$ampDirStr" \
-                  "$schemeDirStr" \
-                  "$schemeStr" \
-                  "$strVer" \
-                  "$prefixStr";
-            } >> "$statsFileStr" # Print out the stats
-
-            #**********************************************
-            # Sec-04 Sub-09:
-            #  - stats for separate scaffold_builer LILO
-            #**********************************************
-
-            if [[ ! -f "$prefixStr-scaffold-manual.fa" ]];
-            then
-               statsLineStr="ERR	ERR	ERR	ERR	ERR";
-            else
-               statsLineStr="$(
-                  "$scriptDirStr/getStats.sh" \
-                      "$trueRefStr" \
-                      "$prefixStr-scaffold-manual.fa" \
-               )";
-               rm "$prefixStr-scaffold-manual.fa";
-            fi
-
-            statsLineStr="$statsLineStr   $(\
-               cat tmp.tsv |
-                 awk \
-                     ' # Check if this command failed
-                       {  if($0 ~ /Com/)
-                          {
-                             print "NA","NA","NA","NA","NA";
-                             exit;
-                          }
-                          else print $0;
-                       }
-                     ' \
-            )";
-
-            { # Print out the stats
-               printf \
-                  "LiloMan\t%s\t%s\t%s\t%s\t%s\t%s" \
-                  "$repI" \
-                  "$iDepth" \
-                  "$numReadsI" \
-                  "$iPercMut" \
-                  "$numMutateI" \
-                  "$mutantRefStatsStr";
-               printf \
-                  "\t%s\t%s\t%s\t%s" \
-                  "$statsLineStr" \
-                  "$inputSeedI" \
-                  "$seedI" \
-                  "$medakaModelStr";
-              printf "\tNA\tNA\tNA"; # buildCon only
-              printf \
-                  "\t%s\t%s\t%s\t%s\t%s\n" \
-                  "$ampDirStr" \
-                  "$schemeDirStr" \
-                  "$schemeStr" \
-                  "$strVer" \
-                  "$prefixStr";
-            } >> "$statsFileStr" # Print out the stats
-
-            #**********************************************
-            # Sec-04 Sub-09:
-            #  - Get stats for LiloAndStich
-            #**********************************************
-
-            if [[ ! -f "$prefixStr-scaffold-stich.fa" ]];
-            then
-               statsLineStr="ERR	ERR	ERR	ERR	ERR";
-            else
-                statsLineStr="$(
-                  "$scriptDirStr/getStats.sh" \
-                      "$trueRefStr" \
-                      "$prefixStr-scaffold-stich.fa" \
-               )";
-               rm "$prefixStr-scaffold-stich.fa";
-            fi
-
-            statsLineStr="$statsLineStr   $(\
-               cat tmp.tsv |
-                 awk \
-                     ' # Check if this command failed
-                       {  if($0 ~ /Com/)
-                          {
-                             print "NA","NA","NA","NA","NA";
-                             exit;
-                          }
-                          else print $0;
-                       }
-                     ' \
-            )";
-
-            { # Print out the stats
-               printf \
-                  "LiloAndStich\t%s\t%s\t%s\t%s\t%s\t%s" \
-                  "$repI" \
-                  "$iDepth" \
-                  "$numReadsI" \
-                  "$iPercMut" \
-                  "$numMutateI" \
-                  "$mutantRefStatsStr";
-               printf \
-                  "\t%s\t%s\t%s\t%s" \
-                  "$statsLineStr" \
-                  "$inputSeedI" \
-                  "$seedI" \
-                  "$medakaModelStr";
-              printf "\tNA\tNA\tNA"; # buildCon only
-              printf \
-                  "\t%s\t%s\t%s\t%s\t%s\n" \
-                  "$ampDirStr" \
-                  "$schemeDirStr" \
-                  "$schemeStr" \
-                  "$strVer" \
-                  "$prefixStr";
-            } >> "$statsFileStr" # Print out the stats
-
-            rm "tmp.tsv";
-
-            #**********************************************
-            # Sec-04 Sub-10:
             #  - Get stats for buildCon no medaka
             #**********************************************
 
-            /usr/bin/time \
-               -f "%e\t%S\t%U\t%M\t%P" \
-               -o "tmp.tsv" \
-               bash "$scriptDirStr/buildAmpCons.sh" \
-                 -fastq "$readsStr" \
-                 -ref "$refStr" \
-                 -primer-scheme "$primersStr" \
-                 -min-length "$minLenI" \
-                 -min-depth "$runDepthI" \
-                 -disable-medaka \
-                 -t "$threadsI" \
-                 -prefix "$prefixStr";
-
-            if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
-               statsLineStr="ERR	ERR	ERR	ERR	ERR";
-            else
-               statsLineStr="$(
-                  "$scriptDirStr/getStats.sh" \
-                      "$trueRefStr" \
-                      "$prefixStr-scaffold.fa" \
-               )";
-               rm "$prefixStr-scaffold.fa";
-            fi
-
-            statsLineStr="$statsLineStr   $(\
-               cat tmp.tsv |
-                 awk \
-                     ' # Check if this command failed
-                       {  if($0 ~ /Com/)
-                          {
-                             print "NA","NA","NA","NA","NA";
-                             exit;
-                          }
-                          else print $0;
-                       }
-                     ' \
+            testAlreadyRunBl="$( \
+              awk \
+                  -f "$scriptDirStr/checkIfRunTest.awk" \
+                  -v progamStr="buildCon" \
+                  -v depthI="$iDepth" \
+                  -v percMutI="$iPercMut" \
+                  -v seedI="$inputSeedI" \
+                  -v modelStr="$medakaModelStr" \
+                  -v usedMedakaBl="false" \
+                  -v usedMajConBl="true" \
+                  -v minLenI="$minLenI" \
+                  -v minDepthI="$runDepthI" \
+                  -v fqDirStr="$ampDirStr" \
+                  -v schemeDirStr="$schemeDirStr" \
+                  -v schemeStr="$schemeStr" \
+                  -v verStr="$strVer" \
+                  -v prefixStr="$prefixStr" \
+                  < "$statsFileStr" \
             )";
 
-            rm "tmp.tsv";
-            rm "$prefixStr-amps-cons.fa";
 
-            { # Print out the stats
-               printf \
-                  "buildCon\t%s\t%s\t%s\t%s\t%s\t%s" \
-                  "$repI" \
-                  "$iDepth" \
-                  "$numReadsI" \
-                  "$iPercMut" \
-                  "$numMutateI" \
-                  "$mutantRefStatsStr";
-               printf \
-                  "\t%s\t%s\t%s\t%s" \
-                  "$statsLineStr" \
-                  "$inputSeedI" \
-                  "$seedI" \
-                  "$medakaModelStr";
-              printf \
-                 "\t%s\t%s\t%s" \
-                 "No" \
-                 "$minLenI" \
-                 "$runDepthI";
-              printf \
-                  "\t%s\t%s\t%s\t%s\t%s\n" \
-                  "$ampDirStr" \
-                  "$schemeDirStr" \
-                  "$schemeStr" \
-                  "$strVer" \
-                  "$prefixStr";
-            } >> "$statsFileStr" # Print out the stats
+            if [[ "$buildConMajconBl" -gt 0 ]]; then
+             if [[ "$testAlreadyRunBl" -eq 0 ]]; then
+               /usr/bin/time \
+                  -f "%e\t%S\t%U\t%M\t%P" \
+                  -o "tmp.tsv" \
+                  bash "$scriptDirStr/buildAmpCons.sh" \
+                    -fastq "$readsStr" \
+                    -ref "$refStr" \
+                    -primer-scheme "$primersStr" \
+                    -min-length "$minLenI" \
+                    -min-depth "$runDepthI" \
+                    -disable-medaka \
+                    -t "$threadsI" \
+                    -prefix "$prefixStr";
+
+               if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                  statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold.fa" \
+                  )";
+                  rm "$prefixStr-scaffold.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
+                      ' # Check if this command failed
+                        {  if($0 ~ /Com/)
+                          {
+                            print "NA","NA","NA","NA","NA";
+                            exit;
+                          }
+                          else print $0;
+                        }
+                     ' \
+               )";
+
+               rm "tmp.tsv";
+               rm "$prefixStr-amps-cons.fa";
+
+               { # Print out the stats
+                  printf \
+                     "buildCon\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf \
+                    "\t%s\t%s\t%s" \
+                    "false" \
+                    "true" \
+                    "$minLenI" \
+                    "$runDepthI";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\tfalse\tfalse\ttrue\n";
+               } >> "$statsFileStr" # Print out the stats
+             fi # If I have not run this test
+            fi # If runing buildCon without medaka
+
+            #**********************************************
+            # Sec-04 Sub-08:
+            #  - stats for buildCon just medaka (no majcon)
+            #**********************************************
+
+            testAlreadyRunBl="$( \
+              awk \
+                  -f "$scriptDirStr/checkIfRunTest.awk" \
+                  -v progamStr="buildCon" \
+                  -v depthI="$iDepth" \
+                  -v percMutI="$iPercMut" \
+                  -v seedI="$inputSeedI" \
+                  -v modelStr="$medakaModelStr" \
+                  -v usedMedakaBl="true" \
+                  -v usedMajConBl="false" \
+                  -v minLenI="$minLenI" \
+                  -v minDepthI="$runDepthI" \
+                  -v fqDirStr="$ampDirStr" \
+                  -v schemeDirStr="$schemeDirStr" \
+                  -v schemeStr="$schemeStr" \
+                  -v verStr="$strVer" \
+                  -v prefixStr="$prefixStr" \
+                  < "$statsFileStr" \
+            )";
+
+            if [[ "$buildConMedakaBl" -gt 0 ]]; then
+             if [[ "$testAlreadyRunBl" -eq 0 ]]; then
+               /usr/bin/time \
+                  -f "%e\t%S\t%U\t%M\t%P" \
+                  -o "tmp.tsv" \
+                  bash "$scriptDirStr/buildAmpCons.sh" \
+                    -fastq "$readsStr" \
+                    -ref "$refStr" \
+                    -primer-scheme "$primersStr" \
+                    -min-length "$minLenI" \
+                    -min-depth "$runDepthI" \
+                    -model "$medakaModelStr" \
+                    -disable-majcon \
+                    -t "$threadsI" \
+                    -prefix "$prefixStr";
+
+               if [[ ! -f "$prefixStr-scaffold.fa" ]]; then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                  statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold.fa" \
+                  )";
+                  rm "$prefixStr-scaffold.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
+                      ' # Check if this command failed
+                        {  if($0 ~ /Com/)
+                          {
+                            print "NA","NA","NA","NA","NA";
+                            exit;
+                          }
+                          else print $0;
+                          }
+                        ' \
+               )";
+
+               rm "tmp.tsv";
+               rm "$prefixStr-amps-cons.fa";
+
+               { # Print out the stats
+                  printf \
+                     "buildCon\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf \
+                    "\t%s\t%s\t%s\t%s" \
+                    "true" \
+                    "false" \
+                    "$minLenI" \
+                    "$runDepthI";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\tfalse\tfalse\ttrue\n";
+               } >> "$statsFileStr" # Print out the stats
+             fi # If I have not run this test
+            fi # If runing buildCon with only medaka
+
+            #**********************************************
+            # Sec-04 Sub-09:
+            #  - Run LILO
+            #**********************************************
+
+            testAlreadyRunBl="$( \
+              awk \
+                  -f "$scriptDirStr/checkIfRunTest.awk" \
+                  -v progamStr="Lilo" \
+                  -v depthI="$iDepth" \
+                  -v percMutI="$iPercMut" \
+                  -v seedI="$inputSeedI" \
+                  -v modelStr="$medakaModelStr" \
+                  -v usedMedakaBl="true" \
+                  -v usedMajConBl="false" \
+                  -v minDepthI="NA" \
+                  -v minLenI="NA" \
+                  -v fqDirStr="$ampDirStr" \
+                  -v schemeDirStr="$schemeDirStr" \
+                  -v schemeStr="$schemeStr" \
+                  -v verStr="$strVer" \
+                  -v prefixStr="$prefixStr" \
+                  < "$statsFileStr" \
+            )";
+
+            if [[ "$liloBl" -gt 0 ]]; then
+             if [[ "$testAlreadyRunBl" -eq 0 ]]; then
+               /usr/bin/time \
+                  -f "%e\t%S\t%U\t%M\t%P" \
+                  -o "tmp.tsv" \
+                  bash "$scriptDirStr/benchLILO.sh" \
+                    -fastq "$readsStr" \
+                    -ref "$refStr" \
+                    -primer-scheme "$primersStr" \
+                    -model "$medakaModelStr" \
+                    -t "$threadsI" \
+                    -prefix "$prefixStr";
+
+               #*******************************************
+               # Sec-04 Sub-10:
+               #  - Get stats for fixed LILO (auto)
+               #*******************************************
+
+               if [[ ! -f "$prefixStr-scaffold-auto.fa" ]];
+               then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                  statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold-auto.fa" \
+                  )";
+                  rm "$prefixStr-scaffold-auto.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
+                      ' # Check if this command failed
+                        {if($0 ~ /Com/)
+                         {
+                            print "NA","NA","NA","NA","NA";
+                            exit;
+                         }
+                         else print $0;
+                        }
+                      ' \
+               )";
+
+               rm "$prefixStr-LILO-amps.fa";
+
+               { # Print out the stats
+                  printf \
+                     "Lilo\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf "\ttrue\tfalse\tNA\tNA";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\ttrue\tfalse\tfalse\n";
+               } >> "$statsFileStr" # Print out the stats
+
+               #*******************************************
+               # Sec-04 Sub-11:
+               #  - stats for separate scaffold_builer LILO
+               #*******************************************
+
+             if [[ ! -f "$prefixStr-scaffold-manual.fa" ]];
+               then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                  statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold-manual.fa" \
+                  )";
+                  rm "$prefixStr-scaffold-manual.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
+                      ' # Check if this command failed
+                        { if($0 ~ /Com/)
+                          {
+                            print "NA","NA","NA","NA","NA";
+                            exit;
+                          }
+                          else print $0;
+                        }
+                      ' \
+               )";
+
+               { # Print out the stats
+                  printf \
+                     "Lilo\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf "\ttrue\tfalse\tNA\tNA";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\tfalse\ttrue\tfalse\n";
+               } >> "$statsFileStr" # Print out the stats
+
+               #*******************************************
+               # Sec-04 Sub-12:
+               #  - Get stats for LiloAndStich
+               #*******************************************
+
+              if [[ ! -f "$prefixStr-scaffold-stich.fa" ]];
+               then
+                  statsLineStr="ERR	ERR	ERR	ERR	ERR";
+               else
+                   statsLineStr="$( \
+                     bash "$scriptDirStr/getStats.sh" \
+                         "$trueRefStr" \
+                         "$prefixStr-scaffold-stich.fa" \
+                  )";
+                  rm "$prefixStr-scaffold-stich.fa";
+               fi
+
+               statsLineStr="$statsLineStr   $(\
+                  cat tmp.tsv |
+                    awk \
+                        ' # Check if this command failed
+                          {  if($0 ~ /Com/)
+                             {
+                                print "NA","NA","NA","NA","NA";
+                                exit;
+                             }
+                             else print $0;
+                          }
+                        ' \
+               )";
+
+               { # Print out the stats
+                  printf \
+                   "Lilo\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "$repI" \
+                     "$iDepth" \
+                     "$numReadsI" \
+                     "$iPercMut" \
+                     "$numMutateI" \
+                     "$mutantRefStatsStr";
+                  printf \
+                     "\t%s\t%s\t%s\t%s" \
+                     "$statsLineStr" \
+                     "$seedI" \
+                     "$inputSeedI" \
+                     "$medakaModelStr";
+                 printf "\ttrue\tfalse\tNA\tNA";
+                 printf \
+                     "\t%s\t%s\t%s\t%s\t%s" \
+                     "$ampDirStr" \
+                     "$schemeDirStr" \
+                     "$schemeStr" \
+                     "$strVer" \
+                     "$prefixStr";
+                 # consensus building method
+                 printf "\tfalse\tfalse\ttrue\n";
+               } >> "$statsFileStr" # Print out the stats
+
+               rm "tmp.tsv";
+
+             fi # If I have not run this test
+            fi # If using LILO
 
             mv "$backUpRefStr" "$refStr";
          done # Loop: though mutating the references
@@ -1153,7 +1438,7 @@ while [[ "$repI" -gt 0 ]]; do
    done # Loop: though all read depths I am testing
 
    #*******************************************************
-   # Sec-04 Sub-05:
+   # Sec-04 Sub-13:
    #  - Clean up and move to next replicate
    #*******************************************************
 
