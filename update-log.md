@@ -1,6 +1,12 @@
 This is a log of updates I made. This should be short and
   I will not log changes in graphs and stats.
 
+# Sep 20th, 2023
+
+- Fixed a couple errors in stich that caused crashes.
+- I am working on adding in ivar. I hope to have this
+  update up at the end of the day
+
 # Sep 18th, 2023
 
 - Updated the benchAll.sh script to not run tests that have

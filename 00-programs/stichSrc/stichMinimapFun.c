@@ -1194,7 +1194,11 @@ char * stichAmpConToCStr(
    ^  - Allocate memory for the consensus
    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
-   conSeqStr = malloc(sizeof(char) * (lenAlnUL + 1));
+   conSeqStr = malloc(sizeof(char) * (lenAlnUL + 2));
+     /*+2 is to account for being off
+     ` Frist + 1 is for '\0' at end
+     ` Second + 1 is for lenAlnUL being index 0
+     */
    conIterStr = conSeqStr;
 
    if(conSeqStr == 0) return 0;

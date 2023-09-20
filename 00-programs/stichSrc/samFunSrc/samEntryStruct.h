@@ -595,6 +595,7 @@ static inline void processSamEntry(
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
     char *samIterUC = samEntryST->samEntryCStr;
+    unsigned int cigEntryUI = 0;
 
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
     ^ Fun-08 Sec-02:
@@ -620,7 +621,9 @@ static inline void processSamEntry(
     ^  o fun-08 sec-03 sub-01:
     ^    - Find non-sequence & q-score entries
     ^  o fun-08 sec-03 sub-02:
-    ^    - sequence length, sequence entry & q-score
+    ^    - Find sequence length from the cigar entry
+    ^  o fun-08 sec-03 sub-03:
+    ^    - Find sequence & q-score entries
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
     /*****************************************************\
@@ -658,37 +661,69 @@ static inline void processSamEntry(
 
     /*****************************************************\
     * Fun-08 Sec-03 Sub-02:
-    *  - Find sequence length, sequence entry & q-score
+    *  - Find sequence length from the cigar entry
     \*****************************************************/
 
+     samEntryST->unTrimReadLenUInt = 0;
+
+     while(*samIterUC > 32)
+     { /*Loop: Get the stats from the cigar entry*/
+        samIterUC = cStrToUInt(samIterUC, &cigEntryUI);
+
+        switch(*samIterUC)
+        { /*Switch: Count number of cigar entries*/
+           case '=':
+           case 'M':
+           case '\t':
+              samEntryST->unTrimReadLenUInt += cigEntryUI;
+              samEntryST->numMatchUInt += cigEntryUI;
+              break;
+           case 'X':
+              samEntryST->unTrimReadLenUInt += cigEntryUI;
+              samEntryST->numSNPUInt += cigEntryUI;
+              break;
+           case 'I':
+              samEntryST->unTrimReadLenUInt += cigEntryUI;
+              samEntryST->numInsUInt += cigEntryUI;
+              break;
+           case 'D':
+              samEntryST->numDelUInt += cigEntryUI;
+              break;
+           case 'S':
+              samEntryST->unTrimReadLenUInt += cigEntryUI;
+              break;
+           default: break;
+        } /*Switch: Count number of cigar entries*/
+
+        cigEntryUI = 0;
+        ++samIterUC; /*Get off entry character type*/
+     } /*Loop: Get the stats from the cigar entry*/
+
+     samEntryST->readLenUInt=samEntryST->unTrimReadLenUInt;
+     ++samIterUC; /*Get off the tab*/
+
+    /*****************************************************\
+    * Fun-08 Sec-03 Sub-02:
+    *  - Find sequence & q-score entries
+    \*****************************************************/
+
+
     /*Find the sequence entry*/
-    for(uint8_t uCharCnt = 0; uCharCnt < 4; ++uCharCnt)
-    { /*Loop past cigar, RNEXT, PNEXT, & TLEN*/
+    for(uint8_t uCharCnt = 0; uCharCnt < 3; ++uCharCnt)
+    { /*Loop past RNEXT, PNEXT, & TLEN*/
         while(*samIterUC > 32) samIterUC++;
+
         samIterUC++;      /*Move of tab after last entry*/
-    } /*Loop past cigar, RNEXT, PNEXT, & TLEN*/
+    } /*Loop past RNEXT, PNEXT, & TLEN*/
 
     /*Recored sequence address*/
     samEntryST->seqCStr = samIterUC;
-    samEntryST->unTrimReadLenUInt = 0;
-    samEntryST->readLenUInt = 0;
 
-    /*Find the sequence length & find q-score entry*/
+    /*Check if have a sequence entry*/
     if(*samIterUC != '*')
-    { /*If this entry has a sequence*/
-        while(*samIterUC > 32)  /*Move to next entry*/
-        { /*Loop: till the end of the sequence*/
-            samIterUC++;
-            ++(samEntryST->unTrimReadLenUInt);
-        } /*Loop: till the end of the sequence*/
+       samIterUC += samEntryST->readLenUInt + 1;
+    else samIterUC += 2;
 
-        samEntryST->readLenUInt =
-           samEntryST->unTrimReadLenUInt;
-    } /*If this entry has a sequence*/
-
-    else ++samIterUC;   /*Move onto tab after entry*/
-
-    samIterUC++;        /*Move of tab after last entry*/
     samEntryST->qCStr = samIterUC; /*Set q-score pionter*/
 
     return;
@@ -1061,6 +1096,7 @@ static inline uint8_t findSamCig(
         { /*Switch: Count number of cigar entries*/
            case '=':
            case 'M':
+           case '\t':
               samStruct->unTrimReadLenUInt += cigEntryUInt;
               samStruct->numMatchUInt += cigEntryUInt;
               break;
@@ -1081,6 +1117,7 @@ static inline uint8_t findSamCig(
            default: break;
         } /*Switch: Count number of cigar entries*/
 
+        cigEntryUInt = 0;
         ++samIterUChar; /*Get off entry character type*/
     } /*Loop: though all cigar entries to read in*/
 
@@ -1711,6 +1748,10 @@ static inline void swapSamEntries(
    swapStr = samOneST->samEntryCStr;
    samOneST->samEntryCStr = samTwoST->samEntryCStr;
    samTwoST->samEntryCStr = swapStr;
+
+   swapStr = samOneST->queryCStr;
+   samOneST->queryCStr = samTwoST->queryCStr;
+   samTwoST->queryCStr = swapStr;
 
    swapStr = samOneST->refCStr;
    samOneST->refCStr = samTwoST->refCStr;
