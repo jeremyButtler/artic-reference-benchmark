@@ -52,6 +52,11 @@ From McGill's web site we found that this data was likely
   basecalled with Guppy version 3.4.4 using the
   941_prom_high_g344 model.
 
+I have not filtered this data set yet with a program like
+  filtlong, so my results are based on the raw data on the
+  SRA. 
+This is a bit of a weak point in my study.
+
 We were unable to download the complete dataset, but were
   able to download 1.7 million reads (see
   01-input/01-SRR21813677-ids.txt for a list of ids).
