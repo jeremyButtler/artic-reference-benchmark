@@ -219,13 +219,22 @@ struct stichAmpST * stichAmpsMinimap(
 | Input:
 |  - ampST:
 |    o samEntry struct with sequence to convert
+|  - errTypeC:
+|    o Reports the type of error
 | Output:
 |  - Returns
 |    o A c-string with the aligned query sequence.
 |      Insertions are in lower case, with deletions as '-'.
+|    o 0 for an error (memory, secondary alignment,
+|  - Modifies:
+|    o errTypeC to be 0 for no errors
+|    o errTypeC to be 1 for invalid sam entry
+|      (unmapped, secondary, supplemental, no cigar)
+|    o errTypeC to be 2 for a memeory error
 \--------------------------------------------------------*/
 char * samEntryToAlnSeq(
-  struct samEntry *ampST
+  struct samEntry *ampST,
+  char *errTypeC          /*Holds the error type*/
 ); /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
    ' Fun-04 TOC: samEntryToAlnSeq
    '  - This uses a samEntry struct to get an aligned

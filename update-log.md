@@ -8,6 +8,18 @@ This is a log of updates I made. This should be short and
   - I have not been able to replicate this, but it has
     poped up in benchmarking.
 
+# Sep 21th, 2023
+
+- Fixed an infinite loop error in stich.
+  - This was due to unmapped amplicons being kept.
+- Added in an install option for ivar in the 00-programs
+  make file
+  - use `make MAKE_PROGRAM=make` to complie with a differnt
+    make program. This is here because the default make for
+    the bsds is bsd make not gnu make (gmake).
+  - Also added in CPPFLAGS and LDFLAGS to the make file
+    in 00-programs.
+ 
 # Sep 20th, 2023
 
 - Fixed a couple errors in stich that caused crashes.

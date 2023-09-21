@@ -1,6 +1,11 @@
 CC=cc
 CXX=c++
 
+# This is so the user can change make to gmake on openbsd
+MAKE_PROGRAM=make
+CPPFLAGS=-I/usr/local/include
+LDFLAGS=-L/usr/lib
+
 # Find the directory of this make file
 # from: https://stackoverflow.com/questions/18136918/how-to-get-current-relative-directory-of-your-makefile
 # For more recent version of GMAKE
@@ -17,37 +22,41 @@ condaCallStr=$(condaStr)/etc/profile.d/conda.sh
 #    canonical path from filesystem root
 #  dir trims off the filename, leaving just the directory.
 
-all: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile buildBuildCon buildStich makeLilo
+# All code for this repository (except artic, samtools, medaka, and minimap2)
+all: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile buildBuildCon buildStich makeLilo makeivar
+
+# My own code
+private: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile buildBuildCon buildStich
 
 buildAlnSeq:
-	make -C alnSeqSrc CC=$(CC)|| printf "Failed to make alnSeq\n" && exit;
+	$(MAKE_PROGRAM) -C alnSeqSrc CC=$(CC)|| printf "Failed to make alnSeq\n" && exit;
 	mv alnSeqSrc/alnSeq ./ || printf "Failed to move alnSeq\n" && exit;
-	make -C alnSeqSrc mid CC=$(CC)|| printf "Failed to make alnSeqMid\n" && exit;
+	$(MAKE_PROGRAM) -C alnSeqSrc mid CC=$(CC)|| printf "Failed to make alnSeqMid\n" && exit;
 	mv alnSeqSrc/alnSeqMid ./ || printf "Failed to move alnSeqMid\n" && exit;
 
 buildFqGetIds:
 	# fqGetIds works better with vector support.
-	make -C fqGetIdsSrc sse CC=$(CC) || make -C fqGetIdsSrc neon CC=$(CC) || make -C fqGetIdsSrc CC=$(CC) || printf "Failed to complile fqGetIds\n" && exit;
+	$(MAKE_PROGRAM) -C fqGetIdsSrc sse CC=$(CC) || $(MAKE_PROGRAM) -C fqGetIdsSrc neon CC=$(CC) || $(MAKE_PROGRAM) -C fqGetIdsSrc CC=$(CC) || printf "Failed to complile fqGetIds\n" && exit;
 	mv fqGetIdsSrc/fqGetIds ./ || printf "Failed to move fqGetIds\n" && exit;
 
 buildScoreReads:
-	make -C findCoInfctSrc scoreReads CC=$(CC) || printf "Failed to complile scoreReads\n" && exit;
+	$(MAKE_PROGRAM) -C findCoInfctSrc scoreReads CC=$(CC) || printf "Failed to complile scoreReads\n" && exit;
 	mv findCoInfctSrc/scoreReads ./ || printf "Failed to move scoreReads\n" && exit;
 
 buildTrimPrimers:
-	make -C findCoInfctSrc trimPrimers CC=$(CC) || printf "Failed to complile trimPrimers\n" && exit;
+	$(MAKE_PROGRAM) -C findCoInfctSrc trimPrimers CC=$(CC) || printf "Failed to complile trimPrimers\n" && exit;
 	mv findCoInfctSrc/trimPrimers ./ || printf "Failed to move trimPrimers\n" && exit;
 
 buildTrimSamFile:
-	make -C findCoInfctSrc trimSam CC=$(CC) || printf "Failed to complile trimSamFile\n" && exit;
+	$(MAKE_PROGRAM) -C findCoInfctSrc trimSam CC=$(CC) || printf "Failed to complile trimSamFile\n" && exit;
 	mv findCoInfctSrc/trimSamFile ./ || printf "Failed to move trimSamFile\n" && exit;
 
 buildBuildCon:
-	make -C findCoInfctSrc buildCon CC=$(CC) || printf "Failed to complile buildCon\n" && exit;
+	$(MAKE_PROGRAM) -C findCoInfctSrc buildCon CC=$(CC) || printf "Failed to complile buildCon\n" && exit;
 	mv findCoInfctSrc/buildCon ./ || printf "Failed to move buildCon\n" && exit;
 
 buildStich:
-	make -C stichSrc CC=$(CC) || printf "Failed to complile stich\n" && exit;
+	$(MAKE_PROGRAM) -C stichSrc CC=$(CC) || printf "Failed to complile stich\n" && exit;
 	mv stichSrc/stich ./ || printf "Failed to move stich\n" && exit;
 
 makeLilo:
@@ -65,6 +74,25 @@ makeLilo:
 	cd Lilo && conda env create --file LILO.yaml;
 	cd Lilo && conda env create --file scaffold_builder.yaml ;
 
+# This assumes samtools in on your system
+makeivar:
+	ls ivar && rm ivar || printf "";
+		# Deal with old installs
+	ls ivarSrc || git clone https://github.com/andersen-lab/ivar || printf "error downloading ivar\n" && exit;
+	ls ivarSrc || mv ivar ivarSrc || printf "could not rename ivar\n" && exit;
+	(sh -c "cd ivarSrc && AUTOCONF_VERSION=2.71 AUTORECONF_VERSION=2.71 AUTOMAKE_VERSION=1.9 bash autogen.sh") || printf "Error while building the config file for ivar\n" && exit;
+		# The VERSION commands are for openbsd
+		# Using a shell to do the cd. make does not like to
+		# cd into anyting
+	(sh -c "cd ivarSrc && ./configure CC=$(CC) CXX=$(CXX) CPPFLAGS=$(CPPFLAGS) LDFLAGS=$(LDFLAGS)") || printf "Error while configuring ivar\n" && exit;
+		# Adding install path flags here. Otherwise they
+		# are not properly applied when I call make
+	$(MAKE_PROGRAM) -C ivarSrc || printf "Could not build ivar\n" && exit;
+		# The second make command is for openbsd. For some
+		# odd reason ivar can not lock onto the htslib header
+		# files.
+	mv ivarSrc/src/ivar ./ || printf "Unable to move ivar  to 00-programs\n" && exit;
+
 removeprograms:
 	source $(condaCallStr) || printf "Is conda activated?\n";
 	conda init bash || printf "Failed to activate bash\n";
@@ -79,6 +107,7 @@ removeprograms:
 	rm trimPrimers || printf "trimPrimers not compiled\n";
 	rm trimSamFile || printf "trimSamFile not compiled\n";
 	rm scoreReads || printf "scoreReads not compiled\n";
+	rm ivar || printf "ivar not compiled\n";
 
 # Cleans everything not downloaded from github
 # (everything that is not my code)
@@ -98,6 +127,14 @@ removeall:
 	rm trimPrimers || printf "trimPrimers not compiled\n";
 	rm trimSamFile || printf "trimSamFile not compiled\n";
 	rm scoreReads || printf "scoreReads not compiled\n";
+	rm ivar || printf "ivar not compiled\n";
+	rm -r ivarSrc || printf "ivarSrc not downloaded\n";
+
+# Cleans downloaded directories (no longer needed)
+# (everything that is not my code); LILO is still needed.
+clean:
+	rm -r -f Porechop-1 || printf "Porchop source already cleaned\n";
+	rm -r ivarSrc || printf "ivarSrc not downloaded\n";
 
 # This is to make sure pwd works across board.
 test:

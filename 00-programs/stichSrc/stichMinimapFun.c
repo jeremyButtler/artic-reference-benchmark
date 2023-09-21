@@ -315,8 +315,11 @@ struct samEntry * getAmpPosMinimap(
 
       /*Check if have an alignment I can use*/
       if(ampIterST->flagUSht & (4 | 256 | 2048))
+      { /*If: I had an invalid alingment*/
          errUC = readSamLine(ampIterST, stdinFILE);
+         continue;
          /*4=unmapped, 256=secondary, 2048=supplemental*/
+      } /*If: I had an invalid alingment*/
      
       ++(*numAmpsUL); /*Counter for number amplicons kept*/
       ++ampIterST;
@@ -415,7 +418,10 @@ struct stichAmpST * stichAmpConMinimap(
    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
    char *alnSeqStr = 0;
+   char errBl = 0;
+
    ulong refEndUL = 0;
+
    struct stichAmpST *conST = 0;
    struct samEntry *ampIterST = ampsAryST;
 
@@ -428,13 +434,24 @@ struct stichAmpST * stichAmpConMinimap(
    { /*While I have sequences to stich together*/
       --numAmpsUL;
 
-      alnSeqStr = samEntryToAlnSeq(ampIterST);
+      alnSeqStr = samEntryToAlnSeq(ampIterST, &errBl);
 
-      if(alnSeqStr == 0)
+      if(errBl & 2)
       { /*If: I had a memory error*/
          freeStichAmpSTList(&conST);
          return 0;
       } /*If: I had a memory error*/
+
+      if(errBl & 1)
+      { /*If: this was a bad amplicon (no cigar/sequence)*/
+         ++ampIterST;
+         continue;
+         /*This is from an
+         `  unammped read, secondary alignment,
+         `  supplemental alignment, no cigar, or no
+         `  sequence.
+         */
+      } /*If: this was a bad amplicon (no cigar/sequence)*/
 
       /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
       ^ Fun-02 Sec-03:
@@ -880,13 +897,22 @@ struct stichAmpST * stichAmpsMinimap(
 | Input:
 |  - ampST:
 |    o samEntry struct with sequence to convert
+|  - errTypeC:
+|    o Reports the type of error
 | Output:
 |  - Returns
 |    o A c-string with the aligned query sequence.
 |      Insertions are in lower case, with deletions as '-'.
+|    o 0 for an error (memory, secondary alignment,
+|  - Modifies:
+|    o errTypeC to be 0 for no errors
+|    o errTypeC to be 1 for invalid sam entry
+|      (unmapped, secondary, supplemental, no cigar)
+|    o errTypeC to be 2 for a memeory error
 \--------------------------------------------------------*/
 char * samEntryToAlnSeq(
-  struct samEntry *ampST
+  struct samEntry *ampST,
+  char *errTypeC          /*Holds the error type*/
 ){ /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
    ' Fun-04 TOC: samEntryToAlnSeq
    '  - This uses a samEntry struct to get an aligned
@@ -900,7 +926,8 @@ char * samEntryToAlnSeq(
    '  o fun-04 sec-02:
    '     - Allocate memory
    '  o fun-04 sec-03:
-   '     - Find the first aligned reference base
+   '    - Remove starting softmask & deal with problematic
+   '      entries
    '  o fun-04 sec-04:
    '     - Find the first aligned query base
    '  o fun-04 sec-05:
@@ -929,13 +956,20 @@ char * samEntryToAlnSeq(
    ^  - Allocate memory
    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
+   *errTypeC = 0;
    alnStr = malloc(sizeof(char) * lenAlnUL);
-   if(alnStr == 0) return 0; /*Memory error*/
    alnIterStr = alnStr;
+
+   if(alnStr == 0)
+   { /*If: I had a memor error*/
+      *errTypeC = 2;
+      return 0; /*Memory error*/
+   } /*If: I had a memor error*/
 
    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
    ^ Fun-04 Sec-03:
-   ^  - Make sure there is not softmask at the start
+   ^  - Remove starting softmask & deal with problematic
+   ^    entries
    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
    cigStr = cStrToUInt(cigStr, &lenEntryUI);
@@ -950,6 +984,17 @@ char * samEntryToAlnSeq(
       ++cigStr; /*Get off letter*/
       cigStr = cStrToUInt(cigStr, &lenEntryUI);
    } /*If: The samEntry was not trimmed*/
+
+   if(
+         ampST->flagUSht & 4    /*Unmapped alignment*/
+      || ampST->flagUSht & 256  /*secondary alignment*/
+      || ampST->flagUSht & 2048 /*Supplemental alignment*/
+      || *cigStr == '*'          /*No cigar*/
+      || *ampST->seqCStr == '*'  /*No sequence*/
+   ) { /*If: I had an invalid samfile entry*/
+      *errTypeC = 1;
+      return 0;
+   } /*If: I had an invalid samfile entry*/
 
    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
    ^ Fun-04 Sec-05:

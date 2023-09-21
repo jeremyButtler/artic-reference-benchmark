@@ -22,6 +22,8 @@ all: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile
 buildAlnSeq:
 	make -C alnSeqSrc CC=$(CC)|| printf "Failed to make alnSeq\n" && exit;
 	mv alnSeqSrc/alnSeq ./ || printf "Failed to move alnSeq\n" && exit;
+	make -C alnSeqSrc mid CC=$(CC)|| printf "Failed to make alnSeqMid\n" && exit;
+	mv alnSeqSrc/alnSeqMid ./ || printf "Failed to move alnSeqMid\n" && exit;
 
 buildFqGetIds:
 	# fqGetIds works better with vector support.
@@ -63,6 +65,15 @@ makeLilo:
 	cd Lilo && conda env create --file LILO.yaml;
 	cd Lilo && conda env create --file scaffold_builder.yaml ;
 
+# This assumes samtools in on your system
+makeivar:
+	ls ivarSrc || git clone https://github.com/andersen-lab/ivar || printf "error downloading ivar\n" && exit;
+	mv ivar ivarSrc || printf "could not rename ivar\n" && exit;
+	./ivarSrc/autogen.sh || printf "Error while building the config file for ivar\n" && exit;
+	./ivarSrc/configure || printf "Error while configuring ivar\n" && exit;
+	make -c ivarSrc CC=$(CC) CXX=$(CXX) || printf "Error while making ivar \nmake sure you complie is good; make CC=c-compiler CXX=c++-compiler; and that you have samtools installed\n" && exit;
+	mv ivarSrc/src/ivar ./ || printf "Unable to move ivar  to 00-programs\n" && exit;
+
 removeprograms:
 	source $(condaCallStr) || printf "Is conda activated?\n";
 	conda init bash || printf "Failed to activate bash\n";
@@ -71,12 +82,12 @@ removeprograms:
 	rm -f -r bin || printf "Porchop not compiled in 00-programs\n";
 	rm -f -r lib || printf "Porchop not compiled in 00-programs\n";
 	rm alnSeq || printf "alnSeq not compiled\n";
+	rm alnSeqMid || printf "alnSeqMid not compiled\n";
 	rm fqGetIds || printf "fqGetIds not compiled\n";
 	rm buildCon || printf "buildCon not compiled\n";
 	rm trimPrimers || printf "trimPrimers not compiled\n";
 	rm trimSamFile || printf "trimSamFile not compiled\n";
 	rm scoreReads || printf "scoreReads not compiled\n";
-	rm stich || printf "stich not compiled\n";
 
 # Cleans everything not downloaded from github
 # (everything that is not my code)
@@ -90,12 +101,12 @@ removeall:
 	rm -f -r bin || printf "Porchop not compiled in 00-programs\n";
 	rm -f -r lib || printf "Porchop not compiled in 00-programs\n";
 	rm alnSeq || printf "alnSeq not compiled\n";
+	rm alnSeqMid || printf "alnSeqMid not compiled\n";
 	rm fqGetIds || printf "fqGetIds not compiled\n";
 	rm buildCon || printf "buildCon not compiled\n";
 	rm trimPrimers || printf "trimPrimers not compiled\n";
 	rm trimSamFile || printf "trimSamFile not compiled\n";
 	rm scoreReads || printf "scoreReads not compiled\n";
-	rm stich || printf "stich not compiled\n";
 
 # This is to make sure pwd works across board.
 test:
