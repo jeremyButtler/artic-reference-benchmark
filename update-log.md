@@ -1,11 +1,18 @@
 This is a log of updates I made. This should be short and
   I will not log changes in graphs and stats.
 
+# Todo
+
+- Need to add auto install in makefile for ivar
+- Need to fix infinite loop error in stich
+  - I have not been able to replicate this, but it has
+    poped up in benchmarking.
+
 # Sep 20th, 2023
 
 - Fixed a couple errors in stich that caused crashes.
-- I am working on adding in ivar. I hope to have this
-  update up at the end of the day
+- added ivar to the testing (00-scripts/runIvar.sh)
+  - ivar needs to be in 00-programs
 
 # Sep 18th, 2023
 

@@ -283,9 +283,16 @@ source "$condaPathStr/etc/profile.d/conda.sh";
 
 conda activate LILO;
 
-  #env PATH="$binPorechopPathStr:$PATH" \
-  # This command messes up poreChop. It has a dependecy
-  # issue.
+# Get rid of less usefull files. Otherwise snakemake
+# errors out when using different files. This is due to
+# snakemake trying to complete a job.
+# --unlock does not work and causes errors.
+ls .snakemake && rm -r .snakemake || printf "";
+ls nucmer.error && rm nucmer.error || printf "";
+
+# This command messes up poreChop. It has a dependecy
+# issue.
+#env PATH="$binPorechopPathStr:$PATH" \
 env CONDA_PREFIX=$condaPathStr \
   snakemake \
       -k \

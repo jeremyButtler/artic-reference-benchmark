@@ -22,8 +22,17 @@ threadsI=3;
 medakaModelStr="r941_prom_high_g344"; # Model for medaka
 useMedakaBl=1;   # 0 is do not use medaka
 noMajCon=0;    # disable majcon step
+ivarBl=0;     # Run ivar at end
+
+# ivar variables
+minSupDbl=0.5;
+minInsSupDbl=0.8;
+minDepthI=10;
+minQI=10;
+ivarSubDepthI=300;
 
 scriptDirStr="$(dirname "$0" | sed 's/^\.\///;')";
+numReadsI=0;
 prefStr="";         # Temporary prefix
 conStr="";
 extraOptions=""; # Extra input options
@@ -72,6 +81,9 @@ Input:
      o Disables the majority consensus step
      o Enables medaka
      o Can be disabled with -use-majcon
+   -ivar: [No]
+     o Use ivar to polish the consensus
+     o -ivar is disabled with -no-ivar
    -t: [$threadsI]
      o Number of threads to use
 Output:
@@ -113,6 +125,8 @@ while [[ $# -gt 0 ]]; do
       -disable-medaka) useMedakaBl=0;;
       -disable-majcon) noMajCon=0;;
       -use-majcon) noMajCon=1; useMedakaBl=1;;
+      -ivar) ivarBl=1;;
+      -no-ivar) ivarBl=0;;
       -t) threadsI="$2"; shift;;
       -threads) threadsI="$2"; shift;;
       -h) printf "%s\n" "$helpStr"; exit;;
@@ -232,8 +246,12 @@ ampStatsFileStr="$inPrefStr-amp-stats.tsv";
 #  o sec-03 sub-03:
 #    - Build consensus
 #  o sec-03 sub-04:
-#    - Build scaffoled (stich amplicons together)
+#    - Grab a subsample for ivar
 #  o sec-03 sub-05:
+#    - Build scaffoled (stich amplicons together)
+#  o sec-03 sub-06:
+#    - run ivar to polish the consensus (if requested)
+#  o sec-03 sub-07:
 #    - Clean up and exit
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -303,6 +321,25 @@ do # Loop: Build a consensus for each amplicon
        -fastq "$prefStr-tmp.fastq" \
        $extraOptions;
 
+   #*******************************************************
+   # Sec-03 Sub-04:
+   #  - Grab a subsample for ivar
+   #*******************************************************
+
+   if [[ "$ivarBl" -gt 0 ]]; then
+      numReadsI="$(\
+         wc -l "$prefStr-tmp.fastq" | awk '{print $1/4}' \
+      )"; # Find the number of reads in the file
+
+      if [[ "$numReadsI" -gt "$ivarSubDepthI" ]]; then
+         cat \
+             "$prefStr--top-reads.fastq" \
+           >> "$inPrefStr-ivar.fq";
+      else
+         cat "$prefStr-tmp.fastq" >>"$inPrefStr-ivar.fq";
+      fi # Check if I am keeping a subsample or all reads
+   fi # Check if I am keeping reads for ivar 
+
    rm "$prefStr-tmp.fastq"
    rm "$prefStr--top-reads.fastq";
 
@@ -312,7 +349,7 @@ do # Loop: Build a consensus for each amplicon
 done # Loop: Build a consensus for each amplicon
 
 #**********************************************************
-# Sec-03 Sub-04:
+# Sec-03 Sub-05:
 #  - Build scaffoled (stich amplicons together)
 #**********************************************************
 
@@ -329,7 +366,39 @@ cat \
     -threads "$threadsI";
 
 #**********************************************************
-# Sec-03 Sub-04:
+# Sec-03 Sub-06:
+#  - run ivar to polish the consensus (if requested)
+#**********************************************************
+
+if [[ "$ivarBl" -gt 0 ]]; then
+# If using ivar
+  minimap2 \
+      -t "$threadsI" \
+      --eqx \
+      -a \
+      -x map-ont \
+      "$inPrefStr-scaffold.fa" \
+      "$inPrefStr-ivar.fq" |
+    "$scriptDirStr/../00-programs/trimSamFile" -stdin |
+    samtools sort -@ "$threadsI" - |
+    samtools view -@ "$threadsI" -F 4 -F 256 -F 2048 -b - |
+    samtools mpileup -B -aa -A -d 0 -Q 0 - | 
+    "$scriptDirStr/../00-programs/ivar" consensus \
+      -p "$inPrefStr-tmp-scaffold" \
+      -i "$inPrefStr-scaffold" \
+      -c "$minInsSupDbl" \
+      -t "$minSupDbl" \
+      -m "$minDepthI" \
+      -n "N" \
+      -q "$minQI";
+
+  mv "$inPrefStr-tmp-scaffold.fa" "$inPrefStr-scaffold.fa";
+  rm "$inPrefStr-tmp-scaffold.qual.txt";
+  rm "$inPrefStr-ivar.fq"; # No longer need
+fi # If using ivar
+
+#**********************************************************
+# Sec-03 Sub-07:
 #  - Clean up and exit
 #**********************************************************
 
