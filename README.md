@@ -16,8 +16,8 @@ This repository is under a dual license consisting of the
 The code in 00-programs and 00-scripts is my own and so,
   are under the dual license.
 However, the code downloaded with the makefile in
-  00-programs (LILO and Porechop) are not my own and so,
-  are not covered by the any license.
+  00-programs (LILO, Porechop, and ivar) are not my own and
+  so, are not covered by these licenses.
 You can remove all complied programs and downloaded code
   with `cd 00-programs && make removeall`.
 
@@ -28,8 +28,9 @@ LILO can be installed with the make file in 00-programs
 This build will call sudo and require you to enter a
   password (for porechop, required by LILO).
 
-You will need to install the artic pipeline (by conda) and
-  minimap2 on your own.
+You will need to install the artic pipeline (by conda),
+  medaka (conda or source), minimap2, and samtools on your
+  own.
 I should add these to the Makefile at some point, but will
   probably never bother to.
 
@@ -89,8 +90,23 @@ To prevent alignment issues, we ensured that all
 This was all automated with the getStats.sh script in
   00-scripts.
 
-The pipelines we tested were artic version 1.2.3, LILO
-  (Downloaded Sep 5th, 2023), and our own pipeline.
+One error that comes from this method is that sometimes
+  snps will be replaced by an deletion and an insertion.
+I would use minimap2, but I have not had good results
+  aligning larges regions with N's with minimap2.
+When I aligned consensus made with any pipeline to the
+  original reference I got a large number of soft masked
+  bases at the start and snps.
+When I aligned these with water from emboss or alnSeq, the
+  softmasking was reduced.
+Water from emboss (-gapextend 2 -gapopen 10) and alnSeq
+  -use-water had similar results for the one alignment I
+  tried, except that water from emboss counted the N's as
+  disagreements, while alnSeq did not.
+
+The pipelines we tested were artic version 1.2.3, ivar 
+  version 1.4.2, LILO (Downloaded Sep 5th, 2023), and our
+  own pipeline.
 Artic was run with medaka (--medaka --skip-nanopolish) with
   the r941_prom_high_g344 model
   (--medaka-model r941_prom_high_g344) and using the artic
