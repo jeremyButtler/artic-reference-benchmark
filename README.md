@@ -105,8 +105,7 @@ Water from emboss (-gapextend 2 -gapopen 10) and alnSeq
   disagreements, while alnSeq did not.
 
 The pipelines we tested were artic version 1.2.3, ivar 
-  version 1.4.2, LILO (Downloaded Sep 5th, 2023), and our
-  own pipeline.
+  version 1.4.2, LILO (Downloaded Sep 5th, 2023).
 Artic was run with medaka (--medaka --skip-nanopolish) with
   the r941_prom_high_g344 model
   (--medaka-model r941_prom_high_g344) and using the artic
@@ -137,23 +136,8 @@ LILO was then called with env to correct the path to
    )" -k -s /path/to/Lilo/LILO --configfile config.txt
    ```
 
-For our own pipeline, we first mapped the reads to the
-  primers with minimap2 (minimap2 -k5 -w1 -s 20 -P -m 15)
-  and then trimmed the mapped primers at the ends of each
-  read.
-We then trimmed off any junk regions (regions that did not
-  map) in the reads using minimap2 and the reference.
-After that, we build a consensus for each amplicon using
-  buildCon, which uses minimap2
-  (see our find--Co-infections repository).
-Finally, we stitched the amplicons together using stich
-  with minimap2 support (only option currently)
-  (see 00-programs).
-All of our own code we used for each of these steps can be
-  found in 00-programs.
-
 We automated each pipeline using scripts
-  (benchArticNoMut.sh, benchLILO.sh, and buildAmpCons.sh),
+  (benchArticNoMut.sh, benchLILO.sh, and runIvar.sh),
   which can be found in 00-scripts.
 
 Our levels for this test are read depth, length, and the
