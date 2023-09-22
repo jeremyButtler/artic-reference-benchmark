@@ -948,5 +948,19 @@ bash 00-scripts/benchAll.sh \
    -rep 5;
 ```
 
+# Rerunning each test individually (10)
 
+Running artic and ivar together; both are quick & working.
 
+```
+bash 00-scripts/benchAll.sh \
+    -no-buildCon-majcon-medaka \
+    -no-buildCon-medaka \
+    -artic \
+    -buildCon-majcon \
+    -LILO \
+    -ivar \
+    -ivar-trim \
+    -rep 10 \
+    -prefix 10-new-bench/10-bench-artic-ivar;
+```
