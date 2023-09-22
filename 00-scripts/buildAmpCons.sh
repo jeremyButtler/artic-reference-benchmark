@@ -21,8 +21,9 @@ minDepthI=20; # Min bin depth to build consensus
 threadsI=3;
 medakaModelStr="r941_prom_high_g344"; # Model for medaka
 useMedakaBl=1;   # 0 is do not use medaka
-noMajCon=0;    # disable majcon step
+useMajCon=1;    # disable majcon step
 ivarBl=0;     # Run ivar at end
+useRefBl=0;   # Use reference in consensus step
 
 # ivar variables
 minSupDbl=0.5;
@@ -84,6 +85,9 @@ Input:
    -ivar: [No]
      o Use ivar to polish the consensus
      o -ivar is disabled with -no-ivar
+   -use-ref: [No]
+     o Use the reference to build the amplicon consensus
+     o -use-ref is disabled with -no-ref
    -t: [$threadsI]
      o Number of threads to use
 Output:
@@ -123,19 +127,21 @@ while [[ $# -gt 0 ]]; do
       -model) medakaModelStr="$2"; useMedakaBl=1; shift;;
       -use-medaka) useMedakaBl=1;;
       -disable-medaka) useMedakaBl=0;;
-      -disable-majcon) noMajCon=0;;
-      -use-majcon) noMajCon=1; useMedakaBl=1;;
+      -disable-majcon) useMajCon=0;;
+      -use-majcon) useMajCon=1;;
       -ivar) ivarBl=1;;
       -no-ivar) ivarBl=0;;
       -t) threadsI="$2"; shift;;
       -threads) threadsI="$2"; shift;;
+      -use-ref) useRefBl=1;;
+      -no-ref) useRefBl=0;;
       -h) printf "%s\n" "$helpStr"; exit;;
       --h) printf "%s\n" "$helpStr"; exit;;
       -help) printf "%s\n" "$helpStr"; exit;;
       --help) printf "%s\n" "$helpStr"; exit;;
       help) printf "%s\n" "$helpStr"; exit;;
       *)
-          printf "%s\n%s is invalid\n" "$helpStr" "$2";
+          printf "%s\n%s is invalid\n" "$helpStr" "$1";
           exit;;
    esac
 
@@ -223,16 +229,20 @@ if [[ "$errBl" -gt 0 ]]; then exit; fi
 #  - Update variables form user input
 #**********************************************************
 
-if [[ "$useMedakaBl" -eq 1 ]]; then
-   extraOptions="-threads $threadsI -enable-medaka";
+extraOptions="-threads $threadsI";
+
+if [[ "$useMedakaBl" -gt 0 ]]; then
+   extraOptions="$extraOptions -enable-medaka";
    extraOptions="$extraOptions -model $medakaModelStr";
-else
-   extraOptions="-threads $threadsI";
 fi # Check if using medaka
 
-if [[ "$noMajCon" -gt 1 ]]; then
+if [[ "$useMajCon" -eq 0 ]]; then
    extraOptions="$extraOptions -disable-majority-consensus";
 fi  # Check if disabling majcon
+
+if [[ "$useRefBl" -gt 0 ]]; then
+   extraOptions="$extraOptions -ref $refStr";
+fi # Check if using the referenc to build the consensus
 
 ampStatsFileStr="$inPrefStr-amp-stats.tsv";
 

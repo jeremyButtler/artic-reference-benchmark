@@ -2070,8 +2070,9 @@ static inline unsigned char readInConFa(
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
     char *tmpCStr = 0;
+    char *delStr = 0;       /*for removing white space*/
     char checkC = 0;        /*Used for single char checks*/
-    uint32_t incBuffUInt = 1000;
+    unsigned int incBuffUInt = 1000;
     FILE *faFILE = 0;
 
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
@@ -2129,9 +2130,14 @@ static inline unsigned char readInConFa(
     *(refST->samEntryCStr + refST->lenBuffULng - 2) = '\0';
 
     /*Read in the first part of the sequence*/
-    fgets(refST->samEntryCStr, refST->lenBuffULng, faFILE);
+    tmpCStr =
+       fgets(
+          refST->samEntryCStr,
+          refST->lenBuffULng,
+          faFILE
+    ); /*Get the first part of the sequence*/
 
-    while(*(refST->samEntryCStr+refST->lenBuffULng-2) > 16)
+    while(tmpCStr != 0 && *tmpCStr != '>')
     { /*While on the sequence line*/
         refST->samEntryCStr =
             realloc(
@@ -2147,20 +2153,16 @@ static inline unsigned char readInConFa(
         } /*Memory allocation error*/
 
         /*Set pointer to new buffer*/
-        tmpCStr = refST->samEntryCStr + refST->lenBuffULng;
+        tmpCStr =
+             refST->samEntryCStr
+           + refST->lenBuffULng
+           - 1;
 
         /*Update buff size*/
-        refST->lenBuffULng += incBuffUInt;
-
-        /*Reset new line markers*/
-        *(refST->samEntryCStr + refST->lenBuffULng-2)='\0';
+        refST->lenBuffULng += incBuffUInt - 1;
 
         /*Read in next part of reference sequence*/
-        fgets(tmpCStr, refST->lenBuffULng, faFILE);
-
-
-        if(*refST->samEntryCStr == '\0')
-            return 4; /*Failed to read in anything*/
+        tmpCStr = fgets(tmpCStr, incBuffUInt, faFILE);
     } /*While on the sequence line*/
 
     fclose(faFILE);
@@ -2181,6 +2183,20 @@ static inline unsigned char readInConFa(
         ++tmpCStr;
         ++refST->readLenUInt;
     } /*Find hte end of the sequence*/
+
+    while(*tmpCStr != '\0')
+    { /*Find the end of the sequence*/
+        if(*tmpCStr > 32)
+        { /*If: this is not white space*/
+           *delStr = *tmpCStr;
+           ++delStr;
+           ++refST->readLenUInt;
+        } /*If: this is not white space*/
+
+        ++tmpCStr;
+    } /*Find the end of the sequence*/
+
+    *delStr = '\0';
 
     /*Set up Q-score entry, so score reads knows is empty*/
     refST->qCStr = tmpCStr;
