@@ -12,6 +12,8 @@ This is a log of updates I made. This should be short and
 
 - Switched to quast for measuring accuracy. This fixed
   an error that introduced extra snps.
+  - Ns, snps, and indels are now measured as per 1000
+    bases.
 - Added ivar support to buildcon
   - I would suggest avoiding this.
 - Added medaka polishing of the consensus to the

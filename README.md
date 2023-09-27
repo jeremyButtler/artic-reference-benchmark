@@ -15,6 +15,8 @@ I found that the Neeldeman aligner I built (alnSeq) had an
 
 To avoid future errors I am switching to quast and am
   restarting my benchmarking (11-quast-bench).
+I changed the Ns, snps, and indels from the 100kb used in
+  quast to per 1kb.
 
 # License
 
