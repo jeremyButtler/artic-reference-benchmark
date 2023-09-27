@@ -12,37 +12,35 @@
 
 BEGIN{
    matchBl = 0;
-   if(progamStr == "") exit; # Program used
-   if(depthI == "") exit;    # Subsampled read depth
-   if(percMutI == "") exit;  # percent muated reference by
-   if(seedI == "") exit;     # Seed used in test
-   if(modelStr == "") exit;  # Model of medaka used
-   if(usedMedakaBl == "") exit; # Did you use medaka
-   if(usedMajConBl == "") exit; # Did you use majCon
-   if(minDepthI == "") exit;    # Min read depth (buildCon)
-   if(minLenI == "") exit;      # min read/consensus length
-   if(fqDirStr == "") exit;     # dir with fastq files
-   if(schemeDirStr == "") exit; # scheme directory
-   if(schemeStr == "") exit;    # scheme name
-   if(verStr == "") exit;       # scheme version
-   if(prefixStr == "") exit;      # prefix
 } # BEGIN
 
 { # MAIN
-  if($1 != progamStr) next;
-  if($3 != depthI) next;
-  if($5 != percMutI) next;
-  if($24 != seedI) next;
-  if($25 != modelStr) next;
-  if($26 != usedMedakaBl) next;
-  if($27 != usedMajConBl) next;
-  if($28 != minLenI) next;
-  if($29 != minDepthI) next;
-  if($30 != fqDirStr) next;
-  if($31 != schemeDirStr) next;
-  if($32 != schemeStr) next;
-  if($33 != verStr) next;
-  if($34 != prefixStr) next;
+  # I am using && = "", because some paratemters are
+  # unique to specific programs
+  # General settings
+  if($1 != programStr && programStr != "") next;
+  if($3 != depthI && depthI != "") next;
+  if($5 != percMutI && percMutI != "") next;
+  if($22 != seedI && seedI != "") next;
+  if($23 != modelStr && modelStr != "") next;
+  if($36 != prefixStr && prefixStr != "") next;
+
+  # Specific to buildcon
+  if($24 != usedMedakaBl && usedMedakaBl != "") next;
+  if($25 != usedMajconBl && usedMajconBl != "") next;
+  if($26 != usedIvarBl && usedIvarBl != "") next;
+  if($27 != usedRaconBl && usedRaconBl != "") next;
+  if($28 != medakaPolishBl && medakaPolishBl != "") next;
+  if($29 != ivarPolishBl && ivarPolishBl != "") next;
+  if($30 != minLenI && minLenI != "") next;
+  if($31 != minDepthI && minDepthI != "") next;
+
+  # File paths and schemes
+  if($32 != fqDirStr && fqDirStr != "") next;
+  if($33 != schemeDirStr && schemeDirStr != "") next;
+  if($34 != schemeStr && schemeStr != "") next;
+  if($35 != verStr && verStr != "") next;
+     # Scheme version (not program)
 
   matchBl = 1;
   exit;

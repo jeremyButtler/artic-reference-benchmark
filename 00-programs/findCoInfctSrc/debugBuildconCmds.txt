@@ -1,0 +1,9 @@
+set confirm off
+#b buildCon.c:695
+b buildConFun.c:2324
+
+define rcmd
+   r -fastq delete-debug/testing.fq -use-ivar -prefix delete-debug/delete;
+end
+
+rcmd

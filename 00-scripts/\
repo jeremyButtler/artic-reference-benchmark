@@ -111,7 +111,7 @@ ampDirStr="05-amplicon-reads";
   # ends. This is so that when I say 100x read depth, I
   # mean 100x read depth for everything.
 seedI=1024;         # Seed for random number generator
-repI=10;            # Number of replicates to run
+repI=5;             # Number of replicates to run
 prefixStr="artic";  # What to name output files
 threadsI=3;         # Number of threads to use
 medakaModelStr="r941_prom_high_g344"; # Model for medaka
@@ -142,14 +142,10 @@ verAryStr=("4.1.1500" "4.1.5000" "4.1.11000" "4.1");
 #  - Variables unique to buildCon
 #**********************************************************
 
-# This is holds the table to extract reads with
-extTablStr="04-read-table/04-buildConTbl.md";
-
 minLenI=320;
 minDepthI=100; # this will be 50% for depths under 100
 runDepthI=0;   # acutal depth running
-buildconMethodAry=("-use-majcon");
-buildconMethodAry+=("-use-majcon -polish-ivar");
+buildconMethodAry=("-use-majcon -polish-ivar");
 buildconMethodAry+=("-use-majcon -polish-medaka");
 buildconMethodAry+=("-use-majcon -polish-medaka -polish-ivar");
 firstMethodBl=1;
@@ -268,11 +264,6 @@ Artic Unique Input:
          o Make sure there is only one file with a
            .reference.fasta ending.
 BuidCon Input:
-   -ext-table:
-     o Table to use to separate reads by amplicons.
-     o Generate this with 00-scripts/readLenPosTbl.sh
-       - You will want to edit this table to remove
-          unwanted entires.
    -minDepth: [$minDepthI]
      o Min read depth to required for buld con to build a
        consensus
@@ -353,7 +344,6 @@ while [ $# -gt 0 ]; do
      -LILO) liloBl=1;;
 
      # Vairables for buildcon
-     -ext-table) extTablStr="$2"; shift;;
      -no-buildcon) buildconBl=0;;
      -buildcon) buildconBl=1;;
      -minDepth) minDepthI="$2"; shift;;
@@ -870,7 +860,7 @@ while [[ "$repI" -gt 0 ]]; do
             testAlreadyRunBl="$( \
               awk \
                   -f "$scriptDirStr/checkIfRunTest.awk" \
-                  -v programStr="artic" \
+                  -v progamStr="artic" \
                   -v depthI="$iDepth" \
                   -v percMutI="$iPercMut" \
                   -v seedI="$inputSeedI" \
@@ -962,15 +952,13 @@ while [[ "$repI" -gt 0 ]]; do
             #  - Check the consensus methods for buildcon
             #**********************************************
 
-            # [@] is used over [*], because [*] will print
-            # the entire array as a single string.
-            for strMethod in "${buildconMethodAry[@]}"; do
+            for strMethod in ${buildconMethodAry[*]}; do
             # Loop: Run all methods for buildcon
                # Check if the user is skipping buildcon
                if [[ "$buildconBl" -le 0 ]]; then break; fi
 
                useMajconBl="$(\
-                   printf "%s" "$strMethod" |
+                   printf "$strMethod" |
                    awk '{
                       if($0 ~ /-use-majcon/) print "TRUE";
                       else print "FALSE"; 
@@ -979,47 +967,48 @@ while [[ "$repI" -gt 0 ]]; do
                )"; # Check if testing majcon
 
                useMedakaBl="$(\
-                   printf "%s" "$strMethod" |
+                   printf "$strMethod" |
                    awk '{
-                      if($0 ~ /-use-medaka/) print "TRUE";
+                      if($0 ~ /-use-medaka/){print "TRUE"};
                       else print "FALSE"; 
                       exit;
                     }' \
                )"; # Check if testing medaka
 
                useIvarBl="$(\
-                   printf "%s" "$strMethod" |
+                   printf "$strMethod" |
                    awk '{
-                      if($0 ~ /-use-ivar/) print "TRUE";
+                      if($0 ~ /-use-ivar/){print "TRUE"};
                       else print "FALSE"; 
                       exit
                     }' \
                )"; # Check if testing ivar
 
                useRaconBl="$(\
-                   printf "%s" "$strMethod" |
+                   printf "$strMethod" |
                    awk '{
-                      if($0 ~ /-use-racon/) print "TRUE";
+                      if($0 ~ /-use-racon/){print "TRUE"};
                       else print "FALSE"; 
                       exit
                     }' \
                )"; # Check if testing racon
 
                useIvarPolishBl="$(\
-                   printf "%s" "$strMethod" |
+                   printf "$strMethod" |
                    awk '{
-                     if($0 ~ /-polish-ivar/) print "TRUE";
+                     if($0 ~ /-polish-ivar/){print "TRUE"};
                      else print "FALSE"; 
                      exit;
                     }' \
                )"; # Check if polishing with ivar
 
                useMedakaPolishBl="$(\
-                   printf "%s" "$strMethod" |
+                   printf "$strMethod" |
                    awk '{
-                    if($0 ~ /-polish-medaka/) print "TRUE";
-                    else print "FALSE"; 
-                    exit;
+                      if($0 ~ /-polish-medaka/)
+                         print "TRUE";
+                      else print "FALSE"; 
+                      exit;
                     }' \
                )"; # Check if testing majcon
 
@@ -1031,7 +1020,7 @@ while [[ "$repI" -gt 0 ]]; do
                testAlreadyRunBl="$( \
                  awk \
                     -f "$scriptDirStr/checkIfRunTest.awk"\
-                    -v programStr="buildCon" \
+                    -v progamStr="buildCon" \
                     -v depthI="$iDepth" \
                     -v percMutI="$iPercMut" \
                     -v seedI="$inputSeedI" \
@@ -1064,14 +1053,12 @@ while [[ "$repI" -gt 0 ]]; do
                     bash "$scriptDirStr/buildAmpCons.sh" \
                       -fastq "$readsStr" \
                       -ref "$refStr" \
-                      -table "$extTablStr" \
                       -primer-scheme "$primersStr" \
                       -min-length "$minLenI" \
                       -min-depth "$runDepthI" \
                       -model "$medakaModelStr" \
                       -t "$threadsI" \
-                      -prefix "$prefixStr" \
-                      $strMethod;
+                      -prefix "$prefixStr";
 
                  if [[ ! -f "$prefixStr-scaffold.fa" ]];
                  then
@@ -1132,7 +1119,7 @@ while [[ "$repI" -gt 0 ]]; do
                       "$useMajconBl" \
                       "$useIvarBl" \
                       "$useRaconBl";
-                   printf \
+                   printf
                       "\t%s\t%s\t%s\t%s" \
                       "$useMedakaPolishBl"\
                       "$useIvarPolishBl" \
@@ -1159,7 +1146,7 @@ while [[ "$repI" -gt 0 ]]; do
             testAlreadyRunBl="$( \
               awk \
                   -f "$scriptDirStr/checkIfRunTest.awk" \
-                  -v programStr="Lilo" \
+                  -v progamStr="Lilo" \
                   -v depthI="$iDepth" \
                   -v percMutI="$iPercMut" \
                   -v seedI="$inputSeedI" \
@@ -1174,7 +1161,6 @@ while [[ "$repI" -gt 0 ]]; do
 
             if [[ "$liloBl" -gt 0 ]]; then
              if [[ "$testAlreadyRunBl" -eq 0 ]]; then
-
                /usr/bin/time \
                   -f "%e\t%S\t%U\t%M\t%P" \
                   -o "tmp.tsv" \
@@ -1219,7 +1205,6 @@ while [[ "$repI" -gt 0 ]]; do
                      bash "$scriptDirStr/getStats.sh" \
                        "$trueRefStr" \
                        "$prefixStr-lilo-auto-ivar-con.fa" \
-                       0 \
                   )";
                   rm "$prefixStr-lilo-auto-ivar-con.fa";
                fi
@@ -1228,7 +1213,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                       ' # Check if this command failed
-                        BEGIN{OFS="\t"};
                         {if($0 ~ /Com/)
                          {
                             print "NA","NA","NA","NA","NA";
@@ -1243,7 +1227,7 @@ while [[ "$repI" -gt 0 ]]; do
 
                { # Print out the stats
                   printf \
-                     "Lilo\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "LiloIvar\t%s\t%s\t%s\t%s\t%s\t%s" \
                      "$repI" \
                      "$iDepth" \
                      "$numReadsI" \
@@ -1284,7 +1268,6 @@ while [[ "$repI" -gt 0 ]]; do
                      bash "$scriptDirStr/getStats.sh" \
                          "$trueRefStr" \
                          "$prefixStr-scaffold-auto.fa" \
-                         0 \
                   )";
                   rm "$prefixStr-scaffold-auto.fa";
                fi
@@ -1293,7 +1276,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                       ' # Check if this command failed
-                        BEGIN{OFS="\t"};
                         {if($0 ~ /Com/)
                          {
                             print "NA","NA","NA","NA","NA";
@@ -1355,7 +1337,6 @@ while [[ "$repI" -gt 0 ]]; do
                     bash "$scriptDirStr/getStats.sh" \
                       "$trueRefStr" \
                       "$prefixStr-lilo-man-ivar-con.fa"\
-                       0 \
                   )";
                   rm "$prefixStr-lilo-man-ivar-con.fa";
                fi
@@ -1364,7 +1345,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                       ' # Check if this command failed
-                        BEGIN{OFS="\t"};
                         { if($0 ~ /Com/)
                           {
                             print "NA","NA","NA","NA","NA";
@@ -1377,7 +1357,7 @@ while [[ "$repI" -gt 0 ]]; do
 
                { # Print out the stats
                   printf \
-                     "Lilo\t%s\t%s\t%s\t%s\t%s\t%s" \
+                     "LiloIvar\t%s\t%s\t%s\t%s\t%s\t%s" \
                      "$repI" \
                      "$iDepth" \
                      "$numReadsI" \
@@ -1419,7 +1399,6 @@ while [[ "$repI" -gt 0 ]]; do
                      bash "$scriptDirStr/getStats.sh" \
                          "$trueRefStr" \
                          "$prefixStr-scaffold-manual.fa" \
-                         0 \
                   )";
                   rm "$prefixStr-scaffold-manual.fa";
                fi
@@ -1428,7 +1407,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                       ' # Check if this command failed
-                        BEGIN{OFS="\t"};
                         { if($0 ~ /Com/)
                           {
                             print "NA","NA","NA","NA","NA";
@@ -1488,7 +1466,6 @@ while [[ "$repI" -gt 0 ]]; do
                     bash "$scriptDirStr/getStats.sh" \
                       "$trueRefStr" \
                       "$prefixStr-lilo-stich-ivar-con.fa" \
-                      0 \
                   )";
                   rm "$prefixStr-lilo-stich-ivar-con.fa";
                fi
@@ -1497,7 +1474,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                         ' # Check if this command failed
-                          BEGIN{OFS="\t"};
                           {  if($0 ~ /Com/)
                              {
                                 print "NA","NA","NA","NA","NA";
@@ -1510,7 +1486,7 @@ while [[ "$repI" -gt 0 ]]; do
 
                { # Print out the stats
                   printf \
-                   "Lilo\t%s\t%s\t%s\t%s\t%s\t%s" \
+                   "LiloIvar\t%s\t%s\t%s\t%s\t%s\t%s" \
                      "$repI" \
                      "$iDepth" \
                      "$numReadsI" \
@@ -1551,7 +1527,6 @@ while [[ "$repI" -gt 0 ]]; do
                      bash "$scriptDirStr/getStats.sh" \
                          "$trueRefStr" \
                          "$prefixStr-scaffold-stich.fa" \
-                         0 \
                   )";
                   rm "$prefixStr-scaffold-stich.fa";
                fi
@@ -1560,7 +1535,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                         ' # Check if this command failed
-                          BEGIN{OFS="\t"};
                           {  if($0 ~ /Com/)
                              {
                                 print "NA","NA","NA","NA","NA";
@@ -1612,7 +1586,7 @@ while [[ "$repI" -gt 0 ]]; do
             testAlreadyRunBl="$( \
               awk \
                   -f "$scriptDirStr/checkIfRunTest.awk" \
-                  -v programStr="ivar" \
+                  -v progamStr="ivar" \
                   -v depthI="$iDepth" \
                   -v percMutI="$iPercMut" \
                   -v seedI="$inputSeedI" \
@@ -1646,7 +1620,6 @@ while [[ "$repI" -gt 0 ]]; do
                      bash "$scriptDirStr/getStats.sh" \
                          "$trueRefStr" \
                          "$prefixStr-con.fa" \
-                         0 \
                   )";
                   rm "$prefixStr-con.fa";
                fi
@@ -1655,7 +1628,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                       ' # Check if this command failed
-                        BEGIN{OFS="\t"};
                         {  if($0 ~ /Com/)
                           {
                             print "NA","NA","NA","NA","NA";
@@ -1706,7 +1678,7 @@ while [[ "$repI" -gt 0 ]]; do
             testAlreadyRunBl="$( \
               awk \
                   -f "$scriptDirStr/checkIfRunTest.awk" \
-                  -v programStr="ivarTrim" \
+                  -v progamStr="ivarTrim" \
                   -v depthI="$iDepth" \
                   -v percMutI="$iPercMut" \
                   -v seedI="$inputSeedI" \
@@ -1741,7 +1713,6 @@ while [[ "$repI" -gt 0 ]]; do
                      bash "$scriptDirStr/getStats.sh" \
                          "$trueRefStr" \
                          "$prefixStr-con-trim.fa" \
-                         0 \
                   )";
                   rm "$prefixStr-con-trim.fa";
                fi
@@ -1750,7 +1721,6 @@ while [[ "$repI" -gt 0 ]]; do
                   cat tmp.tsv |
                     awk \
                       ' # Check if this command failed
-                        BEGIN{OFS="\t"};
                         {  if($0 ~ /Com/)
                           {
                             print "NA","NA","NA","NA","NA";

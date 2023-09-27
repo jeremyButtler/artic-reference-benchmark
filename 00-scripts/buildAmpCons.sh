@@ -11,26 +11,64 @@
 #    o Stiched together amplicons (scaffold)
 ###########################################################
 
-refStr="01-input/01-primer-schemes/SARS-CoV-2/V4.1/SARS-CoV-2.reference.fasta";
-fqStr="05-amplicon-reads/";
-readExtractTblStr="04-read-table/04-buildConTbl.md";
-primersStr="01-input/01-primer-schemes/SARS-CoV-2/V4.1/SARS-CoV-2.scheme.bed";
-inPrefStr="buildCon"; # Input prefix to name stuff
-minLenI=300;  # Min read length/consensus length
-minDepthI=20; # Min bin depth to build consensus
-threadsI=3;
-medakaModelStr="r941_prom_high_g344"; # Model for medaka
-useMedakaBl=1;   # 0 is do not use medaka
-useMajCon=1;    # disable majcon step
-ivarBl=0;     # Run ivar at end
-useRefBl=0;   # Use reference in consensus step
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Sec-01:
+#  - Variable declerations
+#  o sec-01 sub-01:
+#    - Variables holding General user input
+#  o sec-01 sub-01:
+#    - Variables holding General user input
+#  o sec-01 sub-02:
+#    - Variables for consensus building or polishing steps
+#  o sec-01 sub-03:
+#    - Variables specific to ivar
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# ivar variables
-minSupDbl=0.5;
-minInsSupDbl=0.8;
-minDepthI=10;
-minQI=10;
-ivarSubDepthI=300;
+#**********************************************************
+# Sec-01 Sub-01:
+#  - Variables holding General user input
+#**********************************************************
+
+refStr="";
+fqStr="";
+readExtractTblStr="";
+primersStr="";
+inPrefStr="buildcon"; # Input prefix to name stuff
+minLenI=300;  # Min read length/consensus length
+minDepthI=100; # Min bin depth to build consensus
+minPerDepthI="0.1"; # Min percentage of mapped reads
+threadsI=3;
+
+#**********************************************************
+# Sec-01 Sub-02:
+#  - Variables for consensus building or polishing steps
+#**********************************************************
+
+medakaModelStr="r941_prom_high_g344"; # Model for medaka
+conMethodAryStr=("-use-majCon" "-use-medaka");
+   # Holds consensus methods using
+lenConMethodI=2; # length of conMethodAryStr
+
+useRefBl=0;   # Use reference in consensus step
+ivarBl=0;      # Polish consensus with ivar
+polishMedBl=0; # Polish consensus with medakd
+minQI=10; # Both majcon and ivar use
+
+#**********************************************************
+# Sec-01 Sub-03:
+#  - Variables specific to ivar
+#**********************************************************
+
+ivarMinSupDbl=0.5;
+ivarMinInsSupDbl=0.8;
+ivarMinDepthI=10;
+minSubDepthI=300;
+
+#**********************************************************
+# Sec-01 Sub-04:
+#  - Non-user input variables
+#**********************************************************
+
 
 scriptDirStr="$(dirname "$0" | sed 's/^\.\///;')";
 numReadsI=0;
@@ -40,6 +78,14 @@ extraOptions=""; # Extra input options
 fqIterI=0;       # For checking if I have fastq files
 errBl=0;         # To know if I need to quite
 tmpFqStr="";
+firstConMethodBl=1; #Tells if user modifed consensus method
+
+# path to use to activate conda
+condaPathStr="$(\
+  conda info | 
+    grep -i 'base environment' | 
+    sed 's/base.*: //; s/  *.read only.//; s/ //g' \
+)";
 
 helpStr="$(basename "$0") \
    -ref ref.fasta \
@@ -47,49 +93,79 @@ helpStr="$(basename "$0") \
    -table read-extract-table.md \
    -primer-scheme primer-scheme.bed;
 Use:
-   - Builds a consensus with buildCon
+   - Builds a consensus with buildcon
    - This trims primers off reads with trimPrimers and 
      then nosiy ends with the reference.
 Input:
-   -ref: [Required]
-     o Fasta file with the reference sequence
-   -fastq: [Required]
-     o Fastq file with reads to build amplicons with
-   -table: [Required]
-     o Table of reads to extract
-     o use readLenPosTbl.sh to build this table.
-     o Then edit this table to only have the reads you want to use
-       to build amplicon consensus with.
-   -primer-scheme: [Required]
-     o primer scheme used with artic.
-     o This will be a bed file with 7 columns
-       - Column 4 has the primer name
-       - Column 7 has the primer sequence
-   -min-length: [$minLenI]
-     o Minimum length to map reads and build consensuses
-       with.
-   -min-depth: [$minDepthI]
-     o Minimum depth to build a consensus at.
-   -prefix: [$inPrefStr]
-     o Prefix to name the output amplicon stats file
-     o prefix-amp-stats.tsv
-   -model: [$medakaModelStr]
-     o Model to use with medaka
-   -use-medaka: [Yes]
-     o Use medaka with buildCon
-     o This is disabled by -disable-medaka
-   -disable-majcon: [No]
-     o Disables the majority consensus step
-     o Enables medaka
-     o Can be disabled with -use-majcon
-   -ivar: [No]
-     o Use ivar to polish the consensus
-     o -ivar is disabled with -no-ivar
-   -use-ref: [No]
-     o Use the reference to build the amplicon consensus
-     o -use-ref is disabled with -no-ref
-   -t: [$threadsI]
-     o Number of threads to use
+  General:
+    -ref: [Required]
+      o Fasta file with the reference sequence
+    -fastq: [Required]
+      o Fastq file with reads to build amplicons with
+    -table: [Required]
+      o Table of reads to extract
+      o use readLenPosTbl.sh to build this table.
+      o Then edit this table to only have the reads you
+        want to use to build amplicon consensus with.
+    -primer-scheme: [Required]
+      o primer scheme used with artic.
+      o This will be a bed file with 7 columns
+        - Column 4 has the primer name
+        - Column 7 has the primer sequence
+    -min-length: [$minLenI]
+      o Minimum length to map reads and build consensuses
+        with.
+    -min-depth: [$minDepthI]
+      o Minimum depth to build a consensus at.
+    -min-perc-depth: [$minPerDepthI]
+      o Minimum percentage of total reads needed to build
+        a consensus for a read or consensus (0 to 1).
+    -prefix: [$inPrefStr]
+      o Prefix to name the output amplicon stats file
+      o prefix-amp-stats.tsv
+    -model: [$medakaModelStr]
+      o Model to use with medaka
+    -polish-ivar: [No]
+      o Use ivar to polish the consensus
+      o -polish-ivar is disabled with -no-polish-ivar
+    -polish-medaka: [No]
+      o Use medaka to polish the consensus
+      o -polish-medaka is disabled with -no-polish-medaka
+    -use-ref: [No]
+      o Use the reference to build the amplicon consensus
+      o -use-ref is disabled with -no-ref
+    -t: [$threadsI]
+      o Number of threads to use
+  Method choice:
+    - Setting one or more of these options disables the
+      default options [use-majcon -use-medaka].
+    - Each option can be used multiple times and is run in
+      the order submitted. So, order matters.
+      o \"-use-majcon -use-medaka\" will run majcon first
+        and then medaka.
+      o \"-use-medaka -use-majcon\" will run medaka first
+        and then majcon.
+    -use-medaka: [-use-majcon -use-medaka]
+      o Use medaka (Medaka is very slow)
+    -use-majcon: [-use-majcon -use-medaka]
+      o Use the majority consensus step
+    -use-ivar: [-use-majcon -use-medaka]
+      o Use ivar to build amplicon consensuses
+    -use-racon: [-use-majcon -use-medaka]
+      o Use racon to build an amplicon consensus
+  Consensus building:
+    -min-base-q: [$minQI]
+      o Min q-score needed to keep a base (for all methods)
+    -ivar-min-sup: [$ivarMinSupDbl]
+      o Min support to keep an snp with ivar (0 to 1)
+    -ivar-min-ins-sup: [$ivarMinInsSupDbl]
+      o Min support to keep insertion with ivar (0 to 1)
+    -ivar-min-depth: [$ivarMinDepthI]
+      o Min read depth for ivar to not mask a base
+    -min-sub-depth: [$minSubDepthI]
+      o Min read depth to use subsampled reads from
+        buildcon for polishing. Otherwise all reads are
+        used.
 Output:
    - Prints the consensus to an file
      deletions to stdout. Adds file name to end if
@@ -117,24 +193,74 @@ Output:
 while [[ $# -gt 0 ]]; do
 # Loop: Get user input
    case $1 in
+       # General input
       -ref) refStr="$2"; shift;;
       -fastq) fqStr="$2"; shift;;
       -table) readExtractTblStr="$2"; shift;;
       -primer-scheme) primersStr="$2"; shift;;
       -min-length) minLenI="$2"; shift;;
       -min-depth) minDepthI="$2"; shift;;
+      -min-perc-depth) minPerDepthI="$2"; shift;;
       -prefix) inPrefStr="$2"; shift;;
-      -model) medakaModelStr="$2"; useMedakaBl=1; shift;;
-      -use-medaka) useMedakaBl=1;;
-      -disable-medaka) useMedakaBl=0;;
-      -disable-majcon) useMajCon=0;;
-      -use-majcon) useMajCon=1;;
-      -ivar) ivarBl=1;;
-      -no-ivar) ivarBl=0;;
+      -model) medakaModelStr="$2"; shift;;
       -t) threadsI="$2"; shift;;
       -threads) threadsI="$2"; shift;;
+
+      # Polishing steps 
+      -no-polish-medaka) polishMedBl=0;;
+      -polish-medaka) polishMedBl=1;;
+      -polish-ivar) ivarBl=1;;
+      -no-polish-ivar) ivarBl=0;;
+
       -use-ref) useRefBl=1;;
       -no-ref) useRefBl=0;;
+
+      # Consensus building method
+      -use-medaka)
+         if [[ "$firstConMethodBl" -gt 0 ]]; then
+            conMethodAryStr=("-use-medaka");
+            firstConMethodBl=0;
+            lenConMethodI=1;
+         else
+            conMethodAryStr+=("-use-medaka");
+            lenConMethodI="$((lenConMethodI + 1))";
+         fi;; # Check if this is the users first input
+      -use-majcon)
+         if [[ "$firstConMethodBl" -gt 0 ]]; then
+            conMethodAryStr=("-use-majCon");
+            firstConMethodBl=0;
+            lenConMethodI=1;
+         else
+            conMethodAryStr+=("-use-majCon");
+            lenConMethodI="$((lenConMethodI + 1))";
+         fi;; # Check if this is the users first input
+      -use-ivar)
+         if [[ "$firstConMethodBl" -gt 0 ]]; then
+            conMethodAryStr=("-use-ivar");
+            firstConMethodBl=0;
+            lenConMethodI=1;
+         else
+            conMethodAryStr+=("-use-ivar");
+            lenConMethodI="$((lenConMethodI + 1))";
+         fi;; # Check if this is the users first input
+      -racon)
+         if [[ "$firstConMethodBl" -gt 0 ]]; then
+            conMethodAryStr=("-use-racon");
+            firstConMethodBl=0;
+            lenConMethodI=1;
+         else
+            conMethodAryStr+=("-use-racon");
+            lenConMethodI="$((lenConMethodI + 1))";
+         fi;; # Check if this is the users first input
+
+      # consensus settings
+      -min-base-q) minQI="$2"; shift;;
+      -ivar-min-sup) ivarMinSupDbl="$2"; shift;;
+      -ivar-min-ins-sup) ivarMinInsSupDbl="$2"; shift;;
+      -ivar-min-depth) ivarMinDepthI="$2"; shift;;
+      -min-sub-depth) minSubDepthI="$2"; shift;;
+
+      # help message and errors
       -h) printf "%s\n" "$helpStr"; exit;;
       --h) printf "%s\n" "$helpStr"; exit;;
       -help) printf "%s\n" "$helpStr"; exit;;
@@ -231,14 +357,17 @@ if [[ "$errBl" -gt 0 ]]; then exit; fi
 
 extraOptions="-threads $threadsI";
 
-if [[ "$useMedakaBl" -gt 0 ]]; then
-   extraOptions="$extraOptions -enable-medaka";
+if [[ "$medakaModelStr" != "" ]]; then
    extraOptions="$extraOptions -model $medakaModelStr";
-fi # Check if using medaka
+fi # If changing the model of medaka I am using
+   # This will not tigure medaka to be called, so is safe
+   # to always do
 
-if [[ "$useMajCon" -eq 0 ]]; then
-   extraOptions="$extraOptions -disable-majority-consensus";
-fi  # Check if disabling majcon
+# Add in the consensus building methods
+for strMethod in ${conMethodAryStr[*]}; do
+# Loop: Add all consensus request to buildCon
+   extraOptions="$extraOptions $strMethod";
+done # Loop: Add all consensus request to buildCon
 
 if [[ "$useRefBl" -gt 0 ]]; then
    extraOptions="$extraOptions -ref $refStr";
@@ -322,13 +451,19 @@ do # Loop: Build a consensus for each amplicon
    #  - Build consensus
    #*******************************************************
 
-   "$scriptDirStr/../00-programs/buildCon" \
-       -min-read-read-map-length "$minLenI" \
-       -min-read-con-map-length "$minLenI" \
-       -min-con-length "$minLenI" \
-       -min-reads-per-bin "$minDepthI" \
+   "$scriptDirStr/../00-programs/buildcon" \
+       -min-length "$minLenI" \
+       -min-depth "$minDepthI" \
+       -min-perc "$minPerDepthI" \
        -prefix "$prefStr" \
        -fastq "$prefStr-tmp.fastq" \
+       -ivar-min-depth $ivarMinDepthI \
+       -ivar-min-snp-sup $ivarMinSupDbl \
+       -ivar-min-ins-sup $ivarMinInsSupDbl \
+       -ivar-min-q $minQI \
+       -maj-con-min-base-q $minQI \
+       -read-con-min-base-q $minQI \
+       -read-read-min-base-q $minQI \
        $extraOptions;
 
    #*******************************************************
@@ -336,12 +471,12 @@ do # Loop: Build a consensus for each amplicon
    #  - Grab a subsample for ivar
    #*******************************************************
 
-   if [[ "$ivarBl" -gt 0 ]]; then
+   if [[ "$ivarBl" -gt 0 || "$polishMedBl" -gt 0 ]]; then
       numReadsI="$(\
          wc -l "$prefStr-tmp.fastq" | awk '{print $1/4}' \
       )"; # Find the number of reads in the file
 
-      if [[ "$numReadsI" -gt "$ivarSubDepthI" ]]; then
+      if [[ "$numReadsI" -gt "$minSubDepthI" ]]; then
          cat \
              "$prefStr--top-reads.fastq" \
            >> "$inPrefStr-ivar.fq";
@@ -380,6 +515,26 @@ cat \
 #  - run ivar to polish the consensus (if requested)
 #**********************************************************
 
+if [[ "$polishMedBl" -gt 0 ]]; then
+   . ~/medaka/venv/bin/activate 
+   medaka --version || source "$condaPathStr/etc/profile.d/conda.sh";
+   medaka --version || conda activate medaka || (printf "No medaka\n" >&2 && exit);
+
+   medaka_consensus \
+       -i "$inPrefStr-ivar.fq" \
+       -d "$inPrefStr-scaffold.fa" \
+       -m "$medakaModelStr" \
+       -o "$inPrefStr-medaka-polish-tmp-dir" \
+       -t "$threadsI";
+
+   mv \
+      "$inPrefStr-medaka-polish-tmp-dir/consensus.fasta" \
+      "$inPrefStr-scaffold.fa";
+   rm -r "$inPrefStr-medaka-polish-tmp-dir";
+
+   deactivate || conda deactivate;
+fi # Check if polishing with medaka
+
 if [[ "$ivarBl" -gt 0 ]]; then
 # If using ivar
   minimap2 \
@@ -396,8 +551,8 @@ if [[ "$ivarBl" -gt 0 ]]; then
     "$scriptDirStr/../00-programs/ivar" consensus \
       -p "$inPrefStr-tmp-scaffold" \
       -i "$inPrefStr-scaffold" \
-      -c "$minInsSupDbl" \
-      -t "$minSupDbl" \
+      -c "$ivarMinInsSupDbl" \
+      -t "$ivarMinSupDbl" \
       -m "$minDepthI" \
       -n "N" \
       -q "$minQI";

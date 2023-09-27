@@ -482,8 +482,9 @@ uint8_t fqOneIdExtract(
 |     - minSimUSht ranges from 1 (0.01%) to precMult (100%)            
 \---------------------------------------------------------------------*/
 uint8_t findBestXReads(
-    const uint64_t *numReadConsULng, /*# reads for bulding a consensus*/
-    uint64_t *numReadsKeptULng,  /*Number of reads binned to con*/
+    const ulong *numReadConsULng,/*Max subsample size*/
+    ulong *numReadsKeptULng,     /*Number of reads kept*/
+    ulong *totalMappedUL,        /*Number of reads mapped*/ 
     char *threadsCStr,           /*Number threads to use with minimap2*/
     const char *useMapqBl,       /*1: use mapping quality in selection*/
     struct minAlnStats *minStats,/*Min stats to cluster reads together*/
@@ -594,6 +595,7 @@ uint8_t findBestXReads(
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
     *numReadsKeptULng = 0; /*Make sure start at 0 reads*/
+    *totalMappedUL = 0;
 
     if(!(noRefBl & 1))
     { /*If using a reference*/
@@ -730,6 +732,10 @@ uint8_t findBestXReads(
         * Fun-3 Sec-4 Sub-4: Check if at max number of reads to keep
         \**************************************************************/
 
+        ++(*totalMappedUL);
+          /*At this point the read passed the quality
+          ` check, but may not be in the subsample
+          */
         tmpRead = 0;
 
         /*Discard decimal part of the Q-score*/
@@ -870,7 +876,7 @@ uint8_t findBestXReads(
     hashTbl = 
         readListToHash(
             readOn,
-            numReadsKeptULng,
+            (uint64_t *) numReadsKeptULng,
             searchStack,        /*Used for searching the hash table*/
             &hashSizeULng,      /*Will hold Size of hash table*/
             &digPerKeyUChar,    /*Power of two hash size is at*/

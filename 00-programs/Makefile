@@ -23,7 +23,7 @@ condaCallStr=$(condaStr)/etc/profile.d/conda.sh
 #  dir trims off the filename, leaving just the directory.
 
 # All code for this repository (except artic, samtools, medaka, and minimap2)
-all: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile buildBuildCon buildStich makeLilo makeivar
+all: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile buildBuildcon buildStich makeLilo makeivar makequast
 
 # My own code
 private: buildAlnSeq buildFqGetIds buildScoreReads buildTrimPrimers buildTrimSamFile buildBuildCon buildStich
@@ -51,9 +51,9 @@ buildTrimSamFile:
 	$(MAKE_PROGRAM) -C findCoInfctSrc trimSam CC=$(CC) || printf "Failed to complile trimSamFile\n" && exit;
 	mv findCoInfctSrc/trimSamFile ./ || printf "Failed to move trimSamFile\n" && exit;
 
-buildBuildCon:
-	$(MAKE_PROGRAM) -C findCoInfctSrc buildCon CC=$(CC) || printf "Failed to complile buildCon\n" && exit;
-	mv findCoInfctSrc/buildCon ./ || printf "Failed to move buildCon\n" && exit;
+buildBuildcon:
+	$(MAKE_PROGRAM) -C findCoInfctSrc makebuildcon CC=$(CC) || printf "Failed to complile buildcon\n" && exit;
+	mv findCoInfctSrc/buildcon ./ || printf "Failed to move buildcon\n" && exit;
 
 buildStich:
 	$(MAKE_PROGRAM) -C stichSrc CC=$(CC) || printf "Failed to complile stich\n" && exit;
@@ -93,6 +93,10 @@ makeivar:
 		# files.
 	mv ivarSrc/src/ivar ./ || printf "Unable to move ivar  to 00-programs\n" && exit;
 
+makequast:
+	ls quast || git clone https://github.com/ablab/quast || printf "Could not download quast\n" && exit;
+	sh -c "cd quast && bash install.sh" || printf "Could not install quast\n" && exit;
+
 removeprograms:
 	source $(condaCallStr) || printf "Is conda activated?\n";
 	conda init bash || printf "Failed to activate bash\n";
@@ -103,7 +107,7 @@ removeprograms:
 	rm alnSeq || printf "alnSeq not compiled\n";
 	rm alnSeqMid || printf "alnSeqMid not compiled\n";
 	rm fqGetIds || printf "fqGetIds not compiled\n";
-	rm buildCon || printf "buildCon not compiled\n";
+	rm buildcon || printf "buildcon not compiled\n";
 	rm trimPrimers || printf "trimPrimers not compiled\n";
 	rm trimSamFile || printf "trimSamFile not compiled\n";
 	rm scoreReads || printf "scoreReads not compiled\n";
@@ -123,12 +127,13 @@ removeall:
 	rm alnSeq || printf "alnSeq not compiled\n";
 	rm alnSeqMid || printf "alnSeqMid not compiled\n";
 	rm fqGetIds || printf "fqGetIds not compiled\n";
-	rm buildCon || printf "buildCon not compiled\n";
+	rm buildcon || printf "buildcon not compiled\n";
 	rm trimPrimers || printf "trimPrimers not compiled\n";
 	rm trimSamFile || printf "trimSamFile not compiled\n";
 	rm scoreReads || printf "scoreReads not compiled\n";
 	rm ivar || printf "ivar not compiled\n";
 	rm -r ivarSrc || printf "ivarSrc not downloaded\n";
+	rm -r quast || printf "Quast not installed\n";
 
 # Cleans downloaded directories (no longer needed)
 # (everything that is not my code); LILO is still needed.

@@ -3,6 +3,7 @@
 #    Holds functions for doing read id extractions for find
 #    co-infections
 # Includes:
+#   - "dataTypeShortHand.h"
 #   o "FCIStatsFun.h"
 #   o "minAlnStats.h"
 #   o "cStrFun.h"
@@ -42,10 +43,10 @@
 #include "trimSam.h"           /*For trimming reads*/
 #include "cStrFun.h"           /*copying c-strings*/
 #include "findCoInftChecks.h"  /*Read quality checks & mindiff struct*/
-#include "cStrFun.h"           /*C-string functions*/
 #include "fqAndFaFun.h"        /*Fastq and fasta functions*/
 #include "findCoInftBinTree.h" /*for readBin struct*/
 #include "fqGetIdsSearchFq.h"  /*For extracting reads by id*/
+#include "dataTypeShortHand.h"
 
 /*---------------------------------------------------------------------\
 | Output:                                                              |
@@ -98,8 +99,9 @@ uint8_t fqOneIdExtract(
 |     - minSimUSht ranges from 1 (0.01%) to precMult (100%)            
 \---------------------------------------------------------------------*/
 uint8_t findBestXReads(
-    const uint64_t *numReadConsULng, /*# reads for bulding a consensus*/
-    uint64_t *numReadsKeptULng,  /*Number of reads binned to con*/
+    const ulong *numReadConsULng,/*Max subsample size*/
+    ulong *numReadsKeptULng,     /*Number of reads kept*/
+    ulong *totalMappedUL,        /*Number of reads mapped*/ 
     char *threadsCStr,           /*Number threads to use with minimap2*/
     const char *useMapqBl,       /*1: use mapping quality in selection*/
     struct minAlnStats *minStats,/*Min stats to cluster reads together*/

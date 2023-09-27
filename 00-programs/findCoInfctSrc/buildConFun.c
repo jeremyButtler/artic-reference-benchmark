@@ -6,43 +6,47 @@
 
 #include "buildConFun.h"
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
 ' SOF TOC: Start of Functions
-'    fun-1 buildCon:
-'        - Builds a consensus from a fastq file using a supplied
-'          reference or the best read (highest medain Q) in the fastq
-'          file.
-'    fun-3 buildSingleCon:
-'        - Builds a consensus using: majority, racon, medaka functions
-'    fun-4 simpleMajCon:
-'        - Builds a majority consensus (ignores insertions)
-'    fun-5 buildConWithRacon:
-'        - Buids a consensus using racon
-'    fun-6 medakaPolish:
-'        - Polish a consensus with medaka using the best reads
-'    fun-7 cmpCons:
-'        - Compares two consensus (does recursive call if tree input
-'    fun-9 freeBaseStruct:
-'        - Frees a base struct from a linked list.
-'        - The freeded base is set to the alternate base if their is an
-'          alternate base or 0 if no alternative base is present.
-'        - Assumes alternateive bases (altBase) have nextBase set to
-'          0 (null).
-'    fun-9 initMajConStruct:
-'        - Set default settings for struct holding majority consensus
-'          settings
-'    fun-10 initRaconStruct:
-'        - Set default settings for struct holding Racon settings
-'    fun-10 initMedakaStruct:
-'        - Set default settings for struct holding Racon settings
-'    fun-10 initMedakaStruct:
-'        - Set default settings for struct holding Racon settings
-'    fun-11 initMedakaStruct:
-'        - Set default settings for struct holding Medaka settings
-'    fun-12 initConBuildStruct:
-'        - Set default settings for struct holdoing consensus bulding
-'          settings.
-'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+'  o fun-1 buildCon:
+'    - Builds a consensus from a fastq file using a
+'      supplied reference or the best read (highest
+'      medain Q) in the fastq file.
+'  o fun-3 buildSingleCon:
+'    - Builds a consensus using: the selected consensus
+'      methods (ivar, medaka, racon, majCon)
+'  o fun-4 simpleMajCon:
+'    - Builds a majority consensus (ignores insertions)
+'  o fun-5 buildConWithRacon:
+'    - Buids a consensus using racon
+'  o fun-6 medakaPolish:
+'    - Polish a consensus with medaka using the best reads
+'  o fun-7 cmpCons:
+'    - Compares two consensus(recursive call if tree input)
+'  o fun-9 freeBaseStruct:
+'    - Frees a base struct from a linked list.
+'    - The freeded base is set to the alternate base if
+'      their is an alternate base
+'    - The freed base is set to 0 if no alternative base is
+'      present.
+'  o fun-9 initMajConStruct:
+'    - Set default settings for struct holding majority
+'      consensus settings
+'  o fun-10 initRaconStruct:
+'    - Set default settings for Racon settings
+'  o fun-10 initMedakaStruct:
+'    - Set default settings for Racon settings
+'  o fun-11 initMedakaStruct:
+'    - Set default settings for Medaka settings
+'  o fun-12 initConBuildStruct:
+'    - Set default settings for struct holdoing consensus
+'      building settings.
+'  o fun-13 ivarCon:
+'    - Builds a consensus using ivar
+'  o macro-01 initIvarSet:
+'    - Initializes the settings for an ivarSet structuer
+'    - in buildConFun.h only
+\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #include "buildConFun.h"
 
@@ -92,8 +96,14 @@ unsigned char buildCon(
     char trueBl = 1;        /*So I can pass TRUE (1) to my functions*/
     char falseBl = 0;       /*So I can pass a FALSE (0) to functions*/
     char tmpBuffCStr[1024];
-    unsigned char errUC = 0;
+    uchar errUC = 0;
+    ulong totalReadsUL = 0; /*Number reads in fastq file*/
+    ulong mappedReadsUL =0;
+      /*Reads that mapped and passed the quality checks,
+      ` but may not be in the subsample
+      */
 
+    float percMappedFlt = 0; /*% of reads mapped*/
     struct samEntry *zeroSam = 0; /*holds the reference (0 to ignore)*/
 
     FILE *fqFILE = 0;
@@ -107,8 +117,10 @@ unsigned char buildCon(
     { /*If have a reference to work with*/
         tmpCStr =
             cStrCpInvsDelm(conData->consensusCStr, conData->fqPathCStr);
-        tmpCStr -= 6; /*move to "." in ".fastq\0"*/
-        tmpCStr = cStrCpInvsDelm(tmpCStr, "--bestRead.fasta");
+
+        /*Get to end of .fastq or .fq*/
+        if(*(tmpCStr - 2) == 't') tmpCStr -= 6; /*.fastq*/
+        else tmpCStr -= 3;                      /*.fq*/
 
         /*Set up the best read name*/
         strcpy(conData->bestReadCStr, conData->consensusCStr);
@@ -139,11 +151,14 @@ unsigned char buildCon(
     ^ Fun-1 Sec-3: Make sure I know the number of reads in fastq file
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
+
     if(conData->numReadsULng == 0)/*Find number of reads in fastq file*/
         conData->numReadsULng = getNumReadsInFq(conData->fqPathCStr);
 
     if(conData->numReadsULng == 0)
         return 2;
+
+    totalReadsUL = conData->numReadsULng;
 
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
     ^ Fun-1 Sec-5: Polish the read or reference
@@ -192,6 +207,7 @@ unsigned char buildCon(
                 findBestXReads(
                     &conSet->maxReadsToBuildConUL,
                     &conSet->numReadsForConUL, /*# of reads extracted*/
+                    &mappedReadsUL,
                     threadsCStr,      /*Number threads for minimap2*/
                     &falseBl,        /*Do not using mapping quality*/
                     minReadReadStats, /*Min stats to keep reads*/
@@ -202,8 +218,15 @@ unsigned char buildCon(
                     1           /*Make a name using the input fastq*/
             );  /*Extract top reads that mapped to selected best read*/
 
-            if(conSet->numReadsForConUL < conSet->minReadsToBuildConUL)
-            { /*If I did not extract enough reads*/
+            percMappedFlt=mappedReadsUL/(totalReadsUL*1.0);
+
+            if(
+                     conSet->numReadsForConUL 
+                   < conSet->minReadsToBuildConUL
+                 ||
+                     percMappedFlt
+                   < conSet->minPercMappedReadsFlt
+            ){ /*If I did not extract enough reads*/
                 errUC = 16;
                 continue; /*If not enough reads to build consensus*/
             } /*If I did not extract enough reads*/
@@ -254,6 +277,7 @@ unsigned char buildCon(
                 findBestXReads(
                     &conSet->maxReadsToBuildConUL,
                     &conSet->numReadsForConUL, /*# of reads extracted*/
+                    &mappedReadsUL,
                     threadsCStr,     /*Number threads for minimap2*/
                     &trueBl,        /*will use mapq for reads here*/
                     minReadConStats,/*Min stats to keep reads*/
@@ -264,8 +288,15 @@ unsigned char buildCon(
                     1           /*Make a name using the input fastq*/
             );  /*Extract top reads that mapped to selected best read*/
 
-            if(conSet->numReadsForConUL < conSet->minReadsToBuildConUL)
-            { /*If need to get a new best read*/
+            percMappedFlt=mappedReadsUL/(totalReadsUL*1.0);
+
+            if(
+                     conSet->numReadsForConUL 
+                   < conSet->minReadsToBuildConUL
+                 ||
+                     percMappedFlt
+                   < conSet->minPercMappedReadsFlt
+            ){ /*If need to get a new best read*/
                 polishBl = 0; /*do best read if reference fails*/
                 errUC = 16; /*Could not build a consensus*/
                 break; /*Get a new best read*/
@@ -356,87 +387,145 @@ unsigned char buildSingleCon(
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
     ' Fun-3 TOC: buildCon
-    '     fun-3 sec-1: variable declerations
-    '     fun-3 sec-2: Build majority consensus if asked for
-    '     fun-3 sec-3: Build consensus with racon if asked for
-    '     fun-3 sec-4: Build consensus with medaka if asked for
+    '  o fun-3 sec-1:
+    '    - Variable declerations
+    '  o Fun-3 Sec-02:
+    '    - Buid a consensus
     \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
-    ^ Fun-3 Sec-1: variable declerations
-    \>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+    ^ Fun-3 Sec-1:
+    ^  - Variable declerations
+    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
     uint8_t errUC = 0;
 
-    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
-    ^ Fun-3 Sec-2: Build majority consensus if asked for
-    \>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+    ^ Fun-3 Sec-02:
+    ^  - Buid a consensus
+    ^  o fun-3 sec-02 sub-01:
+    ^    - Check which methods using to build a consensus
+    ^  o fun-3 sec-02 sub-02:
+    ^    - Build the consensus with majority consensus
+    ^  o fun-3 sec-02 sub-03:
+    ^    - Build the consensus with racon
+    ^  o fun-3 sec-2 sub-04:
+    ^    - Build the consensus with medaka
+    ^  o fun-3 sec-2 sub-05:
+    ^    - Build consensus with ivar
+    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
-    if(conSet->majConSet.useMajConBl & 1)
-    { /*If need to build a simple majority consensus first*/
+    /*****************************************************\
+    * Fun-3 Sec-2 Sub-01:
+    *  - Check which methods using to build a consensus
+    \*****************************************************/
 
-        /*Build the conssensus*/
-        errUC =
-          simpleMajCon(
-              &conSet->clustUC,
-              threadsCStr,
-              clustOn,
-              samStruct,
-              &conSet->majConSet
-        ); /*Build a simple majority consensus from input reads*/
+    for(uchar iRnd = 0; iRnd < conSet->lenMethodUC; ++iRnd)
+    { /*Loop: Build consensus according to user input*/
+       switch(conSet->methodAryUC[iRnd])
+       { /*Switch: Check wich consensus method I am using*/
+          case defNoCon: goto builtOneCon;
 
-        if(!(errUC & 1))
-            return errUC;
+          /***********************************************\
+          * Fun-3 Sec-2 Sub-02:
+          *  - Build majority consensus
+          \***********************************************/
 
-        conSet->lenConUL = conSet->majConSet.lenConUL;
+          case defUseMajCon:
+          /*Case: Using the majority consensus method*/
+              errUC =
+                simpleMajCon(
+                    &conSet->clustUC,
+                    threadsCStr,
+                    clustOn,
+                    samStruct,
+                    &conSet->majConSet
+              ); /*Build the consensus*/
 
-        if(conSet->lenConUL < conSet->minConLenUI)
-            return 32; /*The consensus was to short*/
-    } /*If need to build a simple majority consensus first*/
+              if(!(errUC & 1))
+                  return errUC;
+
+              conSet->lenConUL =conSet->majConSet.lenConUL;
+
+              if(conSet->lenConUL < conSet->minConLenUI)
+                  return 32; /*The consensus was to short*/
+             break;
+          /*Case: Using the majority consensus method*/
     
-    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
-    ^ Fun-3 Sec-3: Build consensus with racon if asked for
-    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+          /***********************************************\
+          * Fun-3 Sec-02 Sub-03:
+          *  - Build consensus with racon
+          \***********************************************/
 
-    if(conSet->raconSet.useRaconBl & 1)
-    { /*If buliding a consensus with racon*/
-        buildConWithRacon(
-            &conSet->raconSet,      /*Has settings for Racon*/
-            &conSet->clustUC,                /*Cluster on*/
-            threadsCStr,
-            clustOn
-        ); /*Builds a consensus using racon*/
+          case defUseRacon:
+          /*Case: using the racon method*/
+              buildConWithRacon(
+                  &conSet->raconSet,
+                  &conSet->clustUC,
+                  threadsCStr,
+                  clustOn
+              ); /*Builds a consensus using racon*/
 
-        conSet->lenConUL = conSet->raconSet.lenConUL;
+              conSet->lenConUL = conSet->raconSet.lenConUL;
 
-        if(conSet->lenConUL < conSet->minConLenUI)
-            return 32; /*The consensus was to short*/
-    } /*If buliding a consensus with racon*/
+              if(conSet->lenConUL < conSet->minConLenUI)
+                  return 32; /*The consensus was to short*/
+              break;
+          /*Case: using the racon method*/
 
+          /***********************************************\
+          * Fun-3 Sec-02 Sub-04:
+          *  - Build consensus with medaka
+          \***********************************************/
 
-    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
-    ^ Fun-3 Sec-4: Build consensus with medaka if asked for
-    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+           case defUseMedaka:
+           /*Case: Use the medaka consensus method*/
+              errUC =
+                  medakaPolish(
+                      &conSet->medakaSet,
+                      &conSet->clustUC,
+                      threadsCStr,
+                      clustOn,
+                      samStruct
+              ); /*Build the consensus with medaka*/
 
-    if(conSet->medakaSet.useMedakaBl & 1)
-    { /*If using medaka to polish*/
-        errUC =
-            medakaPolish(
-                &conSet->medakaSet,
-                &conSet->clustUC,
-                threadsCStr,
-                clustOn,
-                samStruct
-        ); /*Build the consensus with medaka*/
+              if(!(errUC & 1)) return errUC;
 
-        if(!(errUC & 1))
-            return errUC;
+              conSet->lenConUL= conSet->medakaSet.lenConUL;
 
-        conSet->lenConUL = conSet->medakaSet.lenConUL;
+              if(conSet->lenConUL < conSet->minConLenUI)
+                  return 32; /*The consensus was to short*/
+              break;
+           /*Case: Use the medaka consensus method*/
 
-        if(conSet->lenConUL < conSet->minConLenUI)
-            return 32; /*The consensus was to short*/
-    } /*If using medaka to polish*/
+          /***********************************************\
+          * Fun-3 Sec-02 Sub-05:
+          *  - Build consensus with ivar
+          \***********************************************/
+
+           case defUseIvar:
+           /*Case: Use the ivar consensus method*/
+              errUC =
+                  ivarCon(
+                      &conSet->ivarSetST,
+                      &conSet->clustUC,
+                      threadsCStr,
+                      clustOn,
+                      samStruct
+              ); /*Build the consensus with medaka*/
+
+              if(!(errUC & 1)) return errUC;
+
+              conSet->lenConUL=conSet->ivarSetST.lenConUL;
+
+              if(conSet->lenConUL < conSet->minConLenUI)
+                  return 32; /*The consensus was to short*/
+              break;
+           /*Case: Use the ivar consensus method*/
+       } /*Switch: Check wich consensus method I am using*/
+    } /*Loop: Build consensus according to user input*/
+
+    builtOneCon:
 
     return 1;
 } /*buildSingleCon*/
@@ -584,7 +673,11 @@ unsigned char simpleMajCon(
 
     tmpCStr =
         cStrCpInvsDelm(binStruct->consensusCStr, binStruct->fqPathCStr);
-    tmpCStr -= 6; /*Get to end of .fastq*/
+
+    /*Get to end of .fastq or .fq*/
+    if(*(tmpCStr - 2) == 't') tmpCStr -= 6; /*.fastq*/
+    else tmpCStr -= 3;                      /*.fq*/
+
     tmpCStr = cStrCpInvsDelm(tmpCStr, "--clust-");
     tmpCStr = uCharToCStr(tmpCStr, *clustUC); /*Add cluster number*/
     tmpCStr=cStrCpInvsDelm(tmpCStr, "--con.fasta");
@@ -1205,7 +1298,11 @@ void buildConWithRacon(
     { /*If using the best read for the first round of racon*/
         tmpCStr =
             cStrCpInvsDelm(conBin->consensusCStr, conBin->fqPathCStr);
-        tmpCStr -= 6; /*Get to end of .fastq*/
+
+        /*Get to end of .fastq or .fq*/
+        if(*(tmpCStr - 2) == 't') tmpCStr -= 6; /*.fastq*/
+        else tmpCStr -= 3;                      /*.fq*/
+
         tmpCStr = cStrCpInvsDelm(tmpCStr, "--clust-");
 
         /*Copy cluster number into file name; tmpCStr will point to end*/
@@ -1384,7 +1481,11 @@ unsigned char medakaPolish(
 
         tmpCStr =
             cStrCpInvsDelm(conBin->consensusCStr, conBin->fqPathCStr);
-        tmpCStr -= 6; /*Get to end of .fastq*/
+
+        /*Get to end of .fastq or .fq*/
+        if(*(tmpCStr - 2) == 't') tmpCStr -= 6; /*.fastq*/
+        else tmpCStr -= 3;                      /*.fq*/
+
         tmpCStr = cStrCpInvsDelm(tmpCStr, "--clust-");
 
         /*Copy cluster number into file name*/
@@ -1434,7 +1535,11 @@ unsigned char medakaPolish(
 
     /*Make temporary director for medaka*/
     tmpCStr = cStrCpInvsDelm(medDirCStr, conBin->fqPathCStr);
-    tmpCStr -= 6; /*move to "." in ".fastq"*/
+
+    /*Get to end of .fastq or .fq*/
+    if(*(tmpCStr - 2) == 't') tmpCStr -= 6; /*.fastq*/
+    else tmpCStr -= 3;                      /*.fq*/
+
     tmpCStr = cStrCpInvsDelm(tmpCStr, "--medaka");
 
     /*Copy the path to the consensus medaka will build*/
@@ -1916,7 +2021,8 @@ void initMajConStruct(
     ' Fun-9 TOC: Sec-1 Sub-1: initMajConStruct
     \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    majConSettings->useMajConBl = defUseMajCon;
+    majConSettings->useMajConBl =
+       (defConMethod == defUseMajCon);
     majConSettings->minBaseQUC = majConMinBaseQ;
     majConSettings->minInsQUC = majConMinInsQ;
     majConSettings->minReadsPercBaseFlt = percBasesPerPos;
@@ -1940,7 +2046,8 @@ void initRaconStruct(
     ' Fun-10 TOC: Sec-1 Sub-1: initRaconStruct
     \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    raconSettings->useRaconBl = defUseRaconCon;
+    raconSettings->useRaconBl =
+       (defConMethod == defUseRacon);
     raconSettings->rndsRaconUC = defRoundsRacon;
     raconSettings->lenConUL = 0;
 
@@ -1960,7 +2067,8 @@ void initMedakaStruct(
     ' Fun-11 TOC: Sec-1 Sub-1: initMedakaStruct
     \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    medakaSettings->useMedakaBl = defUseMedakaCon;
+    medakaSettings->useMedakaBl =
+       (defConMethod == defUseMedaka);
     strcpy(medakaSettings->modelCStr, defMedakaModel);
     medakaSettings->condaBl = defCondaBl;
     medakaSettings->lenConUL = 0;
@@ -1972,7 +2080,7 @@ void initMedakaStruct(
 | Output: Modifies: medakaStruct to have default settings
 \---------------------------------------------------------------------*/
 void initConBuildStruct(
-    struct conBuildStruct *consensusSettings
+    struct conBuildStruct *conSetST
     /*struct to set to default values in defaultSettings.h*/
 ) /*Sets input structers variables to default settings*/
 { /*initConBuildStruct*/
@@ -1981,18 +2089,434 @@ void initConBuildStruct(
     ' Fun-12 TOC: Sec-1 Sub-1: initConBuildStruct
     \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    consensusSettings->useStatBl = 0;
-    consensusSettings->clustUC = 0;
-    consensusSettings->minReadsToBuildConUL = minReadsPerBin;
-    consensusSettings->numRndsToPolishUI = defNumPolish;
-    consensusSettings->maxReadsToBuildConUL = defReadsPerCon;
-    consensusSettings->minConLenUI = defMinConLen;
-    consensusSettings->lenConUL = 0;
-    consensusSettings->numReadsForConUL = 0;
+    conSetST->methodAryUC[0] = defConMethod;
+    conSetST->methodAryUC[1] = defNoCon;
+    conSetST->lenMethodUC = 1;
+    conSetST->minPercMappedReadsFlt =defMinPercMappedReads;
+    
+    conSetST->useStatBl = 0;
+    conSetST->clustUC = 0;
+    conSetST->minReadsToBuildConUL = minReadsPerBin;
+    conSetST->numRndsToPolishUI = defNumPolish;
+    conSetST->maxReadsToBuildConUL = defReadsPerCon;
+    conSetST->minConLenUI = defMinConLen;
+    conSetST->lenConUL = 0;
+    conSetST->numReadsForConUL = 0;
 
-    initMajConStruct(&consensusSettings->majConSet);
-    initRaconStruct(&consensusSettings->raconSet);
-    initMedakaStruct(&consensusSettings->medakaSet);
+    initMajConStruct(&conSetST->majConSet);
+    initRaconStruct(&conSetST->raconSet);
+    initMedakaStruct(&conSetST->medakaSet);
+    initIvarSet(conSetST->ivarSetST);
 
     return;
 } /*initConBuildStruct*/
+
+/*--------------------------------------------------------\
+| Name: ivarCon
+| Use:
+|  - Builds a consensus using ivar
+| Input:
+|  - settings:
+|    o ivarSet structure with settings for ivar
+|  - clustUC:
+|    o Number of the cluster
+|  - threadsStr:
+|    o Number of threads to use (as string)
+|  - conST:
+|    o Has names of the consensus, best read, and top reads
+|      fastq files.
+|    o best read is the read to use in making the consensus
+|      - fastq or fasta
+|    o top reads are aligned to best read and used to build
+|      the consensus
+|    o consensus is the name of the output consensus
+|      - Avoid periods in names
+|  - samST:
+|    o Used to read in sam entries.
+| Output:
+|    - Returns:
+|        o 1 If succeded
+|        o 2 for pipe error with samtools/ivar
+|        o 4 Failed to make a consensus
+|        o 32 for pipe error with minimap2
+|        o 64 memory error
+\--------------------------------------------------------*/
+unsigned char ivarCon(
+    struct ivarSet *settings,/*Settings to run ivar with*/
+    uchar *clustUC,          /*Cluster number to use*/
+    char *threadsStr,        /*Number of threads*/
+    struct readBin *conST,   /*Has reads/consensus to use*/
+    struct samEntry *samST   /*For getting sam file input*/
+){ /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+   ' Fun-13 TOC: ivarCon
+   '  - Builds a consensus using ivar from the best reads
+   '    & top read
+   '  o fun-13 sec-01:
+   '    - Variable declerations
+   '  o fun-13 sec-02:
+   '    - Make the command for ivar
+   '  o fun-13 sec-03:
+   '    - Run ivar
+   '  o fun-13 sec-04:
+   '    - Clean up and trim/print consensus
+   \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+   /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+   ^ Fun-13 Sec-01:
+   ^  - Variable declerations
+   \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+
+   ushort lenIvarCmdUS = 2048;
+   char minimap2CmdStr[lenIvarCmdUS];
+   char ivarCmdStr[lenIvarCmdUS];
+   char *buffStr = 0;
+      /*So can swap between buffers when checking the
+      ` sequence. I am using the minimap2CmdStr and
+      ` ivarCmdStr as buffers in the consensus check step.
+      */
+
+   int lenPrefI = 512;
+   char prefixStr[lenPrefI];   /*output File name*/
+   char *prefEndStr = 0;
+   char *tmpStr = 0;
+
+   uchar errUC = 0;  /*Report errors*/
+
+   FILE *stdinFILE = 0;
+   FILE *stdoutFILE = 0;
+
+   /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+   ^ Fun-13 Sec-02:
+   ^  - Make the commands to call
+   ^  o fun-13 sec-02 sub-01:
+   ^    - Build the consensus name
+   ^  o fun-13 sec-02 sub-02:
+   ^    - Make the command for minimap2
+   ^  o fun-13 sec-02 sub-03:
+   ^    - Make the command for ivar
+   \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+   /******************************************************\
+   * Fun-13 Sec-02 Sub-01:
+   *  - Build the consensus name
+   \******************************************************/
+
+    tmpStr =
+       cStrCpInvsDelm(
+          conST->consensusCStr,
+          conST->fqPathCStr
+    ); /*Copy the consensus name*/
+
+    /*Get to end of .fastq or .fq*/
+    if(*(tmpStr - 2) == 't') tmpStr -= 6; /*.fastq case*/
+    else tmpStr -= 3;                     /*.fq case*/
+
+    tmpStr = cStrCpInvsDelm(tmpStr, "--clust-");
+
+    /*Copy cluster number into file name*/
+    tmpStr = uCharToCStr(tmpStr, *clustUC);
+    tmpStr = cStrCpInvsDelm(tmpStr, "--con.fasta");
+
+   /******************************************************\
+   * Fun-13 Sec-02 Sub-02:
+   *  - Make the command for minimap2
+   \******************************************************/
+
+   tmpStr = cStrCpInvsDelm(minimap2CmdStr, minimap2CMD);
+   tmpStr = cpParmAndArg(tmpStr, "-t", threadsStr);
+
+   /*Check if I am using a consensus file or best reads*/
+   /*I set the best read to the last consensus when I am
+   ` doing multiple iterations
+   */
+   if(conST->consensusCStr[0] == '\0')
+      tmpStr =
+         cpParmAndArg(
+            tmpStr,
+            conST->bestReadCStr,
+            conST->consensusCStr
+      ); /*Copy reads and the consensus*/
+
+   else
+      tmpStr =
+         cpParmAndArg(
+            tmpStr,
+            conST->bestReadCStr,
+            conST->fqPathCStr
+      ); /*Copy the reads and the best read/consensus*/
+
+   /******************************************************\
+   * Fun-13 Sec-02 Sub-03:
+   *  - Make the command for ivar
+   \******************************************************/
+  
+    /*I will use popen(file, "w") to pass the trimmed
+    ` minimap2 output to the samtools/ivar pipeline
+    */
+   tmpStr = cStrCpInvsDelm(ivarCmdStr, "samtools sort");
+   tmpStr = cpParmAndArg(tmpStr, "-@ 1", "- |");
+     /*For some odd reason the pipe has an issue with
+     ` samtools sort with more than 1 thread*/
+   tmpStr = cpParmAndArg(tmpStr, "samtools", "view");
+   tmpStr = cpParmAndArg(tmpStr, "-@", "1");
+     /*I could multi thread here, but no point*/
+   tmpStr = cpParmAndArg(tmpStr, "-F", "4");
+     /*No unmapped reads*/
+   tmpStr = cpParmAndArg(tmpStr, "-F", "256");
+     /*No secondary alignments*/
+   tmpStr = cpParmAndArg(tmpStr, "-F", "512");
+     /*No alignments that falied to pass filters*/
+   tmpStr = cpParmAndArg(tmpStr, "-F", "2048");
+     /*No supplemenatry alignments*/
+   tmpStr = cpParmAndArg(tmpStr, "-b -", "|");
+   tmpStr = cpParmAndArg(tmpStr, "samtools", "mpileup");
+   tmpStr = cpParmAndArg(tmpStr,"-B -aa -A -d 0","-Q 0");
+   tmpStr = cpParmAndArg(tmpStr, "-", "|");
+
+   tmpStr = cpParmAndArg(tmpStr, "ivar", "consensus");
+
+   prefEndStr =
+      strCpTill(
+         prefixStr,
+         conST->consensusCStr,
+         '.',
+         &lenPrefI
+   ); /*Get the name of the consensus*/
+   
+   tmpStr = cpParmAndArg(tmpStr, "-p", prefixStr);
+   tmpStr = cpParmAndArg(tmpStr, "-i", prefixStr);
+   tmpStr = cpParmAndArg(tmpStr,"-t",settings->minSupStr);
+
+   tmpStr =
+      cpParmAndArg(tmpStr, "-c", settings->minInsSupStr);
+   tmpStr =
+      cpParmAndArg(tmpStr, "-m", settings->minDepthStr);
+
+   *tmpStr = ' ';
+   ++tmpStr;
+   *tmpStr = '-';
+   ++tmpStr;
+   *tmpStr = 'n';
+   ++tmpStr;
+   *tmpStr = ' ';
+   ++tmpStr;
+   *tmpStr = settings->maskC;
+   ++tmpStr;
+   *tmpStr = ' ';
+   ++tmpStr;
+
+   tmpStr = cpParmAndArg(tmpStr, "-q", settings->minQStr);
+
+   /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+   ^ Fun-13 Sec-03:
+   ^  - Run ivar
+   ^  o fun-13 sec-03 sub-01:
+   ^    - Call minimap2
+   ^  o fun-13 sec-03 sub-02:
+   ^    - Call ivar
+   ^  o fun-13 sec-03 sub-03:
+   ^    - Build Consensus
+   \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+   /******************************************************\
+   * Fun-13 Sec-03 Sub-01:
+   *  - Call minimap2
+   \******************************************************/
+
+   stdinFILE = popen(minimap2CmdStr, "r");
+   if(stdinFILE == 0) return 32;
+
+   blankSamEntry(samST);
+   errUC = readSamLine(samST, stdinFILE);
+
+   if(!(errUC & 1))
+   { /*If: I had an error with minimap2*/
+      pclose(stdinFILE);
+      return 32;
+   } /*If: I had an error with minimap2*/
+
+   /******************************************************\
+   * Fun-13 Sec-03 Sub-02:
+   *  - Call ivar
+   \******************************************************/
+
+   stdoutFILE = popen(ivarCmdStr, "w");
+
+   if(stdoutFILE == 0)
+   { /*If: I had a pipe problem with ivar*/
+      pclose(stdinFILE);
+      blankSamEntry(samST);
+      return 2;
+   } /*If: I had a pipe problem with ivar*/
+
+   /******************************************************\
+   * Fun-13 Sec-03 Sub-03:
+   *  - Build the consensus
+   \******************************************************/
+
+   while(errUC & 1)
+   { /*Loop: though the entire minimap2 output*/
+      if(*samST->samEntryCStr != '@')
+      { /*If: This is not a header entry*/
+         if(
+              (samST->flagUSht & 4)    /*Unmmaped*/
+           || (samST->flagUSht & 256)/*SecondaryAlignment*/
+           || (samST->flagUSht & 512)  /*Failed filters*/
+           || (samST->flagUSht & 2048) /*Supplemental aln*/
+         ){ /*If: This is not an entry I want to keep*/
+            blankSamEntry(samST);
+            errUC = readSamLine(samST, stdinFILE);
+            continue;
+         } /*If: This is not an entry I want to keep*/
+
+         trimSamEntry(samST);
+      } /*If: This is not a header entry*/
+
+      printSamEntry(samST, stdoutFILE);
+      blankSamEntry(samST);
+      errUC = readSamLine(samST, stdinFILE);
+   } /*Loop: though the entire minimap2 output*/
+
+   pclose(stdinFILE);
+   stdinFILE = 0;
+
+   pclose(stdoutFILE);
+   stdoutFILE = 0;
+
+   if(errUC & 64) return 64; /*If this was a memory error*/
+
+   /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+   ^ Fun-13 Sec-04:
+   ^  - Clean up and trim/print consensus
+   ^  o fun-13 sec-04 sub-01:
+   ^    - Remove the quality score file ivar outputs
+   ^  o fun-13 sec-04 sub-02:
+   ^    - Open consensus files & print header to out file
+   ^  o fun-13 sec-04 sub-03:
+   ^    - Get past anonymous bases at the start
+   ^  o fun-13 sec-04 sub-04:
+   ^    - Mask anonymous bases, find length, & move to end
+   ^  o fun-13 sec-04 sub-05:
+   ^    - Trim masked bases at end (adjust length for trim)
+   \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+   /******************************************************\
+   * Fun-13 Sec-04 Sub-01:
+   *  - Remove the quality score file ivar outputs
+   \******************************************************/
+
+   /*Add the fa ending ivar output*/
+   strCpTill(prefEndStr, ".qual.txt", 0, &lenPrefI);
+   remove(prefixStr);
+
+   /******************************************************\
+   * Fun-13 Sec-04 Sub-02:
+   *  - Open consensus files & print header to output file
+   \******************************************************/
+
+   /*Add the fa ending ivar output*/
+   *prefEndStr = '.';
+   *(prefEndStr + 1) = 'f';
+   *(prefEndStr + 2) = 'a';
+   *(prefEndStr + 3) = '\0';
+
+   /*Reads in reference sequence to samST and removes
+   ` white space. Header is ignored.
+   */
+   if(readInConFa(prefixStr, samST) != 1) return 4;
+
+   stdoutFILE = fopen(conST->consensusCStr, "w");
+   if(stdoutFILE == 0) return 4;
+
+   /*Put the header to the file*/
+   *prefEndStr = '\0';
+   fprintf(stdoutFILE, ">%s\n", prefixStr);
+   *prefEndStr = '.';
+
+   /******************************************************\
+   * Fun-13 Sec-04 Sub-03:
+   *  - Get past anonymous bases at the start
+   \******************************************************/
+
+   buffStr = samST->seqCStr;
+
+   while(*buffStr > 32) /*No white space in sequence*/
+   { /*Loop: Get past masking at start*/
+      switch(*buffStr & (~32))
+      { /*Switch: Check if is a standard base*/
+         case 'A': goto ivarConCheckSeq;
+         case 'T': goto ivarConCheckSeq;
+         case 'C': goto ivarConCheckSeq;
+         case 'G': goto ivarConCheckSeq;
+         default:
+            ++buffStr;
+            break;
+      } /*Switch: Check if is a standard base*/
+   } /*Loop: Get past masking at start*/
+
+   /******************************************************\
+   * Fun-13 Sec-04 Sub-04:
+   *  - Mask anonymous bases, find length, and move to end
+   \******************************************************/
+
+   ivarConCheckSeq:
+
+   tmpStr = buffStr;
+   settings->lenConUL = 0;
+
+   while(*tmpStr > 32) /*No white space in sequence*/
+   { /*Loop: While I have a sequence to read in*/
+      ++(settings->lenConUL);
+
+      switch(*tmpStr & (~32))
+      { /*Switch: Check if is a standard base*/
+         case 'A': break;
+         case 'T': break;
+         case 'C': break;
+         case 'G': break;
+         default: *tmpStr = settings->maskC; break;
+      } /*Switch: Check if is a standard base*/
+
+      ++tmpStr;
+   } /*Loop: While I have a sequence to read in*/
+
+   /******************************************************\
+   * Fun-13 Sec-04 Sub-05:
+   *  - Trim masked bases at end (adjust length for trim)
+   \******************************************************/
+
+   --tmpStr;
+
+   while(*tmpStr > *buffStr)
+   { /*Loop: Trim off masking at end*/
+      if(*tmpStr != settings->maskC) break;
+      --tmpStr;
+      --(settings->lenConUL);
+   } /*Loop: Trim off masking at end*/
+
+   *(tmpStr + 1) = '\0';
+
+   fputs(buffStr, stdoutFILE);
+   fputc('\n', stdoutFILE);
+
+   fclose(stdoutFILE);
+   stdoutFILE = 0;
+
+   remove(prefixStr);
+
+   return 1;
+} /*ivarCon*/
+
+/*--------------------------------------------------------\
+| Name: initIvarSet [initIvarSet(iverSetST);]
+| Macro-01:
+| Use:
+|  - Initializes the settings for an ivarSet structuer
+| Input:
+|  - ivarSetST:
+|    o ivarSet strucuture (not pointer) to initialize
+| Output:
+|  - Initializes
+|    o All variables in ivarSetST
+\--------------------------------------------------------*/

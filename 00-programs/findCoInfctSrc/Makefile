@@ -1,12 +1,9 @@
 CC=gcc
 
 gccArgs=-Wall \
-    cStrToNumberFun.c \
-    cStrFun.c \
     minAlnStatsStruct.c \
     FCIStatsFun.c \
     printErrors.c \
-    samEntryStruct.c \
     findCoInftChecks.c \
     fqAndFaFun.c \
     trimSam.c \
@@ -28,12 +25,9 @@ gccArgs=-Wall \
     -o findCoInft
 
 gccBuildConArgs=-Wall \
-    cStrToNumberFun.c \
-    cStrFun.c \
-	minAlnStatsStruct.c \
+    minAlnStatsStruct.c \
     FCIStatsFun.c \
     printErrors.c \
-    samEntryStruct.c \
     findCoInftChecks.c \
     fqAndFaFun.c \
     trimSam.c \
@@ -45,30 +39,25 @@ gccBuildConArgs=-Wall \
     fqGetIdsSearchFq.c \
     findCoInftBinTree.c \
     readExtract.c \
-	buildConFun.c \
-    buildCon.c \
-    -o buildCon
+    buildConFun.c \
+    buildCon.c
     
 gccBinReadsArgs=-Wall \
     fqAndFaFun.c \
-    cStrToNumberFun.c \
-    cStrFun.c \
-	minAlnStatsStruct.c \
-	FCIStatsFun.c \
+    minAlnStatsStruct.c \
+    FCIStatsFun.c \
     printErrors.c \
-    samEntryStruct.c \
     findCoInftChecks.c \
     trimSam.c \
     scoreReadsFun.c \
     findCoInftBinTree.c \
-	binReadsFun.c \
+    binReadsFun.c \
     binReads.c \
     -o binReads
 
 trimGccArgs=-Wall \
     cStrToNumberFun.c \
     printErrors.c \
-    samEntryStruct.c \
     trimSam.c \
     trimSamFile.c \
     -o trimSamFile
@@ -78,18 +67,14 @@ scoreGccArgs=-Wall\
     cStrToNumberFun.c \
     minAlnStatsStruct.c \
     FCIStatsFun.c \
-    samEntryStruct.c \
     fqAndFaFun.c \
     scoreReadsFun.c \
     scoreReads.c \
     -o scoreReads
 
 fqGetIdsArgs=-Wall \
-    cStrToNumberFun.c \
-    cStrFun.c \
     FCIStatsFun.c \
     printErrors.c \
-    samEntryStruct.c \
     fqAndFaFun.c \
     fqGetIdsFqFun.c \
     fqGetIdsStructs.c \
@@ -102,11 +87,8 @@ fqGIdO=-o fqGetIds
 fqGIdOMem=-DMEM -o fqGetIdsMem
 
 trimPrimGcc=-Wall \
-    cStrToNumberFun.c \
-    cStrFun.c \
     FCIStatsFun.c \
     printErrors.c \
-    samEntryStruct.c \
     fqAndFaFun.c \
     fqGetIdsFqFun.c \
     fqGetIdsStructs.c \
@@ -122,22 +104,17 @@ trimPrimO=-o trimPrimers
 trimPrimMemO=-DMEM -o trimPrimers
 
 filterReadsGcc=-Wall \
-    cStrToNumberFun.c \
     minAlnStatsStruct.c \
     FCIStatsFun.c \
     printErrors.c \
-    samEntryStruct.c \
     fqAndFaFun.c \
     filterReads.c \
     -o filterReads
 
 extractReadsGcc=-Wall \
-    cStrToNumberFun.c \
-    cStrFun.c \
     printErrors.c \
     minAlnStatsStruct.c \
     FCIStatsFun.c \
-    samEntryStruct.c \
     trimSam.c \
     findCoInftChecks.c \
     fqAndFaFun.c \
@@ -151,14 +128,6 @@ extractReadsGcc=-Wall \
     readExtract.c \
     extractTopReads.c \
     -o extractTopReads
-
-alignSeqGcc=-Wall\
-    twoBitArrays.c \
-    sequenceFun.c \
-    cStrToNumberFun.c \
-    alignmentsFun.c \
-    alignSeq.c \
-    -o alignSeq
 
 # To find the compiler I am using || to default to different names for
 # gcc when the default gcc does not exist or failes. || is universal
@@ -175,8 +144,11 @@ all:
 	$(CC) -O3 $(gccArgs) || gcc -O3 $(gccArgs) || egcc -O3 $(gccArgs) || cc -O3 $(gccArgs)
 
 # My consensus building step as  a separate program
-buildCon:
-	$(CC) -O3 $(gccBuildConArgs) || gcc -O3 $(gccBuildConArgs) || egcc -O3 $(gccBuildConArgs) || cc -O3 $(gccBuildConArgs)
+makebuildcon:
+	$(CC) --std=gnu99 -O3 $(gccBuildConArgs) -o buildcon;
+buildcondebug:
+	egcc --std=gnu99 -O0 -ggdb -Wall $(gccBuildConArgs) -o debugbuildcon;
+	bash debug.sh debugBuildconCmds.txt debugbuildcon
 
 # Program to bin reads using a set of references
 binReads:

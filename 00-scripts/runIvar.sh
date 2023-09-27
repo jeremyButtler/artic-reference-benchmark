@@ -12,6 +12,7 @@
 
 readsStr="";
 refStr="";
+primFileStr="";
 prefixStr="output";
 threadsI=3;
 keepConQBl=0; # Keep consensus q-score entry
@@ -31,10 +32,10 @@ minQI=10;        # min Q-score to keep base
 #  - ivar trim variables
 #**********************************************************
 
-primFileStr="";
 minLenI=100; # Min length to keep a trimmed read
 minTrimQI=0; # Min q-score to keep a trimmed region
 minTrimWindowI=20; # Min window size for trimming
+useIvarsTrimBl=0; # 1: use ivars internal trim function
 
 #**********************************************************
 # Sec-01 Sub-04:
@@ -72,10 +73,12 @@ Input:
        o Reference to bulid consensus with
      -fastq: [Required]
        o Reads to build consensus with
-     -primers: [None]
+     -primers: [Required]
        o Bed file with primers to trim reads with
-       o This calls ivar trim, otherwise only reference
-         trimming is done (../00-programs/trimSamFile)
+     -ivar-trim: [No]
+       o Calls the trimming function in ivar
+       o disabled by -no-ivar-trim, which calls
+         script-dir/../00-programs/trimPrimers
      -prefix or -p: [$prefixStr]
        o prefix to name the output
      -threads or -t: [$threadsI]
@@ -146,6 +149,8 @@ while [[ $# -gt 0 ]]; do
      -min-len) minLenI="$2"; shift;;
      -min-trim-q) minTrimQI="$2"; shift;;
      -trim-window) minTrimWindowI="$2"; shift;;
+     -ivar-trim) useIvarsTrimBl=1;;
+     -no-ivar-trim) useIvarsTrimBl=0;;
      -h) printf "%s\n" "$helpStr"; exit;;
      --h) printf "%s\n" "$helpStr"; exit;;
      -help) printf "%s\n" "$helpStr"; exit;;
@@ -437,15 +442,30 @@ if [[ "$errBl" -gt 0 ]]; then exit; fi
 #      doing
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
 #**********************************************************
 # Sec-03 Sub-01:
 #  - Run ivar without trimming
 #**********************************************************
 
 # By having duplicates commands I can avoid temporary files
-if [[ ! -f "$primFileStr" ]]; then
-# If: I am not doing a primer trim
+if [[ "$useIvarsTrimBl" -eq 0 ]]; then
+# If: I am using an external primer trim
+   if [[ -f "$primFileStr" ]]; then
+   # If: I am trimming primers
+      awk \
+          '{printf ">%s\n%s\n", $4, $7}' \
+          < "$primFileStr" \
+        > "$prefixStr-tmp-primers.fasta";
+
+      "$scriptDirStr/../00-programs/trimPrimers" \
+          -end-trim \
+          -primers "$prefixStr-tmp-primers.fasta" \
+          -fastq "$readsStr" \
+          -out "$prefixStr-tmp.fastq";
+
+      readsStr="$prefixStr-tmp.fastq";
+   fi # If: I am trimming primers
+
    minimap2 \
        -t "$threadsI" \
        --eqx \
@@ -475,7 +495,11 @@ if [[ ! -f "$primFileStr" ]]; then
    if [[ "$keepConQBl" -lt 1 ]]; then
       rm "$prefixStr-con.qual.txt";
    fi # If I do not want the quality score file
-# If: I am not triming primers
+
+   # If I created a temporary file (readsStr changed to
+   # hold name of temporary file)
+   if [[ -f "$primFileStr" ]]; then rm "$readsStr"; fi
+# If: I am using an external primer trim
 
 #**********************************************************
 # Sec-03 Sub-02:
@@ -483,7 +507,7 @@ if [[ ! -f "$primFileStr" ]]; then
 #**********************************************************
 
 else
-# Else: I am trimming primers
+# Else: I am trimming primers with ivar
    awk \
        -f "$scriptDirStr/setUpIvarPrimFile.awk" \
        < "$primFileStr"\
@@ -521,7 +545,7 @@ else
    fi # If I do not want the quality score file
 
    rm "$tmpPrimFileStr";
-# Else: I am trimming primers
+# Else: I am trimming primers with ivar
 fi # Check if I am doing a primer trim run or not
 
 exit;

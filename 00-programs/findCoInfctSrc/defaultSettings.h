@@ -75,7 +75,15 @@
 * Sec-4: Specific settings for separate consensus building steps
 \**********************************************************************/
 
-#define defUseMajCon 1    /*1: Use majority in consnesus building*/
+#define defNoCon 0      /*end of consensus building array*/
+#define defUseMajCon 1    /*id for use majCon*/
+#define defUseRacon 2  /*id for use racon*/
+#define defUseMedaka 3 /*id for use medaka*/
+#define defUseIvar 4   /*id for use ivar*/
+
+#define defConMethod defUseMajCon
+#define defMinPercMappedReads 0.1 /*Min % of mapped reads*/
+
 /*#define majConMinBaseQ 10  Min Q-score to keep base in majority con*/
 #define majConMinBaseQ 7 /*Min Q-score to keep base in majority con*/
 /*#define percBasesPerPos 0.4 majority consensus (-maj-con-min-bases)*/
@@ -83,12 +91,17 @@
 #define majConMinInsQ 5   /*Min Q-score to keep insertion in majority*/
 #define percInsPerPos 0.3 /*% of supporting reads to keep insertion*/
 
-#define defUseRaconCon 0  /*1: Racon in consensus building*/
 #define defRoundsRacon 4    /*Default number of racon rounds/consensus*/
 
-#define defUseMedakaCon 0 /*1: Use medaka in consensus building*/
 #define defMedakaModel "r941_min_high_g351" /*Model to use with medaka*/
 #define defCondaBl 0      /*Default no, but my code will autofind*/
+
+/*Ivar settings*/
+#define defIvarMinSupStr "0.5" /*At least 50% for snps*/
+#define defIvarMinInsSupStr "0.9"/*At least 90% for ins*/
+#define defIvarMinDepthStr "10"/*At least 10 reads*/
+#define defIvarMask 'N'
+#define defIvarMinQStr "10"    /*Base has Q-score >= 10*/
 
 /**********************************************************************\
 * Sec-5: Read to reference mapping settings/scoreRead default settings

@@ -140,9 +140,12 @@ fi # Check if the sam file exists
 awk \
     -v lenReadBinI="$lenReadBinI" \
     -v posBinI="$posBinI" \
+    -v minLenI="$minLenI" \
     '
     { # MAIN
       if($1 ~ /^@/){next;}; # Skip headers
+      # discard reads shorter than 200 nucleotides
+      if($4 < minLenI){next;};
 
       # Get read length
       seqLenInt = length($10);
@@ -164,7 +167,6 @@ awk \
   uniq -c |
   awk \
     -v minReadsI="$minReadsI" \
-    -v minLenI="$minLenI" \
     '
       BEGIN{
         OFS="\t";  # ensure tab output
@@ -183,9 +185,6 @@ awk \
       { # MAIN
         # discard entries with under x (200) reads
         if($1 < minReadsI){next;};
-
-        # discard reads shorter than 200 nucleotides
-        if($4 < minLenI){next;};
 
         # Print out the table entry                 
         printf "| %-9s | %-23s |", $1, $2;

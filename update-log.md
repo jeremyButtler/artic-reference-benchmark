@@ -8,6 +8,19 @@ This is a log of updates I made. This should be short and
   - I have not been able to replicate this, but it has
     poped up in benchmarking.
 
+# sep 26, 2023
+
+- Switched to quast for measuring accuracy. This fixed
+  an error that introduced extra snps.
+- Added ivar support to buildcon
+  - I would suggest avoiding this.
+- Added medaka polishing of the consensus to the
+  buildAmpCon.sh (calls buildcon) script
+- Modified runIvar.sh to take in primers. The benchmarking
+  step is now using trimPrimers (00-programs) to trim
+  primers when Ivar's internal trim is not being used.
+- Various modifications to benchAll.sh.
+
 # Sep 21th, 2023
 
 - Fixed an infinite loop error in stich.

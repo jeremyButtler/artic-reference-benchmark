@@ -85,13 +85,14 @@
 #    stdout: prints out the top x reads reads to stdout
 # Non c-standard includes:
 #   - "readExtrac.h"
-#   o "defaultSettings.h"
-#   o "cStrFun.h"
-#   o "cStrToNumberFun.h"
+#   - "dataTypeShortHand.h"   (No .c file)
+#   o "defaultSettings.h"     (No .c file)
+#   o "cStrFun.h"             (No .c file)
+#   o "cStrToNumberFun.h"     (No .c file)
 #   o "printError.h"
 #   o "FCIStatsFun.h"
 #   o "minAlnStats.h"
-#   o "samEntryStruct.h"
+#   o "samEntryStruct.h"      (No .c file)
 #   o "trimSam.h"
 #   o "fqAndFaFun.h"
 #   o "scoreReadsFun.h"
@@ -103,6 +104,7 @@
 #   o "fqGetIdsHash.h"
 #   o "fqGetIdsAVLTree.h"
 # C standard Includes (all though non c-standard includes):
+#   o <time.h>
 #   o <string.h>
 #   o <stdlib.h>
 #   o <sdtint.h>
@@ -158,10 +160,12 @@ int main(int lenArgsInt, char *argsCStr[])
     char threadsCStr[64];     /*Number of threads for minimap2*/
     char oneC = 1;            /*For passing 1 to functions*/
     char noRefBl = 0;           /*1: using reference; 0 I am not*/
-    uint64_t numReadsToExtractUL = 300;
-    uint64_t numReadsExtractedUL = 0;
+    ulong numReadsToExtractUL = 300;
+    ulong numReadsExtractedUL = 0;
+    ulong totalMappedUL = 0;
 
-    unsigned char errUC = 0; /*For error messages*/
+
+    uchar errUC = 0; /*For error messages*/
 
     FILE *testFILE = 0;       /*Input file*/
 
@@ -414,6 +418,7 @@ int main(int lenArgsInt, char *argsCStr[])
         findBestXReads(
             &numReadsToExtractUL,
             &numReadsExtractedUL,
+            &totalMappedUL,
             threadsCStr,
             &oneC,
             &minStats,

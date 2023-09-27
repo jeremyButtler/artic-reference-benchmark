@@ -102,6 +102,8 @@ int main(
     char minimap2VersionCStr[256];
     char raconVersionCStr[256];
     char medakaVersionCStr[2048]; /*For gpu error messages*/
+    char ivarVersionStr[256];
+    char samtoolsVersionStr[256];
     char *tmpCStr = 0;         /*For string manipulation*/
 
     /*Miscalanious variables*/
@@ -127,121 +129,135 @@ int main(
     char *helpCStr = "\
             \n buildCon -fastq reads.fastq [Options ...]\
             \n Use: Builds a consensus from a fastq file.\
-            \n    -fastq:\
-            \n        - Fastq file with reads to search      [Required]\
-            \n    -ref:\
-            \n        - Reference used to build consensus   [Best read]\
-            \n    -prefix:                                  [out]\
-            \n        - Prefix to name output file\
-            \n    -stats:                                    [Not used]\
-            \n        - tsv file output by score reads to use\
-            \n          to select the best read by mapping\
-            \n          quality.\
-            \n        - Default is to use the read with the\
-            \n          best median Q-score.\
-            \n    -threads:\
-            \n        - Number of threads to use             [3]\
-            \n    -min-reads-per-bin:\
-            \n        - Min number of reads needed to keep   [100]\
-            \n          a bin or a cluster\
-            \n    -max-reads-per-con:\
-            \n        - Max numver of reads to use in        [300]\
-            \n          a consensus.\
-            \n    -extra-consensus-steps:                    [2]\
-            \n        - Number of times to rebuild the\
-            \n          consensus using a new set of best\
-            \n          reads.\
-            \n    -min-con-length:                               [500]\
-            \n       - Discard consensuses that are under the\
-            \n         input length.\
-            \n       - If you lower this your should also lower\
-            \n         -min-read-read-map-length &\
-            \n         -min-read-con-map-length\
+            \n    -fastq: [Required]\
+            \n      - Fastq file with reads to search\
+            \n    -ref: [None]\
+            \n      - Reference start building the\
+            \n        consensus with\
+            \n      - This will hunt for reads if the\
+            \n        reference failed.\
+            \n    -prefix: [out]\
+            \n      - Prefix to name output file\
+            \n    -stats: [None]\
+            \n      - tsv file output by score reads to\
+            \n        use to select the best read by\
+            \n        mapping quality.\
+            \n      - Default is to use the read with the\
+            \n        best median Q-score.\
+            \n    -threads: [3]\
+            \n      - Number of threads to use\
+            \n    -min-depth: [100]\
+            \n      - Min number of reads needed to build\
+            \n        a consensus\
+            \n    -min-perc: [0.1 or 10%]\
+            \n      - Min percentage of reads needed to\
+            \n        map to a read/con to keep it.\
+            \n      - This is here to overide -min-depth\
+            \n        when the read depth is deep.\
+            \n    -max-depth: [300]\
+            \n      - Max number of reads to subsample\
+            \n        for buildnig a consensus.\
+            \n    -extra-consensus-steps: [2]\
+            \n      - Number of times to rebuild the\
+            \n        consensus using a new set of best\
+            \n        reads.\
+            \n    -min-length: [500]\
+            \n      - Discard consensuses or read mappings\
+            \n        that are under the input length.\
             \n Additional Help messages:\
             \n    -h-build-consensus:\
-            \n        - Print paramaters for building the consensus\
+            \n      - Help message for consensus building\
             \n    -h-read-con-map:\
-            \n        - Print out the parameters for the read to\
-            \n          consensus mapping step.\
+            \n      - Help message for read to consensus\
+            \n        mapping\
             \n    -h-read-read-map:\
-            \n        - Print out the parameters for the read to read\
-            \n          mapping step.\
+            \n      - Help mesage for read to read mapping\
             \n Output:\
-            \n    - File:\
-            \n      o Contents: Consensus built from the fasta file\
-            \n      o Name: fastqFileName--cluster-0--consensus.fasta\
-            \n      o Stdout: Minimap2, Racon, and Medaka versions.\
+            \n  - File:\
+            \n    o Consensus built from the fasta file\
+            \n    o fastqFileName--cluster-0--consensus.fasta\
+            \n  - Stdout: Program versions.\
             \n Requires:\
-            \n    - Minimap2\
-            \n Optional dependencies:\
-            \n    - Racon\
-            \n        o Required if using racon in consensus building.\
-            \n    - Medaka\
-            \n        o Required if using Medaka in consensus building.\
-            \n        o Can be installed at ~/medaka through the python\
-            \n          virtual enviroment (git hub install) or by\
-            \n           miniconda\
+            \n  - Minimap2\
+            \n Option specific requirments:\
+            \n  - Racon\
+            \n    o Required for -use-racon\
+            \n    o Needs to be in the system path\
+            \n  - Medaka\
+            \n    o Required for -use-medaka\
+            \n    o Can be installed at ~/medaka through\
+            \n      the python virtual enviroment\
+            \n      (git hub install) or by miniconda\
+            \n  - Ivar\
+            \n    o Required for -use-ivar\
+            \n    o Requires: samtools in the system path\
+            \n    o Needs to be in the system path\
         "; /*Help message*/
 
     char *conBuildHelpCStr = "\
             \n buildCon can use several different consensuses\
             \n   building methods to build a consensus. These methods\
             \n   can be run separately or can be combined together.\
-            \n   When run together the majority consensus step builds\
-            \n   the consensus using the selected read, while the Racon\
-            \n   and Medaka steps are used to polish the consensus\
-            \n   built with the majority consensus step. Medaka is used\
-            \n   used to polish the consensus build by Racon when Racon\
-            \n   is used to build a consensus.\
+            \n   The order these methods are input is what \
+            \n   determines which method is used.\
             \n\
-            \n Note: The majority consensus step is the fastest\
-            \n   consensus building method. It handles SNPs and matches\
-            \n   well, provided their is enough read depth, but is weak\
-            \n   for indels.\
-            \n    -min-con-length:                               [500]\
-            \n       - Discard consensuses that are under the\
-            \n         input length.\
-            \n       - If you lower this your should also lower\
-            \n         -min-read-read-map-length &\
+            \n    -min-con-length: [500]\
+            \n       - Discard consensuses that are under\
+            \n         the input length.\
+            \n       - If you lower this your should also\
+            \n         lower -min-read-read-map-length &\
             \n         -min-read-con-map-length\
-            \n    -max-reads-per-con:\
+            \n       - use -min-length to lower all three\
+            \n    -max-depth:\
             \n        - Max number of reads to use in        [300]\
             \n          a consensus.\
             \n    -extra-consensus-steps:                    [2]\
             \n        - Number of times to rebuild the\
             \n          consensus using a new set of best\
             \n          reads.\
-            \n    -disable-majority-consensus: [Use majority consensus]\
-            \n        - Build a consensus using a simple\
-            \n          majority consensus. This consensus\
-            \n          will be polished with Racon or\
-            \n          Medaka if Racon and Medaka set.\
-            \n    -maj-con-min-bases                         [0.35=35%]\
+            \n  -use-ivar: [No]\
+            \n    o Build a consensus using an ivar step\
+            \n    -ivar-min-deth: [10]\
+            \n      - Min depth for ivar not to mask.\
+            \n    -ivar-min-snp-sup: [0.5] \
+            \n      - Min support to not mask an snp \
+            \n      - 0 to 1\
+            \n    -ivar-min-ins-sup: [0.9] \
+            \n      - Min support to not remove an\
+            \n        insertion\
+            \n      - 0 to 1\
+            \n    -ivar-min-q: [10] \
+            \n      - Min Q-score needed to keep a base\
+            \n    -ivar-mask: [N] \
+            \n      - Base to use for masking\
+            \n  -use-majCon: [Yes]\
+            \n   o Build a consensus using majCon\
+            \n   o Disable by inputing a different method\
+            \n    -maj-con-min-bases: [0.35=35%]\
             \n        - When building the majority consesus\
             \n          make a deletion in positions that\
             \n          have less than x\% of bases (35%).\
-            \n    -maj-con-min-base-q:                       [7]\
+            \n    -maj-con-min-base-q: [7]\
             \n        - Minimum q-score to keep a base when\
             \n          building a majority consensus.\
-            \n    -maj-con-min-ins                           [0.3=30%]\
+            \n    -maj-con-min-ins: [0.3=30%]\
             \n        - When building the majority consesus\
             \n          ingore insertions that have support\
             \n          from less than x\% of reads (30%).\
-            \n    -maj-con-min-ins-q:                        [5]\
+            \n    -maj-con-min-ins-q: [5]\
             \n        - Minimum q-score to keep a insertion\
             \n          when building a majority consensus.\
-            \n    -enable-racon:                                [No]\
-            \n        - Do not use racon to polish the\
-            \n          consensus.\
-            \n    -rounds-racon:\
-            \n        - Number of rounds to polish a         [4]\
-            \n          consensus with racon\
-            \n    -enable-medaka:                               [No]\
-            \n        - Do not use medaka to polish the\
-            \n          consensus.\
-            \n    -model:\
-            \n        - Model to use with medaka   [r941_min_high_g351]\
-            \n          (calling medaka_consensus)\
+            \n  -use-racon: [No]\
+            \n    o Use racon to build/polish a consensus.\
+            \n    o My advice is to use ivar or medaka\
+            \n    -rounds-racon: [4]\
+            \n      - Number of rounds to polish a\
+            \n        consensus with racon\
+            \n  -use-medaka: [No]\
+            \n    o use medaka to build/polish a consensus\
+            \n    -model: [r941_min_high_g351]\
+            \n      - Model to use with medaka_consensus\
+            \n\
        "; /*consensus building parameters*/
 
     char
@@ -330,6 +346,7 @@ int main(
             \n        - Maximum G homopolymer size to keep\
             \n          an deletion (1 = no hompolymer,\
             \n          0 = always discard).\
+            \n\
             "; /*Read mapping help message*/
 
 
@@ -412,6 +429,7 @@ int main(
             \n        - Maximum G homopolymer size to keep\
             \n          an deletion (1 = no hompolymer,\
             \n          0 = always discard).\
+            \n\
             "; /*Clustering help message*/
 
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
@@ -505,6 +523,42 @@ int main(
             exit(0);
         } /*If user wanted the help message*/
 
+        if(strcmp(tmpCStr, "-ivar-min-depth") == 0)
+        { /*If: Ivar min depth was invalid*/
+            fputs(
+               "Invalid input for -ivar-min-depth\n",
+               stderr
+            );/*Print out help message*/
+            exit(-1);
+        } /*If: Ivar min depth was invalid*/
+
+        if(strcmp(tmpCStr, "-ivar-min-snp-sup") == 0)
+        { /*If: ivar min snp support invalid*/
+            fputs(
+               "Invalid input for -ivar-snp-sup\n",
+               stderr
+            );/*Print out help message*/
+            exit(-1);
+        } /*If: ivar min snp support invalid*/
+
+        if(strcmp(tmpCStr, "-ivar-min-ins-sup") == 0)
+        { /*If: ivar min ins support is invalid*/
+            fputs(
+               "Invalid input for -ivar-ins-sup\n",
+               stderr
+            );/*Print out help message*/
+            exit(-1);
+        } /*If: ivar min ins support is invalid*/
+
+        if(strcmp(tmpCStr, "-ivar-min-q") == 0)
+        { /*If: Q-score input for ivar is invalid*/
+            fputs(
+               "Invalid input for -ivar-min-q\n",
+               stderr
+            );/*Print out help message*/
+            exit(-1);
+        } /*If: Q-score input for ivar is invalid*/
+
         fprintf(
             stderr,
             "%s\n\n%s is an invalid parameter\n",
@@ -515,27 +569,38 @@ int main(
         exit(1);
     } /*If have an error*/
 
-    if(!(
-        conSetting.majConSet.useMajConBl |
-        conSetting.raconSet.useRaconBl |
-        conSetting.medakaSet.useMedakaBl
-    )) { /*If the user said to ingore all consensus building steps*/
-        printf("Current settings have turned off all consensus");
-        printf(" building methods.\nSelect a consensus step by");
-        printf(" removing: -enable-medaka or -enable-racon\n");
-    } /*If the user said to ingore all consensus building steps*/
+    if(
+          (!conSetting.majConSet.useMajConBl)
+       && (!conSetting.raconSet.useRaconBl)
+       && (!conSetting.medakaSet.useMedakaBl)
+       && (!conSetting.ivarSetST.useIvarBl)
+    ) { /*If; No consensus method input*/
+        fprintf(stderr, "No consensus method selected\n");
+        fprintf(
+           stderr,
+           "Use: -usr-ivar, -use-medaka, or -use-racon\n"
+        );
+    }
 
-    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
-    ^ Main Sec-4: Get minimap2, racon, & medaka versions
-    ^   main sec-4 sub-1: Check if fastq file exists
-    ^   main sec-4 sub-1: Find minimap2 version & check if exists
-    ^   main sec-4 sub-2: If using Racon, find version & check if exists
-    ^   main sec-4 sub-3: If using Medaka, find version
-    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+    /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+    ^ Main Sec-4:
+    ^  - Get minimap2, racon, & medaka versions
+    ^  o main sec-4 sub-1:
+    ^    - Check if fastq file exists
+    ^  o main sec-4 sub-2:
+    ^    - Find minimap2 version & check if exists
+    ^  o main sec-4 sub-3:
+    ^    - If using Racon, find version & check if exists
+    ^  o main sec-4 sub-4:
+    ^    - If using Medaka, find version
+    ^  o main sec-4 sub-5:
+    ^    - Check if ivar exists
+    \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
-    /******************************************************************\
-    * Main Sec-4 Sub-1: Check if the fastq file exists
-    \******************************************************************/
+    /*****************************************************\
+    * Main Sec-4 Sub-1:
+    *  - Check if the fastq file exists
+    \*****************************************************/
 
     stdinFILE = fopen(fqPathCStr, "r");
 
@@ -589,11 +654,13 @@ int main(
         fclose(stdinFILE);
     } /*If the user provided a reference file*/
 
-    /******************************************************************\
-    * Main Sec-4 Sub-1: Find minimap2 version & check if exists
-    \******************************************************************/
+    /*****************************************************\
+    * Main Sec-4 Sub-2:
+    *  - Find minimap2 version & check if exists
+    \*****************************************************/
 
     /*Set up minimap 2 check*/
+    minimap2VersionCStr[0] = '\0';
     tmpCStr = cpParmAndArg(tmpCmdCStr, "minimap2", "--version");
 
     stdinFILE = popen(tmpCmdCStr, "r");
@@ -606,18 +673,20 @@ int main(
         exit(1);
     } /*If could not find minimap2*/
 
-    /******************************************************************\
-    * Main Sec-4 Sub-2: If using Racon, find version & check if exists
-    \******************************************************************/
+    /*****************************************************\
+    * Main Sec-4 Sub-3:
+    *  - If using Racon, find version & check if exists
+    \*****************************************************/
 
     if(conSetting.raconSet.useRaconBl & 1)
     { /*If using racon, get the version used*/
         /*Set up racon check*/
+        raconVersionCStr[0] = '\0';
         tmpCStr = cpParmAndArg(tmpCmdCStr, "racon", "--version");
 
         stdinFILE = popen(tmpCmdCStr, "r");
         fgets(raconVersionCStr, 256, stdinFILE);
-        fclose(stdinFILE);
+        pclose(stdinFILE);
 
         if(raconVersionCStr[0] == '\0')
         { /*If racon does not exist*/
@@ -626,13 +695,15 @@ int main(
         } /*If racon does not exist*/
     } /*If using racon, get the version used*/
 
-    /******************************************************************\
-    * Main Sec-4 Sub-3: If using Medaka, find version & check if exists
-    \******************************************************************/
+    /*****************************************************\
+    * Main Sec-4 Sub-4:
+    *  - If using Medaka, find version & check if exists
+    \*****************************************************/
 
     if(conSetting.medakaSet.useMedakaBl & 1)
     { /*If using medaka, check version*/
         /*Set up non-miniconda command*/
+        medakaVersionCStr[0] = '\0';
         tmpCStr = cStrCpInvsDelm(tmpCmdCStr, medakaCMD);
         tmpCStr = cpParmAndArg(tmpCStr, "medaka", "--version");
         tmpCStr = cpParmAndArg(tmpCStr, medakaCMDEnd, "");
@@ -650,7 +721,7 @@ int main(
 
             stdinFILE = popen(tmpCmdCStr, "r");
             fgets(medakaVersionCStr, 2048, stdinFILE);
-            fclose(stdinFILE);
+            pclose(stdinFILE);
 
             if(medakaVersionCStr[0] == '\0')
             { /*If medaka could not be found*/
@@ -662,6 +733,42 @@ int main(
             conSetting.medakaSet.condaBl = 1;
         } /*If python virtual enviorment medaka does not exist*/
     } /*If using medaka, check version*/
+
+    /*****************************************************\
+    * Main Sec-4 Sub-5:
+    *  - Check if ivar exists
+    \*****************************************************/
+
+    if(conSetting.ivarSetST.useIvarBl)
+    { /*If: I am using ivar*/
+        ivarVersionStr[0] = '\0';
+
+        tmpCStr = cpParmAndArg(tmpCmdCStr, "ivar", "-v");
+        stdinFILE = popen(tmpCmdCStr, "r");
+        fgets(ivarVersionStr, 256, stdinFILE);
+        pclose(stdinFILE);
+
+        if(ivarVersionStr[0] == '\0')
+        { /*If racon does not exist*/
+            fprintf(stderr, "Ivar could not be found\n");
+            exit(1);
+        } /*If racon does not exist*/
+
+        samtoolsVersionStr[0] = '\0';
+
+        tmpCStr =
+           cpParmAndArg(tmpCmdCStr, "samtools", "version");
+
+        stdinFILE = popen(tmpCmdCStr, "r");
+        fgets(samtoolsVersionStr, 256, stdinFILE);
+        pclose(stdinFILE);
+
+        if(samtoolsVersionStr[0] == '\0')
+        { /*If racon does not exist*/
+           fprintf(stderr,"samtools could not be found\n");
+           exit(1);
+        } /*If racon does not exist*/
+    } /*If: I am using ivar*/
 
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
     ^ Main Sec-5: Build the consensus
@@ -744,6 +851,16 @@ int main(
     if(conSetting.medakaSet.useMedakaBl & 1)
         fprintf(stdout, "Medaka version: %s\n", medakaVersionCStr);
 
+    if(conSetting.ivarSetST.useIvarBl & 1)
+    { /*If: I need to print out version number for ivar*/
+       fprintf(stdout,"Ivar version: %s\n",ivarVersionStr);
+       fprintf(
+          stdout,
+          "Samtools version: %s\n",
+          samtoolsVersionStr
+       );
+    } /*If: I need to print out version number for ivar*/
+
     if(errUC & 16)
     { /*If had a memory allocation error*/
         fprintf(stdout, "Unable to build a consensus\n");
@@ -784,10 +901,12 @@ char * getUserInput(
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
     ^ Fun-1 Sec-1: Variable declerations
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
-   char
-       *tmpCStr = 0,
-       *inputCStr = 0, /*Points to user input part of line*/
-       *parmCStr = 0;   /*Points to argument part of parameter*/
+
+   char *tmpStr = 0;
+   char *argStr = 0; /*Points to user input part of line*/
+   char *parmStr = 0;   /*Points to argument part of parameter*/
+   char firstConMethodBl = 0;
+     /*Tells if user supplied a consensus method*/
 
     /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
     ^ Fun-1 Sec-2: Get user input
@@ -799,193 +918,336 @@ char * getUserInput(
     ^    fun-1 sec-2 sub-6: scoreReads consensus to consensus settings
     \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
-    /******************************************************************\
-    * Fun-1 Sec-2 Sub-1: General input
-    \******************************************************************/
+    /*****************************************************\
+    * Fun-1 Sec-2 Sub-1:
+    *  - General input
+    \*****************************************************/
 
     if(lenArgsInt < 2)
         return 0;       /*Nothing input*/
 
     for(int32_t intArg = 1; intArg < lenArgsInt; intArg += 2)
     { /*Loop through all user arguments (for)*/
-        parmCStr = *(argsCStr + intArg); /*Get the parameter used*/
-        inputCStr = *(argsCStr + intArg + 1); /*setting*/
+        parmStr = *(argsCStr + intArg); /*Get the parameter used*/
+        argStr = *(argsCStr + intArg + 1); /*setting*/
 
-        if(strcmp(parmCStr, "-fastq") == 0)
-            *fqPathCStr = inputCStr;  /*Fastq file to check*/
+        if(strcmp(parmStr, "-fastq") == 0)
+            *fqPathCStr = argStr;  /*Fastq file to check*/
 
-        else if(strcmp(parmCStr, "-stats") == 0)
-            *statsPathCStr = inputCStr; /*Stats file with reads to use*/
+        else if(strcmp(parmStr, "-stats") == 0)
+            *statsPathCStr = argStr; /*Stats file with reads to use*/
 
-        else if(strcmp(parmCStr, "-ref") == 0)
-            *refPathCStr = inputCStr;  /*references*/
+        else if(strcmp(parmStr, "-ref") == 0)
+            *refPathCStr = argStr;  /*references*/
 
-        else if(strcmp(parmCStr, "-prefix") == 0)
-            strcpy(prefixCStr, inputCStr); /*Prefix to name files with*/
+        else if(strcmp(parmStr, "-prefix") == 0)
+            strcpy(prefixCStr, argStr); /*Prefix to name files with*/
 
-        else if(strcmp(parmCStr, "-threads") == 0)
-            strcpy(threadsCStr, inputCStr); /*Number of threads*/
+        else if(strcmp(parmStr, "-threads") == 0)
+            strcpy(threadsCStr, argStr); /*Number of threads*/
 
-        else if(strcmp(parmCStr, "-model") == 0)
-            strcpy(conSet->medakaSet.modelCStr, inputCStr);
+        else if(strcmp(parmStr, "-min-depth") == 0)
+            conSet->minReadsToBuildConUL=strtoul(argStr,&tmpStr,10);
 
-        else if(strcmp(parmCStr, "-min-reads-per-bin") == 0)
-            conSet->minReadsToBuildConUL=strtoul(inputCStr,&tmpCStr,10);
+        else if(strcmp(parmStr, "-max-depth") == 0)
+            conSet->maxReadsToBuildConUL=strtoul(argStr,&tmpStr,10);
 
-        else if(strcmp(parmCStr, "-max-reads-per-con") == 0)
-            conSet->maxReadsToBuildConUL=strtoul(inputCStr,&tmpCStr,10);
+        else if(strcmp(parmStr, "-min-perc") == 0)
+           conSet->minPercMappedReadsFlt =
+              (float) atof(argStr);
+              /*Not the best way, but works*/
 
-        else if(strcmp(parmCStr, "-rounds-racon") == 0)
-            cStrToUChar(inputCStr, &conSet->raconSet.rndsRaconUC);
- 
-        else if(strcmp(parmCStr, "-extra-consensus-steps") == 0)
-            cStrToUInt(inputCStr, &conSet->numRndsToPolishUI);
+        else if(strcmp(parmStr, "-extra-consensus-steps") == 0)
+           strToUIBase10(
+              argStr,
+              &conSet->numRndsToPolishUI
+           ); /*Get base 10 unsigned int*/
 
-        else if(strcmp(parmCStr, "-min-con-length") == 0)
-            conSet->minConLenUI = strtoul(inputCStr, &tmpCStr, 10);
+        else if(strcmp(parmStr, "-min-length") == 0)
+        { /*Else if: setting min length for everything*/
+            strToUIBase10(
+               argStr,
+               &conSet->minConLenUI
+            ); /*Get base 10 unsigned int*/
 
-        else if(strcmp(parmCStr, "-disable-majority-consensus") == 0)
-        { /*Else if user is ussing the best read instead of consensus*/
-            conSet->majConSet.useMajConBl = 0;
-            --intArg; /*Account for this being a true or false*/
-        } /*Else if user is ussing the best read instead of consensus*/
+            minReadConStats->minReadLenULng =
+               conSet->minConLenUI;
 
-        else if(strcmp(parmCStr, "-enable-racon") == 0)
-        { /*Else if user is ussing the best read instead of consensus*/
+            readToReadMinStats->minReadLenULng =
+               conSet->minConLenUI;
+        } /*Else if: setting min length for everything*/
+
+        else if(strcmp(parmStr, "-min-con-length") == 0)
+            conSet->minConLenUI = strtoul(argStr, &tmpStr, 10);
+
+        /*************************************************\
+        * Fun-1 Sec-2 Sub-2:
+        *  - Selecting the consensus methods
+        \*************************************************/
+
+        else if(strcmp(parmStr, "-use-racon") == 0)
+        { /*Else if: using racon*/
+            if(!firstConMethodBl)
+            { /*If: this is the first input method*/
+               conSet->lenMethodUC = 0;
+               firstConMethodBl = 1;
+            } /*If: this is the first input method*/
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defUseRacon;
+
+            ++(conSet->lenMethodUC);
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defNoCon;
+
+            --intArg;
+
+            /*Make sure I know racon was used*/
             conSet->raconSet.useRaconBl = 1;
-            --intArg; /*Account for this being a true or false*/
-        } /*Else if user is ussing the best read instead of consensus*/
+        } /*Else if: using racon*/
 
-        else if(strcmp(parmCStr, "-enable-medaka") == 0)
-        { /*Else if user is ussing the best read instead of consensus*/
+        else if(strcmp(parmStr, "-use-medaka") == 0)
+        { /*Else if: using medaka*/
+            if(!firstConMethodBl)
+            { /*If: this is the first input method*/
+               conSet->lenMethodUC = 0;
+               firstConMethodBl = 1;
+            } /*If: this is the first input method*/
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defUseMedaka;
+
+            ++(conSet->lenMethodUC);
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defNoCon;
+
+            --intArg;
+            /*Make sure I know medaka was used*/
             conSet->medakaSet.useMedakaBl = 1;
-            --intArg; /*Account for this being a true or false*/
-        } /*Else if user is ussing the best read instead of consensus*/
+        } /*Else if: using medaka*/
+
+        else if(strcmp(parmStr, "-use-majCon") == 0)
+        { /*Else if: using the majority consensus*/
+            if(!firstConMethodBl)
+            { /*If: this is the first input method*/
+               conSet->lenMethodUC = 0;
+               firstConMethodBl = 1;
+            } /*If: this is the first input method*/
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defUseMajCon;
+
+            ++(conSet->lenMethodUC);
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defNoCon;
+
+            --intArg;
+
+            /*So I know that majority consensus was used*/
+            conSet->majConSet.useMajConBl = 1;
+        } /*Else if: using the majority consensus*/
+
+        else if(strcmp(parmStr, "-use-ivar") == 0)
+        { /*Else if: using ivar*/
+            if(!firstConMethodBl)
+            { /*If: this is the first input method*/
+               conSet->lenMethodUC = 0;
+               firstConMethodBl = 1;
+            } /*If: this is the first input method*/
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defUseIvar;
+
+            ++(conSet->lenMethodUC);
+
+            conSet->methodAryUC[conSet->lenMethodUC] =
+               defNoCon;
+
+            --intArg;
+
+            /*So I know that majority consensus was used*/
+            conSet->ivarSetST.useIvarBl = 1;
+        } /*Else if: using ivar*/
+
+        /*************************************************\
+        * Fun-1 Sec-2 Sub-2:
+        *  - Settings unique to ivar
+        \*************************************************/
+
+        else if(strcmp(parmStr, "-ivar-min-depth") == 0)
+        { /*Else if: Setting the min depth to not mask*/
+           if(isUInt(argStr))
+             strcpy(conSet->ivarSetST.minDepthStr,argStr);
+           /*else return parmStr;*/
+        } /*Else if: Setting the min depth to not mask*/
+
+        else if(strcmp(parmStr, "-ivar-min-snp-sup") == 0)
+        { /*Else if: Setting the min snp support*/
+           if(isUDec(argStr))
+             strcpy(conSet->ivarSetST.minSupStr,argStr);
+           else return parmStr;
+        } /*Else if: Setting the min snp support*/
+
+        else if(strcmp(parmStr, "-ivar-min-ins-sup") == 0)
+        { /*Else if: Setting the min insterion support*/
+           if(isUDec(argStr))
+            strcpy(conSet->ivarSetST.minInsSupStr,argStr);
+           else return parmStr;
+        } /*Else if: Setting the min insterion support*/
+
+        else if(strcmp(parmStr, "-ivar-min-q") == 0)
+        { /*Else if: Setting the base Q-score*/
+           if(isUInt(argStr))
+             strcpy(conSet->ivarSetST.minQStr, argStr);
+           else return parmStr;
+        } /*Else if: Setting the base Q-score*/
+
+        else if(strcmp(parmStr, "-ivar-mask") == 0)
+           conSet->ivarSetST.maskC = *parmStr;
+
+        /*************************************************\
+        * Fun-1 Sec-2 Sub-2:
+        *  - Settings unique to medaka and racon
+        \*************************************************/
+
+        else if(strcmp(parmStr, "-model") == 0)
+            strcpy(conSet->medakaSet.modelCStr, argStr);
+
+        else if(strcmp(parmStr, "-rounds-racon") == 0)
+            cStrToUChar(argStr, &conSet->raconSet.rndsRaconUC);
+ 
+        /*************************************************\
+        * Fun-1 Sec-2 Sub-2:
+        *  - Majority consensus settings
+        \*************************************************/
+
+        else if(strcmp(parmStr, "-maj-con-min-bases") == 0)
+          sscanf(argStr,"%f",&conSet->majConSet.minReadsPercBaseFlt);
+
+        else if(strcmp(parmStr, "-maj-con-min-ins") == 0)
+           sscanf(argStr,"%f",&conSet->majConSet.minReadsPercInsFlt);
+
+        else if(strcmp(parmStr, "-maj-con-min-base-q") == 0)
+            cStrToUChar(argStr, &conSet->majConSet.minBaseQUC);
+
+        else if(strcmp(parmStr, "-maj-con-min-ins-q") == 0)
+            cStrToUChar(argStr, &conSet->majConSet.minInsQUC);
             
-        else if(strcmp(parmCStr, "-maj-con-min-bases") == 0)
-          sscanf(inputCStr,"%f",&conSet->majConSet.minReadsPercBaseFlt);
-
-        else if(strcmp(parmCStr, "-maj-con-min-ins") == 0)
-           sscanf(inputCStr,"%f",&conSet->majConSet.minReadsPercInsFlt);
-
-        else if(strcmp(parmCStr, "-maj-con-min-base-q") == 0)
-            cStrToUChar(inputCStr, &conSet->majConSet.minBaseQUC);
-
-        else if(strcmp(parmCStr, "-maj-con-min-ins-q") == 0)
-            cStrToUChar(inputCStr, &conSet->majConSet.minInsQUC);
-            
-        /**************************************************************\
+        /*************************************************\
         * Fun-1 Sec-2 Sub-2: Percent difference settings
-        \**************************************************************/
+        \*************************************************/
 
-        else if(strcmp(parmCStr, "-min-read-con-map-length") == 0)
+        else if(strcmp(parmStr, "-min-read-con-map-length") == 0)
         { /*Else if the user provided a minimum read length*/
             minReadConStats->minReadLenULng =
-                strtoul(inputCStr, &tmpCStr, 10);
+                strtoul(argStr, &tmpStr, 10);
         } /*Else if the user provided a minimum read length*/
 
-        else if(strcmp(parmCStr, "-read-con-snps") == 0)
-            sscanf(inputCStr, "%f", &minReadConStats->minSNPsFlt);
-        else if(strcmp(parmCStr, "-read-con-diff") == 0)
-            sscanf(inputCStr, "%f", &minReadConStats->minDiffFlt);
-        else if(strcmp(parmCStr, "-read-con-dels") == 0)
-            sscanf(inputCStr, "%f", &minReadConStats->minDelsFlt);
-        else if(strcmp(parmCStr, "-read-con-inss") == 0)
-            sscanf(inputCStr, "%f", &minReadConStats->minInssFlt);
-        else if(strcmp(parmCStr, "-read-con-indels") == 0)
-            sscanf(inputCStr, "%f", &minReadConStats->minIndelsFlt);
+        else if(strcmp(parmStr, "-read-con-snps") == 0)
+            sscanf(argStr, "%f", &minReadConStats->minSNPsFlt);
+        else if(strcmp(parmStr, "-read-con-diff") == 0)
+            sscanf(argStr, "%f", &minReadConStats->minDiffFlt);
+        else if(strcmp(parmStr, "-read-con-dels") == 0)
+            sscanf(argStr, "%f", &minReadConStats->minDelsFlt);
+        else if(strcmp(parmStr, "-read-con-inss") == 0)
+            sscanf(argStr, "%f", &minReadConStats->minInssFlt);
+        else if(strcmp(parmStr, "-read-con-indels") == 0)
+            sscanf(argStr, "%f", &minReadConStats->minIndelsFlt);
 
         /**************************************************************\
         * Fun-1 Sec-2 Sub-5: scoreReads read to consensus settings
         \**************************************************************/
 
-        else if(strcmp(parmCStr, "-read-con-min-base-q") == 0)
-            cStrToUChar(inputCStr, &minReadConStats->minQChar);
+        else if(strcmp(parmStr, "-read-con-min-base-q") == 0)
+            cStrToUChar(argStr, &minReadConStats->minQChar);
 
-        else if(strcmp(parmCStr, "-read-con-min-mapq") == 0)
-            cStrToUInt(inputCStr, &minReadConStats->minMapqUInt);
+        else if(strcmp(parmStr, "-read-con-min-mapq") == 0)
+            cStrToUInt(argStr, &minReadConStats->minMapqUInt);
 
-         else if(strcmp(parmCStr, "-read-con-max-a-ins-homo") == 0)
-           cStrToUInt(inputCStr, &minReadConStats->maxHomoInsAry[0]);
+         else if(strcmp(parmStr, "-read-con-max-a-ins-homo") == 0)
+           cStrToUInt(argStr, &minReadConStats->maxHomoInsAry[0]);
 
-         else if(strcmp(parmCStr, "-read-con-max-t-ins-homo") == 0)
-           cStrToUInt(inputCStr,&minReadConStats->maxHomoInsAry[10]);
+         else if(strcmp(parmStr, "-read-con-max-t-ins-homo") == 0)
+           cStrToUInt(argStr,&minReadConStats->maxHomoInsAry[10]);
 
-         else if(strcmp(parmCStr, "-read-con-max-c-ins-homo") == 0)
-            cStrToUInt(inputCStr,&minReadConStats->maxHomoInsAry[1]);
+         else if(strcmp(parmStr, "-read-con-max-c-ins-homo") == 0)
+            cStrToUInt(argStr,&minReadConStats->maxHomoInsAry[1]);
 
-         else if(strcmp(parmCStr, "-read-con-max-g-ins-homo") == 0)
-            cStrToUInt(inputCStr,&minReadConStats->maxHomoInsAry[3]);
+         else if(strcmp(parmStr, "-read-con-max-g-ins-homo") == 0)
+            cStrToUInt(argStr,&minReadConStats->maxHomoInsAry[3]);
 
-         else if(strcmp(parmCStr, "-read-con-max-a-del-homo") == 0)
-           cStrToUInt(inputCStr, &minReadConStats->maxHomoDelAry[0]);
+         else if(strcmp(parmStr, "-read-con-max-a-del-homo") == 0)
+           cStrToUInt(argStr, &minReadConStats->maxHomoDelAry[0]);
 
-         else if(strcmp(parmCStr, "-read-con-max-t-del-homo") == 0)
-           cStrToUInt(inputCStr,&minReadConStats->maxHomoDelAry[10]);
+         else if(strcmp(parmStr, "-read-con-max-t-del-homo") == 0)
+           cStrToUInt(argStr,&minReadConStats->maxHomoDelAry[10]);
 
-         else if(strcmp(parmCStr, "-read-con-max-c-del-homo") == 0)
-            cStrToUInt(inputCStr,&minReadConStats->maxHomoDelAry[1]);
+         else if(strcmp(parmStr, "-read-con-max-c-del-homo") == 0)
+            cStrToUInt(argStr,&minReadConStats->maxHomoDelAry[1]);
 
-         else if(strcmp(parmCStr, "-read-con-max-g-del-homo") == 0)
-            cStrToUInt(inputCStr,&minReadConStats->maxHomoDelAry[3]);
+         else if(strcmp(parmStr, "-read-con-max-g-del-homo") == 0)
+            cStrToUInt(argStr,&minReadConStats->maxHomoDelAry[3]);
 
         /**************************************************************\
         * Fun-1 Sec-2 Sub-2: Percent difference settings
         \**************************************************************/
 
-        else if(strcmp(parmCStr, "-min-read-read-map-length") == 0)
+        else if(strcmp(parmStr, "-min-read-read-map-length") == 0)
         { /*Else if the user provided a minimum read length*/
             readToReadMinStats->minReadLenULng =
-                strtoul(inputCStr, &tmpCStr, 10);
+                strtoul(argStr, &tmpStr, 10);
         } /*Else if the user provided a minimum read length*/
 
-        else if(strcmp(parmCStr, "-read-read-snps") == 0)
-            sscanf(inputCStr, "%f", &readToReadMinStats->minSNPsFlt);
-        else if(strcmp(parmCStr, "-read-read-diff") == 0)
-            sscanf(inputCStr, "%f", &readToReadMinStats->minDiffFlt);
-        else if(strcmp(parmCStr, "-read-read-dels") == 0)
-            sscanf(inputCStr, "%f", &readToReadMinStats->minDelsFlt);
-        else if(strcmp(parmCStr, "-read-read-inss") == 0)
-            sscanf(inputCStr, "%f", &readToReadMinStats->minInssFlt);
-        else if(strcmp(parmCStr, "-read-read-indels") == 0)
-            sscanf(inputCStr, "%f", &readToReadMinStats->minIndelsFlt);
+        else if(strcmp(parmStr, "-read-read-snps") == 0)
+            sscanf(argStr, "%f", &readToReadMinStats->minSNPsFlt);
+        else if(strcmp(parmStr, "-read-read-diff") == 0)
+            sscanf(argStr, "%f", &readToReadMinStats->minDiffFlt);
+        else if(strcmp(parmStr, "-read-read-dels") == 0)
+            sscanf(argStr, "%f", &readToReadMinStats->minDelsFlt);
+        else if(strcmp(parmStr, "-read-read-inss") == 0)
+            sscanf(argStr, "%f", &readToReadMinStats->minInssFlt);
+        else if(strcmp(parmStr, "-read-read-indels") == 0)
+            sscanf(argStr, "%f", &readToReadMinStats->minIndelsFlt);
 
         /**************************************************************\
         * Fun-1 Sec-2 Sub-5: scoreReads read to readsensus settings
         \**************************************************************/
 
-        else if(strcmp(parmCStr, "-read-read-min-base-q") == 0)
-            cStrToUChar(inputCStr, &readToReadMinStats->minQChar);
+        else if(strcmp(parmStr, "-read-read-min-base-q") == 0)
+            cStrToUChar(argStr, &readToReadMinStats->minQChar);
 
-        else if(strcmp(parmCStr, "-read-read-min-mapq") == 0)
-            cStrToUInt(inputCStr, &readToReadMinStats->minMapqUInt);
+        else if(strcmp(parmStr, "-read-read-min-mapq") == 0)
+            cStrToUInt(argStr, &readToReadMinStats->minMapqUInt);
 
-         else if(strcmp(parmCStr, "-read-read-max-a-ins-homo") == 0)
-           cStrToUInt(inputCStr, &readToReadMinStats->maxHomoInsAry[0]);
+         else if(strcmp(parmStr, "-read-read-max-a-ins-homo") == 0)
+           cStrToUInt(argStr, &readToReadMinStats->maxHomoInsAry[0]);
 
-         else if(strcmp(parmCStr, "-read-read-max-t-ins-homo") == 0)
-           cStrToUInt(inputCStr,&readToReadMinStats->maxHomoInsAry[10]);
+         else if(strcmp(parmStr, "-read-read-max-t-ins-homo") == 0)
+           cStrToUInt(argStr,&readToReadMinStats->maxHomoInsAry[10]);
 
-         else if(strcmp(parmCStr, "-read-read-max-c-ins-homo") == 0)
-            cStrToUInt(inputCStr,&readToReadMinStats->maxHomoInsAry[1]);
+         else if(strcmp(parmStr, "-read-read-max-c-ins-homo") == 0)
+            cStrToUInt(argStr,&readToReadMinStats->maxHomoInsAry[1]);
 
-         else if(strcmp(parmCStr, "-read-read-max-g-ins-homo") == 0)
-            cStrToUInt(inputCStr,&readToReadMinStats->maxHomoInsAry[3]);
+         else if(strcmp(parmStr, "-read-read-max-g-ins-homo") == 0)
+            cStrToUInt(argStr,&readToReadMinStats->maxHomoInsAry[3]);
 
-         else if(strcmp(parmCStr, "-read-read-max-a-del-homo") == 0)
-           cStrToUInt(inputCStr, &readToReadMinStats->maxHomoDelAry[0]);
+         else if(strcmp(parmStr, "-read-read-max-a-del-homo") == 0)
+           cStrToUInt(argStr, &readToReadMinStats->maxHomoDelAry[0]);
 
-         else if(strcmp(parmCStr, "-read-read-max-t-del-homo") == 0)
-           cStrToUInt(inputCStr,&readToReadMinStats->maxHomoDelAry[10]);
+         else if(strcmp(parmStr, "-read-read-max-t-del-homo") == 0)
+           cStrToUInt(argStr,&readToReadMinStats->maxHomoDelAry[10]);
 
-         else if(strcmp(parmCStr, "-read-read-max-c-del-homo") == 0)
-            cStrToUInt(inputCStr,&readToReadMinStats->maxHomoDelAry[1]);
+         else if(strcmp(parmStr, "-read-read-max-c-del-homo") == 0)
+            cStrToUInt(argStr,&readToReadMinStats->maxHomoDelAry[1]);
 
-         else if(strcmp(parmCStr, "-read-read-max-g-del-homo") == 0)
-            cStrToUInt(inputCStr,&readToReadMinStats->maxHomoDelAry[3]);
+         else if(strcmp(parmStr, "-read-read-max-g-del-homo") == 0)
+            cStrToUInt(argStr,&readToReadMinStats->maxHomoDelAry[3]);
 
         else
-            return parmCStr;
+            return parmStr;
     } /*Loop through all user arguments (for)*/
 
     return 0;

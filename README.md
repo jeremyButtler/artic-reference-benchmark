@@ -7,6 +7,15 @@ The goal of this repository is to see how a poor choice in
 We are also comparing the accuracy of artic to the accuracy
   of LILO, which does not do reference based polishing.
 
+# found error:
+
+I found that the Neeldeman aligner I built (alnSeq) had an
+  issue with adding or misplacing two extra deletions. I
+  plan to fix these errors later.
+
+To avoid future errors I am switching to quast and am
+  restarting my benchmarking (11-quast-bench).
+
 # License
 
 This repository is under a dual license consisting of the
@@ -16,12 +25,14 @@ This repository is under a dual license consisting of the
 The code in 00-programs and 00-scripts is my own and so,
   are under the dual license.
 However, the code downloaded with the makefile in
-  00-programs (LILO, Porechop, and ivar) are not my own and
-  so, are not covered by these licenses.
+  00-programs (LILO, Porechop, quast, and ivar) are not my
+  own and so, are not covered by these licenses.
 You can remove all complied programs and downloaded code
   with `cd 00-programs && make removeall`.
 
 # Extra steps
+
+## Installing programs
 
 LILO can be installed with the make file in 00-programs
   `cd 00-programs && make`.
@@ -33,6 +44,28 @@ You will need to install the artic pipeline (by conda),
   own.
 I should add these to the Makefile at some point, but will
   probably never bother to.
+
+## Preparing data for graphing
+
+The stats files produced are a mixture of space and tab
+  deliminators. Also, there might be some runs that might
+  have made an emtpy sequence and thus, never had any
+  stats. To do this I use:
+
+```
+tr ' ' ',' < file-stats.tsv |
+  tr '\t' ',' |
+  sed 's/,,*/,/g; s/,$//;' |
+  tr ',' '\t' |
+  awk '{
+      if(NR == 1){lenHeadI = NF; print $0; next;};
+      if(NF < lenHeadI){next;}; # if row is missing values
+      print $0;
+    };' > tmp.tsv &&
+  mv tmp.tsv file-stats.tsv;
+
+  # for some odd reason sed has an issue with s/\t\t*/\t/g
+```
 
 # Methods:
 
@@ -78,31 +111,11 @@ Also, to avoid having overlapping amplicons (more than just
   ```
 
 To measure accuracy we looked at the number of SNPs and
-  indels using the Needleman alignment from alnSeq
-We did not use minimap2, because  minimap2 does not handle
-   a large number of Ns very well, which many of our
-  consensus had.
+  indels using quast.
 We also measured completeness by the number of N's in each
-  consensus.
-To prevent alignment issues, we ensured that all
-  consensuses missing ends filled in with N's before
-  aligning.
-This was all automated with the getStats.sh script in
+  consensus and the number of missing bases (done in R).
+The quast call was automated with the getStats.sh script in
   00-scripts.
-
-One error that comes from this method is that sometimes
-  snps will be replaced by an deletion and an insertion.
-I would use minimap2, but I have not had good results
-  aligning larges regions with N's with minimap2.
-When I aligned consensus made with any pipeline to the
-  original reference I got a large number of soft masked
-  bases at the start and snps.
-When I aligned these with water from emboss or alnSeq, the
-  softmasking was reduced.
-Water from emboss (-gapextend 2 -gapopen 10) and alnSeq
-  -use-water had similar results for the one alignment I
-  tried, except that water from emboss counted the N's as
-  disagreements, while alnSeq did not.
 
 The pipelines we tested were artic version 1.2.3, ivar 
   version 1.4.2, LILO (Downloaded Sep 5th, 2023).
@@ -136,6 +149,11 @@ LILO was then called with env to correct the path to
    )" -k -s /path/to/Lilo/LILO --configfile config.txt
    ```
 
+We also ran our own pipeline (buildcon). This is not a 
+  pipeline that we expect to be used, since it requires
+  the user to identify the reads to use to build each
+  amplicons consensus. See buildAmpCon.sh for details.
+
 We automated each pipeline using scripts
   (benchArticNoMut.sh, benchLILO.sh, and runIvar.sh),
   which can be found in 00-scripts.
@@ -143,8 +161,8 @@ We automated each pipeline using scripts
 Our levels for this test are read depth, length, and the
   percent difference between the reference and true
   sequence.
-For depth, we looked at 30x, 50x, 100x, 200x, 500x, 1000x,
-  and 1200x read depth.
+For depth, we looked at 30x, 50x, 100x, 200x, 500x, and
+  1000x read depth.
 We selected the reads for each read depth by randomly
   subsampling each amplicons file.
 The seed for each subsample was the same for all depths,
@@ -176,22 +194,11 @@ Also, we automated all of this with the benchAll.sh script
 
 # Results:
 
-The current graphs is somewhat simple, but shows how the
-  reference can change the snp accuracy of the artic
-  pipeline. This graph was made using the tsv file
-  (filter.tsv) in the 07 folder. There are also some
-  initial 30x read depth results in the 09 directory.
+## found error:
 
-![Graph showing how the SNP accuracy of the artic pipeline
-  is affected by the reference. Accuracy decreases as the
-  reference becomes more distant from the sequence.
-  However, even at 10%, the accuracy rarely goes beneath
-  99.8% and never beneath 99.75%. Read depth seems to have
-  little affect on accuracy. I suspect this is due to
-  masking.
-](artic-initial-bench.svg)
+I found that the Neeldeman aligner I built (alnSeq) had an
+  issue with adding or misplacing two extra deletions. I
+  plan to fix these errors later.
 
-The figure above shows how the choice of reference can
-  change the accuracy of the artic pipeline. However, the
-  accuracy is never beneath 99.85%. There is no clear trend
-  on the affect of depth.
+To avoid future errors I am switching to quast and am
+  restarting my benchmarking (11-quast-bench).

@@ -6,11 +6,12 @@
 #   - "trimSam.h"
 #   - "fqAndFaFun.h"
 #   - "readExtract.h"
+#   - "dataTypeShortHand.h"           (No .c file)
 #   o "defaultSettings.h"
-#   o "cStrFun.h"
-#   o "cStrToNumberFun.h"
+#   o "cStrFun.h"                     (No .c file)
+#   o "cStrToNumberFun.h"             (No .c file)
 #   o "printError.h"
-#   o "samEntryStruct.h"
+#   o "samEntryStruct.h"              (No .c file)
 #   o "findCoInftBinTree.h"
 #   o "findCoInftChecks.h
 #   o "scoreReadsFun.h"
@@ -19,7 +20,8 @@
 #   o "fqGetIdsStructs.h"
 #   o "fqGetIdsHash.h"
 #   o "fqGetIdsAVLTree.h"
-# C standard librarys (may be in non-standard library includes):
+# C standard Libraries:
+#   o <time.h>
 #   o <string.h>
 #   o <stdlib.h>
 #   o <stdio.h>
@@ -32,6 +34,7 @@
 #include "trimSam.h"
 #include "readExtract.h"
 #include "fqAndFaFun.h"
+#include "dataTypeShortHand.h"
 
 /*---------------------------------------------------------------------\
 | Struct-1: majCon
@@ -73,40 +76,84 @@ typedef struct medakaStruct
    unsigned long lenConUL;   /*Holds length of ouput consensus*/
 }medakaStruct;
 
+/*--------------------------------------------------------\
+| Struct-4: ivarSet
+| Use:
+|  - Holds settings for ivar
+\--------------------------------------------------------*/
+typedef struct ivarSet
+{ /*ivarSet*/
+   char minSupStr[8];    /*Min support for snps*/
+   char minInsSupStr[8]; /*Min support for insertions*/
+   char minDepthStr[16]; /*Min read depth*/
+   char maskC;           /*Base to mask with*/
+   char minQStr[4];      /*Min Q-score to keep a base*/
+   ulong lenConUL;       /*Length of consensus*/
+   char useIvarBl;       /*Lets me know if ivar is used*/
+}ivarSet;
+
+/*--------------------------------------------------------\
+| Name: initIvarSet
+| Macro-01:
+| Use:
+|  - Initializes the settings for an ivarSet structuer
+| Input:
+|  - ivarSetST:
+|    o ivarSet strucuture (not pointer) to initialize
+| Output:
+|  - Initializes
+|    o All variables in ivarSetST
+\--------------------------------------------------------*/
+#define initIvarSet(ivarSetST){ \
+   strcpy((ivarSetST).minSupStr, defIvarMinSupStr); \
+   strcpy((ivarSetST).minInsSupStr, defIvarMinInsSupStr);\
+   strcpy((ivarSetST).minDepthStr, defIvarMinDepthStr); \
+   (ivarSetST).maskC = defIvarMask; \
+   strcpy((ivarSetST).minQStr, defIvarMinQStr); \
+   (ivarSetST).useIvarBl = (defConMethod == defUseIvar);\
+} /*initIvarSet*/
+
 /*---------------------------------------------------------------------\
-| Struct-4: conuildStruct
+| Struct-5: conBuildStruct
 | Use:
 |    - Holds settings for consensus building
 \---------------------------------------------------------------------*/
 typedef struct conBuildStruct
 { /*condBuildStruct*/
-    char useStatBl;
-         /*1: Use a stats file instead of read median-Q for finding a
-              good read to build with*/
-    unsigned char clustUC;
-        /*The cluster number to assign to the consensus*/
-    uint32_t numRndsToPolishUI;
-         /*Number times to rebuild consensus*/
-    uint64_t minReadsToBuildConUL;
-         /*Min number of reads needed to build a consensus*/
-    uint64_t maxReadsToBuildConUL;
-         /*Max number of reads to build a consensus with*/
-    uint64_t numReadsForConUL;
-         /*Number of reads deticated to building the consensus*/
-    /*Min length to keep consensus built by majority consensus*/
-    unsigned int minConLenUI;
+    uchar methodAryUC[32];/*Order to run methods*/
+    uchar lenMethodUC;   /*Number consensus methods input*/
 
-    unsigned long lenConUL;   /*Holds length of ouput consensus*/
-        /*Here so user does not need to access internal structers*/
+    char useStatBl;
+         /*1: Use a stats file instead of read median-Q
+         ` for finding a good read to build with
+         */
+    uchar clustUC; /*Cluster number of consensus*/
+    uint numRndsToPolishUI;
+       /*This is used to determine the number of times
+       ` to rebuild the consensus.
+       */
+    float minPercMappedReadsFlt;
+       /*Min % of total reads that mapped. This is used to
+       ` determine if a consensus should be built when
+       ` the subsample depth is smaller than the reads.
+       */
+    ulong minReadsToBuildConUL; /*Min reads for consensus*/
+    ulong maxReadsToBuildConUL; /*max read subsample size*/
+    ulong numReadsForConUL;
+        /*Number of reads kept to buld a consensus.*/
+
+    uint minConLenUI; /*Min consensus length*/
+    ulong lenConUL;   /*length of ouput consensus*/
 
     /*Settings for the consensus building step*/
     struct majConStruct majConSet;
     struct raconStruct raconSet;
     struct medakaStruct medakaSet;
+    struct ivarSet ivarSetST;
 }condBuildStruct;
 
 /*---------------------------------------------------------------------\
-| Struct-5: baseStruct
+| Struct-6: baseStruct
 | Use:
 |    - Holds the base, error type (if insertion or deletion), & a
 |      counter for number of reads with the same base.
@@ -288,5 +335,54 @@ void initConBuildStruct(
     struct conBuildStruct *consensusSettings
     /*struct to set to default values in defaultSettings.h*/
 ); /*Sets input structers variables to default settings*/
+
+/*--------------------------------------------------------\
+| Name: ivarCon (Fun-13:)
+| Use:
+|  - Builds a consensus using ivar
+| Input:
+|  - settings:
+|    o ivarSet structure with settings for ivar
+|  - clustUC:
+|    o Number of the cluster
+|  - threadsStr:
+|    o Number of threads to use (as string)
+|  - conST:
+|    o Has names of the consensus, best read, and top reads
+|      fastq files.
+|    o best read is the read to use in making the consensus
+|      - fastq or fasta
+|    o top reads are aligned to best read and used to build
+|      the consensus
+|    o consensus is the name of the output consensus
+|      - Avoid periods in names
+|  - samST:
+|    o Used to read in sam entries.
+| Output:
+|    - Returns:
+|        o 1 If succeded
+|        o 2 for pipe error with samtools/ivar
+|        o 4 Failed to make a consensus
+|        o 32 for pipe error with minimap2
+|        o 64 memory error
+\--------------------------------------------------------*/
+unsigned char ivarCon(
+    struct ivarSet *settings,/*Settings to run ivar with*/
+    uchar *clustUC,          /*Cluster number to use*/
+    char *threadsStr,        /*Number of threads*/
+    struct readBin *conST,   /*Has reads/consensus to use*/
+    struct samEntry *samST  /*For getting sam file input*/
+); /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+   ' Fun-13 TOC: ivarCon
+   '  - Builds a consensus using ivar from the best reads & top read
+   '  o fun-13 sec-01:
+   '    - Variable declerations
+   '  o fun-13 sec-02:
+   '    - Make a temporary file for trimming
+   '  o fun-13 sec-03:
+   '    - Prepare command to call ivar
+   '  o fun-13 sec-04:
+   '    - Run ivar
+   \~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #endif
