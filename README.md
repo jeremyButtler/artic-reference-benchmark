@@ -7,6 +7,12 @@ The goal of this repository is to see how a poor choice in
 We are also comparing the accuracy of artic to the accuracy
   of LILO, which does not do reference based polishing.
 
+# Note about the writing
+
+This is not going to be the most well written repository.
+  That is not my goal. This is just here to show what I
+  found.
+
 # found error:
 
 I found that the Neeldeman aligner I built (alnSeq) had an
@@ -48,6 +54,26 @@ I should add these to the Makefile at some point, but will
   probably never bother to.
 
 ## Preparing data for graphing
+
+I needed to clean up the stats from the quast benchmarking.
+  Something was happening with the medaka polishing runs
+  for buildcon. Also I had some errored out entires at low
+  read depths or early on.
+
+```
+tr '\t' ',' < 11-quast-bench/11-quast-bench-stats.tsv |
+  sed 's/[, ][, ]*/,/g; s/[, ]*$//g;' |
+  tr ',' '\t' | 
+  awk \
+      'BEGIN{OFS=FS="\t"};
+       {
+          if(NR == 1){headI = NF; print $0; next;};
+          if($28 == "TRUE") next; 
+          if(NF == headI) print $0;
+          #print NF;
+      };' \
+  > 11-quast-bench/11-quast-bench-cleanup.tsv;
+```
 
 The stats files produced are a mixture of space and tab
   deliminators. Also, there might be some runs that might
@@ -117,7 +143,7 @@ To measure accuracy we looked at the number of SNPs and
 We also measured completeness by the number of N's in each
   consensus and the number of missing bases (done in R).
 The quast call was automated with the getStats.sh script in
-  00-scripts.
+  00-scripts (getStats2.sh gets more data).
 
 The pipelines we tested were artic version 1.2.3, ivar 
   version 1.4.2, LILO (Downloaded Sep 5th, 2023).
@@ -134,8 +160,7 @@ The second was using the polished_trimmed amplicons with
   scaffold_builder using the settings suggested by
   Amanda Warr for manually building the consensus on issue
   #2 in the LILO repository.
-The third was with stich, which we used in our own
-  pipeline.
+The third was with stich (in 00-programs).
 
 We ran LILO with a config file that had the scheme
   (scheme: SARS-CoV-2), reference
@@ -154,7 +179,10 @@ LILO was then called with env to correct the path to
 We also ran our own pipeline (buildcon). This is not a 
   pipeline that we expect to be used, since it requires
   the user to identify the reads to use to build each
-  amplicons consensus. See buildAmpCon.sh for details.
+  amplicons consensus. We used only the majcon step (not
+  Racon or Medaka), but we tested with and without ivar
+  polishing. See buildAmpCon.sh in 00-scripts for details
+  on how this pipeline ran.
 
 We automated each pipeline using scripts
   (benchArticNoMut.sh, benchLILO.sh, and runIvar.sh),
@@ -179,6 +207,8 @@ Scheme files and reference files had entries/parts of
   sequences removed that did not match these lengths.
 To prevent errors, we made sure to only take only the first
   X nucleotides for each sequence.
+I am currently not planning to graph this data, but it is
+  their if you want to try.
 
 To make the reference different than the true consensus we
   mutated the reference.
@@ -190,17 +220,263 @@ Like, subsampling, each level used the same seed, with the
   seed changing between replicates.
 This step was automated with a script (mutateSeq.sh).
 
-We ran each test for five replicates.
+We ran each test for ten replicates.
 Also, we automated all of this with the benchAll.sh script
   in 00-scripts.
 
+The computer used for benchmarking had an Intel Core
+  i5-2500 CPU @ 3.30GHz and 8 gigs of ram.
+
+There is a benchAll2.sh and getStats2.sh, which I never
+  used. I made these scripts to get data I missed in my
+  first quast run, but found that my results were good
+  enough for what I wanted.  I have tested getStats2.sh
+  for water from EMBOSS, but not benchAll2.sh. These should
+  be better scripts, if they work.
+
 # Results:
 
-## found error:
+Our first step was to narrow down Ivar, LILO, and buildcon
+  to a single combination.
+We found that Ivar with its built in trimming step was less
+  accurate than Ivar with trimPrimers (ivar graphs in
+  11-quast-bench), or without primer any trimming (ivar
+  graphs in 10-new-bench).
+For LILO, we found that LILO with a manual scaffold_builder
+  step with Ivar polishing or stich step with Ivar
+  polishing was more accurate than the other tested 
+  combinations for LILO (lilo graphs in 11-quast-bench).
+We found that buildcon with Ivar polishing was the only
+  option with any level of accuracy (buildCon graphs in
+  11-quast-bench).
 
-I found that the Neeldeman aligner I built (alnSeq) had an
-  issue with adding or misplacing two extra deletions. I
-  plan to fix these errors later.
+![
+  Graph showing the number of false snps and indels of
+  artic, Ivar, LILO, and buildcon when the read depth is
+  over 30x.
+](11-quast-bench/all-over30x-snps-indels.svg)
 
-To avoid future errors I am switching to quast and am
-  restarting my benchmarking (11-quast-bench).
+**Figure 1:**
+  Graph showing the number of false snps and indels of
+  artic, Ivar, LILO, and buildcon when the read depth is
+  over 30x.
+  
+We looked at the indel and snp accuracy of each
+  consensus at read depths over 30x and when the reference
+  was 0%, 1%, 2%, 5%, and 10% different.
+We found that Ivar had the least number of false positive
+  snps and indels, followed by either LILO or buildcon
+  (figure 1).
+Both LILO and buildcon had outliers that were close or had
+  over 0.5% false positive snps (figure 1).
+However, artic had more outliers then LILO or buildcon
+  (figure 1).
+
+We thought that read depth might be a factor, so we made
+  graphs for reach read depth (see
+  11-quast-bench/all-depthX-snps-indels.svg).
+However, we found that in some cases buildcon had less
+  outliers at 50x than 500x
+  (See 11-quast-bench/all-50X-snps-indels.svg and
+   11-quast-bench/all-50X-snps-indels.svg).
+We also found that the worst outliers for LILO were at
+  1000x read depth
+  (see 11-quast-bench/all-1000X-snps-indels.svg).
+This could be due to not running enough replicates and so,
+  these may be rare cases.
+It also could be due to having more complete genomes at 
+  deeper read depths, which may include amplicons that
+  were more error prone
+  (see 11-quast-bench/all-masked.svg).
+
+![
+  Graph showing how the number of false positive snps
+  changes as the reference becomes more distant from the
+  true sequence.
+](11-quast-bech/all-over30x-snps-ref.svg)
+
+**Figure 2:**
+  Graph showing how the number of false positive snps
+  changes as the reference becomes more distant from the
+  true sequence. Read depth is over 30x.
+
+Next we looked at how the reference was influencing the
+  snp accuracy of our consensus.
+We found that reference choice had little affect on
+  buildcon, possibly caused a few outliers with over ten
+  false positive snps LILO when 10% different, may have
+  added an false positive snp for Ivar, and had a large
+  increase in false positive snps for artic (figure 2).
+For the artic pipeline, we found that even when the
+  reference was 1% to 2% different than the true sequence,
+  we still had several consensuses with at least one extra 
+  false positive snp (figure 2).
+We also found less extreme outliers in LILO than buildcon
+  or artic when the reference was under 10% different
+  (figure 2).
+
+The increase in false positive snps in artic would explain
+  many of the outliers in artic in the snp/indel graph
+  (figure 1 and 2), which are not explained by read depth
+  (11-quast-bench/all-over30x-snps-ref.svg).
+Also, we noticed that most consensuses made using Ivar did
+  not have the extra false positive snp, even when the
+  reference was 10% different
+  (see 11-quast-bench/ivar-snps-depth.svg).
+
+![
+  Graph showing how depth (30x to 1000x) changes the
+  completeness of built consensuses.
+](11-quast-bench/all-masked.svg)
+
+**Figure 3:**
+  Graph showing how depth (30x to 1000x) changes the
+  completeness of built consensuses.
+
+Next we looked at how the read depth changed the
+  completeness of each consensus.
+We found that Ivar made the most complete consensuses,
+  followed by artic, then buildcon, which was closely
+  followed by LILO
+  (figure 3).
+We also found that increasing read depth led to an increase
+  in the consensus completeness for every pipeline except
+  artic (figure 3).
+Also, we noticed that both buildcon and LILO were
+  less predictable about how complete a genome was at any
+  read depth than artic are Ivar (figure 3).
+
+![
+  Graph showing how close the consensus is to the real
+  sequence as the reference changes. Reads depths are all
+  over 30x.
+](11-quast-bench/all-over30x-lenth-ref.svg)
+
+**Figure 4:**
+  Graph showing how close the consensus is to the real
+  sequence as the reference changes. Reads depths are all
+  over 30x.
+
+We wanted to look at how the length of the consensus
+  changed as the reference became more distant to the true
+  sequence.
+We found that only LILO with scaffold_builder had more than
+  one or two outliers for a single reference (figure 4).
+In this case scaffold_builder inserted between 100 to 2000
+  bases in almost all sequences when the reference was 10%
+  different (figure 4).
+However, these large insertions were not present when the
+  reference was 5% or less different than the true
+  sequence (figure 4).
+Also, LILO with stich did not suffer from this error, which
+  suggests that this is a problem with scaffold_builder or
+  our settings for scaffold_builder and not LILO itself
+  (figure 4).
+There was a similar error, were LILO produced consensuses
+  with 40 to 120 false positive indels when the
+  scaffold_builder step in LILO did not error out
+  (see 11-quast-bench/lilo-snps-indels.svg; this does not
+   account for added bases).
+
+![
+  Graph showing the time usage of each pipeline as read
+  depth increases (starts at 50x read depth).
+](11-quast-bench/all-over30x-time.svg)
+
+![
+  Graph showing the memory usage of each pipeline as read
+  depth increases (starts at 50x read depth).
+](11-quast-bench/all-over30x-memory.svg)
+
+**Figure 5:**
+  Graph showing the time usage of each pipeline as read
+  depth increases (starts at 50x read depth). (a) is time
+  usage in minutes. (b) is memory usage in megabytes.
+
+We also wanted to look at the time usage and memory usage
+  of each pipeline as read depth increased.
+At all read depths, we found that Ivar was the fastest
+  program (under two minutes), followed by buildcon
+  (under four minutes), then artic (under five minutes),
+  and finally LILO (around 20 minutes at 1000x read depth)
+  (figure 5a).
+Of all programs, artic seemed to have the least increase in
+  time usage as read depth increased (figure 5a).
+
+One note I will add is that I know that buildcon, when used
+  with Medaka is slower (I think around 30 minutes for
+  1000x read depth) than LILO.
+So, these time stats only apply to the fastest consensus
+  method in buildcon.
+
+For memory usage we noticed that artic used the most
+  memory (over 750 mb), followed by LILO (under 600 mb),
+  and then followed by either buildcon or Ivar
+  (under 200 mb) (figure 5b).
+However, the memory usage of buildcon was lower than Ivar
+  only after 500x read depth (figure 5b).
+This is likely due to buildcon only using only a subsample
+  of all reads (300 reads) in its consensus building step.
+
+Again the memory usage for buildcon does not include a
+  Medaka step.
+The memory usage will be the same as LILO when Medaka is
+  used.
+
+# Summary
+
+We set out to determine how the reference affects the
+  accuracy of consensus made with artic, Ivar, and LILO.
+We found that the reference had little affect on
+  consensuses made using Ivar.
+That the reference added in many insertions into
+  consensuses built by LILO when the reference was 10%
+  different than the true sequence, but had little affect
+  when the reference was 5% different than the true
+  sequence.
+That the reference had an affect on the accuracy
+  of the artic pipelines consensus, but that it took over
+  10% difference to get more than 0.05% increase in snps.
+
+If you are aiming for the most accurate consensus we would
+  recommend that you check how close your reads are to the
+  reference.
+We would then recommend only using artic if the reference
+  is 1% or at most 2% different than the possible
+  consensus.
+The alternatives to artic we would recommend are Ivar or
+  LILO combined with Ivar polishing and either a manual
+  scaffold_builder call when the reference is under 5%
+  different or stich if over 5% different.
+
+We should note that Ivar has not been tested with
+  deletions in the reference, which would appear as
+  insertions in the reads.
+Since Ivar has a stiff insertion threshold (90%), it is
+  possible that Ivar would favor deletions in these cases.
+However, the most likely targets would be larger
+  homopolymers, due to Nanopore reads having more errors
+  and thus, less support in larger homopolymer regions.
+This error will not likely effect the polishing the
+  consensus made by LILO, since Ivar is polishing the
+  consensus instead of a reference.
+  
+Overall, we have no idea what to recommend, except that you
+  should make sure that you check the reference when using
+  the artic pipeline.
+However, if you want to prevent reference errors, we would
+  recommend to always check your reference (no mater the
+  pipeline), to use multiple references in your check, and
+  to select and use the best reference from the check.
+This should ensure that the closest reference is always
+  used.
+
+# Thanks
+
+- Eric Bortz for encouraging me and pointing me to the type
+  of data to look for.
+- The Drown lab (Devin Drown and many others) for there
+  encouragement.
+- My Dad for listening to me talk about this (a lot) and
+  finding a computer I could run this on. One thing that
+  amazes me is just how much you can do with a little.
