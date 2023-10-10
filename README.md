@@ -293,7 +293,7 @@ It also could be due to having more complete genomes at
   Graph showing how the number of false positive snps
   changes as the reference becomes more distant from the
   true sequence.
-](11-quast-bech/all-over30x-snps-ref.svg)
+](11-quast-bench/all-over30x-snps-ref.svg)
 
 **Figure 2:**
   Graph showing how the number of false positive snps
@@ -350,7 +350,7 @@ Also, we noticed that both buildcon and LILO were
   Graph showing how close the consensus is to the real
   sequence as the reference changes. Reads depths are all
   over 30x.
-](11-quast-bench/all-over30x-lenth-ref.svg)
+](11-quast-bench/all-over30x-length-ref.svg)
 
 **Figure 4:**
   Graph showing how close the consensus is to the real
