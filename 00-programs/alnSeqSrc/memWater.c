@@ -136,9 +136,13 @@ struct scoresStruct * memWaterAln(
    /*Direction matrix (one cell holds a single direction)*/
    #if defined TWOBITMSW
       struct twoBitAry *dirRow = 0;/*Holds directions*/
+      unsigned char lastDirC = 0;
+      unsigned char lastLastDirC = 0;
    #else
       char *dirRow = 0;  /*Holds directions*/
       char *firstDir = 0; /*Holds directions*/
+      char lastDirC = 0;
+      char lastLastDirC = 0;
    #endif
 
    struct scoresStruct *bestScoreST = 0;
@@ -307,6 +311,7 @@ struct scoresStruct * memWaterAln(
    *scoreOnLP = 0;
    delScoreL = 0;
    insScoreL = 0;
+   lastLastDirC = 0;
    ++scoreOnLP;
 
    /******************************************************\
@@ -358,7 +363,9 @@ struct scoresStruct * memWaterAln(
        *  - Find the best score for the last round
        \**************************************************/
 
+       lastDirC = lastLastDirC;
        #if defined TWOBITMSW
+          lastLastDirC = getTwoBitElm(dirRow);
           waterTwoBitMaxScore(
             dirRow,
             settings,
@@ -369,6 +376,7 @@ struct scoresStruct * memWaterAln(
           ); /*Update the scores*/
 
        #else
+          lastLastDirC = *dirRow;
           waterByteMaxScore(
             dirRow,
             settings,
@@ -378,7 +386,6 @@ struct scoresStruct * memWaterAln(
             scoreOnLP
           ); /*Update the scores*/
        #endif
-
        /**************************************************\
        * Fun-01 Sec-04 Sub-06:
        *  - Find the the next deletion score
@@ -416,11 +423,12 @@ struct scoresStruct * memWaterAln(
           #else
              *dirRow,
           #endif
+          lastDirC,
           lastRefStartUL,
           lastQryStartUL,
           refStartUL,
           qryStartUL,
-          refIterStr,
+          refIterStr - 1,
           refST->seqCStr,
           qryIterStr,
           qryST->seqCStr
@@ -433,9 +441,11 @@ struct scoresStruct * memWaterAln(
           bestScoreST->refStartUL = *refStartUL;
           bestScoreST->qryStartUL = *qryStartUL;
 
-          bestScoreST->refEndUL= refIterStr-refST->seqCStr;
+          bestScoreST->refEndUL =
+            refIterStr - refST->seqCStr - 1;
           bestScoreST->qryEndUL= qryIterStr-qryST->seqCStr;
        } /*If this is the current best score*/
+
 
        /***********************************************\
        * Fun-01 Sec-04 Sub-09:
@@ -491,6 +501,7 @@ struct scoresStruct * memWaterAln(
        ` case, this score can only apply to indels. So,
        ` I need to move off it to avoid overwirting it
        */
+       lastDirC = lastLastDirC;
        #if defined TWOBITMSW
           waterTwoBitMaxScore(
             dirRow,
@@ -516,13 +527,13 @@ struct scoresStruct * memWaterAln(
      *  - Is the last base in row an alternative alignment?
      \****************************************************/
 
-
      updateStartPos(
         #if defined TWOBITMSW
            getTwoBitElm(dirRow),
         #else
            *dirRow,
         #endif
+        lastDirC,
         lastRefStartUL,
         lastQryStartUL,
         refStartUL,
@@ -560,11 +571,11 @@ struct scoresStruct * memWaterAln(
       */
       #if defined TWOBITMSW
          twoBitMvXElmFromStart(dirRow, 0);
-         changeTwoBitElm(dirRow, defMvIns);
+         changeTwoBitElm(dirRow, defMvStop);
          twoBitMvToNextElm(dirRow);
       #else
          dirRow = firstDir;
-         *dirRow = defMvIns;
+         *dirRow = defMvStop;
          ++dirRow;
       #endif
 
@@ -583,7 +594,8 @@ struct scoresStruct * memWaterAln(
          + *scoreOnLP;
 
       /*Update the indel column and find next deletion*/
-      *scoreOnLP += settings->gapExtendI;
+      lastLastDirC = 0;
+      *scoreOnLP = 0; /*First column is always insertion*/
       delScoreL = *scoreOnLP + settings->gapExtendI;
       ++scoreOnLP; /*Move to the first base pair*/
 
@@ -749,9 +761,13 @@ struct alnMatrixStruct * memWaterAltAln(
    /*Direction matrix (one cell holds a single direction)*/
    #if defined TWOBITMSW
       struct twoBitAry *dirRow = 0;/*Holds directions*/
+      unsigned char lastDirC = 0;
+      unsigned char lastLastDirC = 0;
    #else
       char *dirRow = 0;  /*Holds directions*/
       char *firstDir = 0; /*Holds directions*/
+      char lastDirC = 0;
+      char lastLastDirC = 0;
    #endif
 
    /*The structure to return (has results)*/
@@ -970,6 +986,7 @@ struct alnMatrixStruct * memWaterAltAln(
    *scoreOnLP = 0;
    delScoreL = 0;
    insScoreL = 0;
+   lastLastDirC = 0;
    ++scoreOnLP;
 
    /******************************************************\
@@ -1021,7 +1038,9 @@ struct alnMatrixStruct * memWaterAltAln(
        *  - Find the best score for the last round
        \**************************************************/
 
+       lastDirC = lastLastDirC;
        #if defined TWOBITMSW
+          lastLastDirC = getTwoBitElm(dirRow);
           waterTwoBitMaxScore(
             dirRow,
             settings,
@@ -1032,6 +1051,7 @@ struct alnMatrixStruct * memWaterAltAln(
           ); /*Update the scores*/
 
        #else
+          lastLastDirC = *dirRow;
           waterByteMaxScore(
             dirRow,
             settings,
@@ -1073,21 +1093,22 @@ struct alnMatrixStruct * memWaterAltAln(
        *  - Determine if is a best score (keep as primary)
        \**************************************************/
 
-       updateStartPos(
-          #if defined TWOBITMSW
-             getTwoBitElm(dirRow),
-          #else
-             *dirRow,
-          #endif
-          lastRefStartUL,
-          lastQryStartUL,
-          refStartUL,
-          qryStartUL,
-          refIterStr,
-          refST->seqCStr,
-          qryIterStr,
-          qryST->seqCStr
-       );
+          updateStartPos(
+             #if defined TWOBITMSW
+                getTwoBitElm(dirRow),
+             #else
+                *dirRow,
+             #endif
+             lastDirC,
+             lastRefStartUL,
+             lastQryStartUL,
+             refStartUL,
+             qryStartUL,
+             refIterStr - 1,
+             refST->seqCStr,
+             qryIterStr,
+             qryST->seqCStr
+          );
           
        keepAltScore(
           *scoreOnLP,
@@ -1095,7 +1116,7 @@ struct alnMatrixStruct * memWaterAltAln(
           qryBasesST,
           refBasesST,
           *refStartUL, /*Is in index 0*/
-          refIterStr - refST->seqCStr, 
+          refIterStr - refST->seqCStr - 1, 
           *qryStartUL,
           qryIterStr - qryST->seqCStr
        ); /*Macro in waterman.h*/
@@ -1155,6 +1176,7 @@ struct alnMatrixStruct * memWaterAltAln(
        ` case, this score can only apply to indels. So,
        ` I need to move off it to avoid overwirting it
        */
+       lastDirC = lastLastDirC;
        #if defined TWOBITMSW
           waterTwoBitMaxScore(
             dirRow,
@@ -1186,6 +1208,7 @@ struct alnMatrixStruct * memWaterAltAln(
         #else
            *dirRow,
         #endif
+        lastDirC,
         lastRefStartUL,
         lastQryStartUL,
         refStartUL,
@@ -1226,11 +1249,11 @@ struct alnMatrixStruct * memWaterAltAln(
       */
       #if defined TWOBITMSW
          twoBitMvXElmFromStart(dirRow, 0);
-         changeTwoBitElm(dirRow, defMvIns);
+         changeTwoBitElm(dirRow, defMvStop);
          twoBitMvToNextElm(dirRow);
       #else
          dirRow = firstDir;
-         *dirRow = defMvIns;
+         *dirRow = defMvStop;
          ++dirRow;
       #endif
 
@@ -1240,7 +1263,7 @@ struct alnMatrixStruct * memWaterAltAln(
       \**************************************************/
 
       /*Move to indel column and apply gap extension*/
-      scoreOnLP = scoreRowLP;
+      *scoreOnLP = 0; /*First column is always insertion*/
       ++qryIterStr; /*Move to the next query base*/
 
       /*Find the next score for an snp/match*/
@@ -1249,6 +1272,7 @@ struct alnMatrixStruct * memWaterAltAln(
          + *scoreOnLP;
 
       /*Update the indel column and find next deletion*/
+      lastLastDirC = 0;
       *scoreOnLP += settings->gapExtendI;
       delScoreL = *scoreOnLP + settings->gapExtendI;
       ++scoreOnLP; /*Move to the first base pair*/

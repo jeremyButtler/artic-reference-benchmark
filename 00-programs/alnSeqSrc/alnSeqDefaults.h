@@ -11,7 +11,7 @@
 #define ALNSEQDEFAULTS_H
 
 /*Gereral find co-infections settings*/
-#define defVersion 20230830  /*Version number for alnSeq*/
+#define defVersion 20231010  /*Version number for alnSeq*/
 
 // Aligment method being used
 #define defUseNeedle 1  /*do Needleman-Wunsch alignment*/
@@ -67,7 +67,7 @@
 #define defDelSnpIns 4
 #define defDelInsSnp 5
 
-#define defBestDir defInsSnpDel
+#define defBestDir defInsDelSnp
 
 /*Scoring variables*/
 #define defGapOpen -10  /*Penalty for starting indel*/

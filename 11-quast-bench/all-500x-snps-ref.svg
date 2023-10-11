@@ -31,411 +31,411 @@
 <g clip-path='url(#cpNDAuODd8NDk4LjAyfDgxLjczfDQ2Ny4xNg==)'>
 <rect x='40.87' y='81.73' width='457.15' height='385.43' style='stroke-width: 1.16; stroke: none; fill: #FFFFFF;' />
 <line x1='40.87' y1='99.25' x2='498.02' y2='99.25' style='stroke-width: 1.07; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
-<polygon points='67.73,106.87 157.68,106.87 157.60,106.87 157.94,106.85 158.29,106.78 158.61,106.66 158.91,106.49 159.18,106.27 159.41,106.01 159.60,105.71 159.73,105.39 159.82,105.06 159.84,104.71 159.84,104.71 159.84,93.79 159.84,93.79 159.82,93.44 159.73,93.10 159.60,92.78 159.41,92.49 159.18,92.23 158.91,92.01 158.61,91.83 158.29,91.71 157.94,91.64 157.68,91.63 67.73,91.63 67.99,91.64 67.64,91.63 67.30,91.67 66.96,91.77 66.65,91.92 66.36,92.11 66.11,92.35 65.90,92.63 65.74,92.94 65.63,93.27 65.57,93.61 65.57,93.79 65.57,104.71 65.57,104.53 65.57,104.88 65.63,105.23 65.74,105.56 65.90,105.86 66.11,106.14 66.36,106.38 66.65,106.58 66.96,106.73 67.30,106.83 67.64,106.87 ' style='stroke-width: 0.53; fill: #FFFFFF;' />
-<text x='112.71' y='103.27' text-anchor='middle' style='font-size: 11.04px; font-family: "DejaVu Sans";' textLength='87.08px' lengthAdjust='spacingAndGlyphs'>0.1% difference</text>
+<polygon points='67.53,106.87 157.48,106.87 157.40,106.87 157.75,106.85 158.09,106.78 158.41,106.66 158.71,106.49 158.98,106.27 159.21,106.01 159.40,105.71 159.53,105.39 159.62,105.06 159.64,104.71 159.64,104.71 159.64,93.79 159.64,93.79 159.62,93.44 159.53,93.10 159.40,92.78 159.21,92.49 158.98,92.23 158.71,92.01 158.41,91.83 158.09,91.71 157.75,91.64 157.48,91.63 67.53,91.63 67.79,91.64 67.44,91.63 67.10,91.67 66.76,91.77 66.45,91.92 66.16,92.11 65.91,92.35 65.70,92.63 65.54,92.94 65.43,93.27 65.37,93.61 65.37,93.79 65.37,104.71 65.37,104.53 65.37,104.88 65.43,105.23 65.54,105.56 65.70,105.86 65.91,106.14 66.16,106.38 66.45,106.58 66.76,106.73 67.10,106.83 67.44,106.87 ' style='stroke-width: 0.53; fill: #FFFFFF;' />
+<text x='112.51' y='103.27' text-anchor='middle' style='font-size: 11.04px; font-family: "DejaVu Sans";' textLength='87.08px' lengthAdjust='spacingAndGlyphs'>0.1% difference</text>
 <line x1='40.87' y1='288.59' x2='498.02' y2='288.59' style='stroke-width: 1.07; stroke-dasharray: 9.96,4.27; stroke-linecap: butt;' />
-<polygon points='64.22,296.21 161.19,296.21 161.11,296.21 161.45,296.19 161.80,296.12 162.12,296.00 162.42,295.83 162.69,295.61 162.92,295.35 163.11,295.05 163.24,294.73 163.33,294.40 163.35,294.05 163.35,294.05 163.35,283.13 163.35,283.13 163.33,282.78 163.24,282.44 163.11,282.12 162.92,281.83 162.69,281.57 162.42,281.35 162.12,281.18 161.80,281.05 161.45,280.98 161.19,280.97 64.22,280.97 64.48,280.98 64.13,280.97 63.79,281.01 63.45,281.11 63.14,281.26 62.85,281.45 62.60,281.69 62.39,281.97 62.23,282.28 62.12,282.61 62.06,282.95 62.06,283.13 62.06,294.05 62.06,293.88 62.06,294.22 62.12,294.57 62.23,294.90 62.39,295.20 62.60,295.48 62.85,295.72 63.14,295.92 63.45,296.07 63.79,296.17 64.13,296.21 ' style='stroke-width: 0.53; fill: #FFFFFF;' />
-<text x='112.71' y='292.61' text-anchor='middle' style='font-size: 11.04px; font-family: "DejaVu Sans";' textLength='94.10px' lengthAdjust='spacingAndGlyphs'>0.05% difference</text>
-<polygon points='76.33,426.61 83.44,426.61 83.44,419.50 76.33,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='71.95' y1='422.98' x2='82.00' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='76.97' y1='428.01' x2='76.97' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='76.98' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='68.84,430.97 73.63,439.27 64.06,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='69.87' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='69.87' y1='441.23' x2='76.98' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='69.87' y1='434.12' x2='76.98' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='102.44,426.61 109.55,426.61 109.55,419.50 102.44,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='116.02' y1='422.94' x2='126.08' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='121.05' y1='427.97' x2='121.05' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='117.99' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='116.19,430.93 120.97,439.23 111.40,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='107.11' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='107.11' y1='441.23' x2='114.22' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='107.11' y1='434.12' x2='114.22' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='139.73,426.61 146.84,426.61 146.84,419.50 139.73,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='145.12' y1='422.94' x2='155.17' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='150.14' y1='427.97' x2='150.14' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='145.09' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='162.61,430.93 167.40,439.23 157.83,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='152.70' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='152.70' y1='441.23' x2='159.81' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='152.70' y1='434.12' x2='159.81' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='277.85,316.87 284.96,316.87 284.96,309.76 277.85,309.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='271.03' y1='422.60' x2='281.09' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='276.06' y1='427.63' x2='276.06' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='277.32' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='258.50,430.97 263.28,439.27 253.71,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='260.04' y='420.71' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='260.04' y1='427.82' x2='267.15' y2='420.71' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='260.04' y1='420.71' x2='267.15' y2='427.82' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='463.23,165.51 470.34,165.51 470.34,158.40 463.23,158.40 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='456.70' y1='422.11' x2='466.76' y2='422.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='461.73' y1='427.14' x2='461.73' y2='417.08' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='472.64' cy='435.59' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='473.99,430.90 478.77,439.19 469.20,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='456.39' y='420.71' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='456.39' y1='427.82' x2='463.50' y2='420.71' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='456.39' y1='420.71' x2='463.50' y2='427.82' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='78.49,426.61 85.60,426.61 85.60,419.50 78.49,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='77.90' y1='423.10' x2='87.95' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='82.92' y1='428.12' x2='82.92' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='73.03' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='72.29,431.01 77.07,439.30 67.50,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='58.59' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='58.59' y1='441.19' x2='65.70' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='58.59' y1='434.08' x2='65.70' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='104.92,412.90 112.03,412.90 112.03,405.79 104.92,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='112.29' y1='423.13' x2='122.35' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='117.32' y1='428.16' x2='117.32' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='106.96' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='101.32,431.01 106.11,439.30 96.53,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='114.48' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='114.48' y1='441.19' x2='121.59' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='114.48' y1='434.08' x2='121.59' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='136.95,412.90 144.06,412.90 144.06,405.79 136.95,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='146.45' y1='423.06' x2='156.50' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='151.48' y1='428.09' x2='151.48' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='160.59' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='155.72,431.01 160.51,439.30 150.93,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='141.90' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='141.90' y1='441.19' x2='149.01' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='141.90' y1='434.08' x2='149.01' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='261.51,344.29 268.62,344.29 268.62,337.18 261.51,337.18 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='258.85' y1='423.10' x2='268.91' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='263.88' y1='428.12' x2='263.88' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='265.42' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='267.63,431.01 272.41,439.30 262.84,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='268.21' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='268.21' y1='441.19' x2='275.32' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='268.21' y1='434.08' x2='275.32' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='452.23,138.17 459.34,138.17 459.34,131.06 452.23,131.06 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='470.76' y1='422.79' x2='480.82' y2='422.79' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='475.79' y1='427.82' x2='475.79' y2='417.76' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='475.76' cy='435.59' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='455.67,431.05 460.46,439.34 450.88,439.34 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='458.31' y='420.68' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='458.31' y1='427.79' x2='465.42' y2='420.68' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='458.31' y1='420.68' x2='465.42' y2='427.79' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='60.79,426.61 67.90,426.61 67.90,419.50 60.79,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='77.70' y1='423.13' x2='87.75' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='82.73' y1='428.16' x2='82.73' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='62.34' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='81.15,430.90 85.93,439.19 76.36,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='60.04' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='60.04' y1='441.19' x2='67.16' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='60.04' y1='434.08' x2='67.16' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='110.20,426.61 117.31,426.61 117.31,419.50 110.20,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='96.74' y1='423.17' x2='106.80' y2='423.17' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='101.77' y1='428.20' x2='101.77' y2='418.14' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='119.00' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='112.66,430.90 117.44,439.19 107.87,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='98.84' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='98.84' y1='441.19' x2='105.95' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='98.84' y1='434.08' x2='105.95' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='157.87,412.90 164.98,412.90 164.98,405.79 157.87,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='158.15' y1='423.17' x2='168.20' y2='423.17' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='163.17' y1='428.20' x2='163.17' y2='418.14' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='148.14' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='141.05,430.90 145.84,439.19 136.27,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='137.59' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='137.59' y1='441.19' x2='144.70' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='137.59' y1='434.08' x2='144.70' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='264.92,316.72 272.03,316.72 272.03,309.61 264.92,309.61 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='268.92' y1='423.06' x2='278.97' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='273.95' y1='428.09' x2='273.95' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='278.33' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='260.33,430.90 265.12,439.19 255.54,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='267.24' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='267.24' y1='441.19' x2='274.36' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='267.24' y1='434.08' x2='274.36' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='458.71,151.99 465.82,151.99 465.82,144.88 458.71,144.88 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='463.37' y1='423.47' x2='473.43' y2='423.47' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='468.40' y1='428.50' x2='468.40' y2='418.45' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='470.33' cy='449.49' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='456.03,444.11 460.82,452.41 451.25,452.41 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='459.13' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='459.13' y1='441.19' x2='466.24' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='459.13' y1='434.08' x2='466.24' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='67.65,426.61 74.76,426.61 74.76,419.50 67.65,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='63.64' y1='423.06' x2='73.70' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='68.67' y1='428.09' x2='68.67' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='71.12' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='72.48,430.86 77.27,439.15 67.69,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='71.23' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='71.23' y1='441.19' x2='78.34' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='71.23' y1='434.08' x2='78.34' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='104.05,426.61 111.16,426.61 111.16,419.50 104.05,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='119.38' y1='422.98' x2='129.44' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='124.41' y1='428.01' x2='124.41' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='118.71' cy='436.35' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='101.50,430.82 106.29,439.11 96.71,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='118.99' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='118.99' y1='441.19' x2='126.10' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='118.99' y1='434.08' x2='126.10' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='151.44,385.41 158.55,385.41 158.55,378.30 151.44,378.30 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='142.74' y1='422.98' x2='152.79' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='147.77' y1='428.01' x2='147.77' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='147.41' cy='436.35' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='158.14,430.82 162.92,439.11 153.35,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='138.76' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='138.76' y1='441.19' x2='145.87' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='138.76' y1='434.08' x2='145.87' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='275.98,385.41 283.09,385.41 283.09,378.30 275.98,378.30 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='274.75' y1='422.72' x2='284.81' y2='422.72' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='279.78' y1='427.74' x2='279.78' y2='417.69' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='270.94' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='258.97,430.82 263.76,439.11 254.19,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='255.96' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='255.96' y1='441.19' x2='263.07' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='255.96' y1='434.08' x2='263.07' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='472.56,275.33 479.67,275.33 479.67,268.22 472.56,268.22 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='455.18' y1='422.98' x2='465.24' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='460.21' y1='428.01' x2='460.21' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='476.06' cy='421.16' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='466.86,417.11 471.64,425.41 462.07,425.41 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='465.51' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='465.51' y1='441.15' x2='472.62' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='465.51' y1='434.04' x2='472.62' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='77.68,426.61 84.79,426.61 84.79,419.50 77.68,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='61.01' y1='422.91' x2='71.06' y2='422.91' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='66.03' y1='427.93' x2='66.03' y2='417.88' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='81.06' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='76.50,430.93 81.29,439.23 71.71,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='81.55' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='81.55' y1='441.19' x2='88.66' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='81.55' y1='434.08' x2='88.66' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='105.96,426.61 113.07,426.61 113.07,419.50 105.96,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='119.21' y1='422.98' x2='129.27' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='124.24' y1='428.01' x2='124.24' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='115.87' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='101.95,430.93 106.74,439.23 97.16,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='115.22' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='115.22' y1='441.15' x2='122.33' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='115.22' y1='434.04' x2='122.33' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='143.92,412.87 151.03,412.87 151.03,405.76 143.92,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='150.12' y1='423.02' x2='160.17' y2='423.02' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='155.15' y1='428.05' x2='155.15' y2='417.99' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='148.07' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='161.74,430.93 166.53,439.23 156.95,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='155.34' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='155.34' y1='441.15' x2='162.45' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='155.34' y1='434.04' x2='162.45' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='256.96,399.16 264.07,399.16 264.07,392.05 256.96,392.05 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='257.45' y1='423.10' x2='267.51' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='262.48' y1='428.12' x2='262.48' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='259.94' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='274.87,416.89 279.66,425.18 270.08,425.18 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='273.92' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='273.92' y1='441.19' x2='281.03' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='273.92' y1='434.08' x2='281.03' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='461.72,316.68 468.83,316.68 468.83,309.57 461.72,309.57 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='464.35' y1='423.17' x2='474.40' y2='423.17' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='469.38' y1='428.20' x2='469.38' y2='418.14' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='471.81' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='458.19,429.87 462.98,438.17 453.40,438.17 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='452.40' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='452.40' y1='441.15' x2='459.51' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='452.40' y1='434.04' x2='459.51' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='76.59,426.61 83.70,426.61 83.70,419.50 76.59,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='69.69' y1='423.13' x2='79.75' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='74.72' y1='428.16' x2='74.72' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='64.85' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='64.15,430.97 68.94,439.27 59.36,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='58.10' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='58.10' y1='441.19' x2='65.21' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='58.10' y1='434.08' x2='65.21' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='104.09,426.61 111.20,426.61 111.20,419.50 104.09,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='105.95' y1='423.13' x2='116.00' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='110.97' y1='428.16' x2='110.97' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='114.16' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='106.13,430.82 110.92,439.11 101.34,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='117.74' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='117.74' y1='441.19' x2='124.85' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='117.74' y1='434.08' x2='124.85' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='152.20,399.16 159.31,399.16 159.31,392.05 152.20,392.05 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='147.05' y1='423.10' x2='157.10' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='152.07' y1='428.12' x2='152.07' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='159.54' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='157.27,430.90 162.05,439.19 152.48,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='154.62' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='154.62' y1='441.19' x2='161.73' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='154.62' y1='434.08' x2='161.73' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='272.90,399.08 280.01,399.08 280.01,391.97 272.90,391.97 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='261.33' y1='422.72' x2='271.38' y2='422.72' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='266.35' y1='427.74' x2='266.35' y2='417.69' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='276.28' cy='436.20' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='268.95,430.48 273.74,438.77 264.16,438.77 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='268.30' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='268.30' y1='441.19' x2='275.41' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='268.30' y1='434.08' x2='275.41' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='453.84,124.01 460.95,124.01 460.95,116.90 453.84,116.90 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='451.53' y1='421.81' x2='461.59' y2='421.81' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='456.56' y1='426.84' x2='456.56' y2='416.78' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='466.88' cy='422.22' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='459.90,416.51 464.69,424.80 455.11,424.80 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='465.39' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='465.39' y1='441.23' x2='472.50' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='465.39' y1='434.12' x2='472.50' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='69.80,426.61 76.91,426.61 76.91,419.50 69.80,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='74.14' y1='423.10' x2='84.20' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='79.17' y1='428.12' x2='79.17' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='72.35' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='71.16,431.01 75.95,439.30 66.37,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='58.13' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='58.13' y1='441.15' x2='65.24' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='58.13' y1='434.04' x2='65.24' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='97.57,385.45 104.68,385.45 104.68,378.34 97.57,378.34 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='99.26' y1='423.06' x2='109.31' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='104.28' y1='428.09' x2='104.28' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='106.44' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='122.26,431.01 127.05,439.30 117.47,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='113.26' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='113.26' y1='441.15' x2='120.37' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='113.26' y1='434.04' x2='120.37' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='155.53,385.45 162.64,385.45 162.64,378.34 155.53,378.34 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='148.19' y1='422.98' x2='158.25' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='153.22' y1='428.01' x2='153.22' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='150.37' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='156.70,431.01 161.49,439.30 151.91,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='160.11' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='160.11' y1='441.15' x2='167.22' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='160.11' y1='434.04' x2='167.22' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='254.93,371.70 262.04,371.70 262.04,364.59 254.93,364.59 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='264.48' y1='422.68' x2='274.53' y2='422.68' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='269.51' y1='427.71' x2='269.51' y2='417.65' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='277.76' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='267.95,430.82 272.74,439.11 263.16,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='265.11' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='265.11' y1='441.15' x2='272.22' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='265.11' y1='434.04' x2='272.22' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='453.16,289.15 460.27,289.15 460.27,282.04 453.16,282.04 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='462.91' y1='423.55' x2='472.97' y2='423.55' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='467.94' y1='428.58' x2='467.94' y2='418.52' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='466.08' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='463.10,416.39 467.89,424.69 458.31,424.69 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='463.73' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='463.73' y1='441.15' x2='470.84' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='463.73' y1='434.04' x2='470.84' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='60.10,426.61 67.21,426.61 67.21,419.50 60.10,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='78.40' y1='422.91' x2='88.46' y2='422.91' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='83.43' y1='427.93' x2='83.43' y2='417.88' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='80.40' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='73.89,430.97 78.68,439.27 69.10,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='78.44' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='78.44' y1='441.19' x2='85.55' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='78.44' y1='434.08' x2='85.55' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='101.10,412.90 108.21,412.90 108.21,405.79 101.10,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='104.14' y1='422.60' x2='114.20' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='109.17' y1='427.63' x2='109.17' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='118.93' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='103.95,430.93 108.73,439.23 99.16,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='117.70' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='117.70' y1='441.19' x2='124.81' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='117.70' y1='434.08' x2='124.81' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='154.00,412.87 161.11,412.87 161.11,405.76 154.00,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='146.87' y1='422.60' x2='156.93' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='151.90' y1='427.63' x2='151.90' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='141.82' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='147.38,430.93 152.17,439.23 142.59,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='156.63' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='156.63' y1='441.19' x2='163.74' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='156.63' y1='434.08' x2='163.74' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='271.09,426.61 278.20,426.61 278.20,419.50 271.09,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='255.28' y1='422.60' x2='265.34' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='260.31' y1='427.63' x2='260.31' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='270.17' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='263.63,430.93 268.42,439.23 258.84,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='264.02' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='264.02' y1='441.19' x2='271.13' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='264.02' y1='434.08' x2='271.13' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='454.01,220.27 461.12,220.27 461.12,213.16 454.01,213.16 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='471.39' y1='422.72' x2='481.44' y2='422.72' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='476.42' y1='427.74' x2='476.42' y2='417.69' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='467.30' cy='320.85' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='472.17,429.91 476.96,438.21 467.38,438.21 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='455.45' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='455.45' y1='441.19' x2='462.57' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='455.45' y1='434.08' x2='462.57' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='61.73,426.61 68.84,426.61 68.84,419.50 61.73,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='79.35' y1='422.94' x2='89.40' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='84.37' y1='427.97' x2='84.37' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='79.69' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='80.43,430.86 85.22,439.15 75.64,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='61.04' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='61.04' y1='441.23' x2='68.15' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='61.04' y1='434.12' x2='68.15' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='100.22,412.87 107.33,412.87 107.33,405.76 100.22,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='102.50' y1='422.94' x2='112.56' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='107.53' y1='427.97' x2='107.53' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='112.43' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='120.74,430.86 125.53,439.15 115.95,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='101.79' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='101.79' y1='441.23' x2='108.90' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='101.79' y1='434.12' x2='108.90' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='142.94,412.87 150.05,412.87 150.05,405.76 142.94,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='146.78' y1='422.64' x2='156.84' y2='422.64' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='151.81' y1='427.67' x2='151.81' y2='417.61' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='156.83' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='143.67,430.93 148.46,439.23 138.88,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='156.74' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='156.74' y1='441.23' x2='163.86' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='156.74' y1='434.12' x2='163.86' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='262.13,412.87 269.24,412.87 269.24,405.76 262.13,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='259.22' y1='422.68' x2='269.27' y2='422.68' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='264.25' y1='427.71' x2='264.25' y2='417.65' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='276.58' cy='394.81' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='276.60,416.96 281.39,425.25 271.81,425.25 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='275.81' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='275.81' y1='441.23' x2='282.92' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='275.81' y1='434.12' x2='282.92' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='471.18,124.46 478.29,124.46 478.29,117.35 471.18,117.35 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='455.83' y1='422.83' x2='465.88' y2='422.83' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='460.85' y1='427.86' x2='460.85' y2='417.80' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='477.24' cy='436.05' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='460.82,430.10 465.61,438.39 456.03,438.39 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='467.33' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='467.33' y1='441.23' x2='474.44' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='467.33' y1='434.12' x2='474.44' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='65.43,426.61 72.54,426.61 72.54,419.50 65.43,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='80.13' y1='285.41' x2='90.18' y2='285.41' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='85.15' y1='290.44' x2='85.15' y2='280.38' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='80.41' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='68.32,430.93 73.11,439.23 63.54,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='74.39' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='74.39' y1='441.23' x2='81.50' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='74.39' y1='434.12' x2='81.50' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='119.85,385.45 126.96,385.45 126.96,378.34 119.85,378.34 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='110.68' y1='422.94' x2='120.74' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='115.71' y1='427.97' x2='115.71' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='117.00' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='120.76,430.93 125.55,439.23 115.97,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='110.28' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='110.28' y1='441.23' x2='117.39' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='110.28' y1='434.12' x2='117.39' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='142.15,399.20 149.26,399.20 149.26,392.09 142.15,392.09 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='151.61' y1='423.02' x2='161.67' y2='423.02' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='156.64' y1='428.05' x2='156.64' y2='417.99' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='152.69' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='156.32,430.93 161.11,439.23 151.53,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='143.48' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='143.48' y1='441.23' x2='150.59' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='143.48' y1='434.12' x2='150.59' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='268.23,330.58 275.34,330.58 275.34,323.47 268.23,323.47 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='261.98' y1='422.83' x2='272.04' y2='422.83' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='267.01' y1='427.86' x2='267.01' y2='417.80' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='258.22' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='259.35,430.86 264.14,439.15 254.56,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='273.66' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='273.66' y1='441.23' x2='280.77' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='273.66' y1='434.12' x2='280.77' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<polygon points='457.84,193.19 464.95,193.19 464.95,186.08 457.84,186.08 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
-<line x1='465.36' y1='423.06' x2='475.42' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<line x1='470.39' y1='428.09' x2='470.39' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
-<circle cx='456.55' cy='434.95' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
-<polygon points='472.41,429.87 477.20,438.17 467.63,438.17 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
-<rect x='461.00' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='461.00' y1='441.23' x2='468.11' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
-<line x1='461.00' y1='434.12' x2='468.11' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='64.02,296.21 160.99,296.21 160.91,296.21 161.26,296.19 161.60,296.12 161.92,296.00 162.22,295.83 162.49,295.61 162.72,295.35 162.91,295.05 163.04,294.73 163.13,294.40 163.15,294.05 163.15,294.05 163.15,283.13 163.15,283.13 163.13,282.78 163.04,282.44 162.91,282.12 162.72,281.83 162.49,281.57 162.22,281.35 161.92,281.18 161.60,281.05 161.26,280.98 160.99,280.97 64.02,280.97 64.28,280.98 63.93,280.97 63.59,281.01 63.25,281.11 62.94,281.26 62.65,281.45 62.40,281.69 62.19,281.97 62.03,282.28 61.92,282.61 61.86,282.95 61.86,283.13 61.86,294.05 61.86,293.88 61.86,294.22 61.92,294.57 62.03,294.90 62.19,295.20 62.40,295.48 62.65,295.72 62.94,295.92 63.25,296.07 63.59,296.17 63.93,296.21 ' style='stroke-width: 0.53; fill: #FFFFFF;' />
+<text x='112.51' y='292.61' text-anchor='middle' style='font-size: 11.04px; font-family: "DejaVu Sans";' textLength='94.10px' lengthAdjust='spacingAndGlyphs'>0.05% difference</text>
+<polygon points='58.10,426.61 65.21,426.61 65.21,419.50 58.10,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='78.08' y1='422.98' x2='88.14' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='83.11' y1='428.01' x2='83.11' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='61.85' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='77.63,430.97 82.42,439.27 72.84,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='71.90' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='71.90' y1='441.23' x2='79.01' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='71.90' y1='434.12' x2='79.01' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='115.66,426.61 122.77,426.61 122.77,419.50 115.66,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='100.17' y1='422.94' x2='110.22' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='105.20' y1='427.97' x2='105.20' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='108.97' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='102.41,430.93 107.20,439.23 97.63,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='117.21' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='117.21' y1='441.23' x2='124.32' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='117.21' y1='434.12' x2='124.32' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='143.44,426.61 150.55,426.61 150.55,419.50 143.44,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='154.98' y1='422.94' x2='165.04' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='160.01' y1='427.97' x2='160.01' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='155.68' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='141.02,430.93 145.81,439.23 136.23,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='157.68' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='157.68' y1='441.23' x2='164.79' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='157.68' y1='434.12' x2='164.79' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='268.28,316.87 275.39,316.87 275.39,309.76 268.28,309.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='268.19' y1='422.60' x2='278.25' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='273.22' y1='427.63' x2='273.22' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='279.41' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='272.83,430.97 277.62,439.27 268.04,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='264.95' y='420.71' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='264.95' y1='427.82' x2='272.06' y2='420.71' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='264.95' y1='420.71' x2='272.06' y2='427.82' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='455.93,165.51 463.04,165.51 463.04,158.40 455.93,158.40 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='459.54' y1='422.11' x2='469.59' y2='422.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='464.57' y1='427.14' x2='464.57' y2='417.08' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='462.95' cy='435.59' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='466.95,430.90 471.73,439.19 462.16,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='472.25' y='420.71' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='472.25' y1='427.82' x2='479.36' y2='420.71' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='472.25' y1='420.71' x2='479.36' y2='427.82' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='79.62,426.61 86.73,426.61 86.73,419.50 79.62,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='58.21' y1='423.10' x2='68.26' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='63.24' y1='428.12' x2='63.24' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='66.07' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='69.87,431.01 74.66,439.30 65.08,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='72.82' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='72.82' y1='441.19' x2='79.93' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='72.82' y1='434.08' x2='79.93' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='109.41,412.90 116.52,412.90 116.52,405.79 109.41,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='105.28' y1='423.13' x2='115.34' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='110.31' y1='428.16' x2='110.31' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='101.31' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='112.13,431.01 116.91,439.30 107.34,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='115.64' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='115.64' y1='441.19' x2='122.75' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='115.64' y1='434.08' x2='122.75' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='152.18,412.90 159.29,412.90 159.29,405.79 152.18,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='155.95' y1='423.06' x2='166.01' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='160.98' y1='428.09' x2='160.98' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='151.91' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='151.18,431.01 155.97,439.30 146.39,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='145.84' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='145.84' y1='441.19' x2='152.95' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='145.84' y1='434.08' x2='152.95' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='255.01,344.29 262.12,344.29 262.12,337.18 255.01,337.18 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='274.26' y1='423.10' x2='284.31' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='279.28' y1='428.12' x2='279.28' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='259.74' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='266.84,431.01 271.62,439.30 262.05,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='270.73' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='270.73' y1='441.19' x2='277.84' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='270.73' y1='434.08' x2='277.84' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='458.60,138.17 465.72,138.17 465.72,131.06 458.60,131.06 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='472.21' y1='422.79' x2='482.27' y2='422.79' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='477.24' y1='427.82' x2='477.24' y2='417.76' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='460.37' cy='435.59' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='456.05,431.05 460.83,439.34 451.26,439.34 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='465.33' y='420.68' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='465.33' y1='427.79' x2='472.44' y2='420.68' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='465.33' y1='420.68' x2='472.44' y2='427.79' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='78.83,426.61 85.94,426.61 85.94,419.50 78.83,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='69.41' y1='423.13' x2='79.46' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='74.44' y1='428.16' x2='74.44' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='75.69' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='69.17,430.90 73.96,439.19 64.39,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='80.86' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='80.86' y1='441.19' x2='87.97' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='80.86' y1='434.08' x2='87.97' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='98.48,426.61 105.59,426.61 105.59,419.50 98.48,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='113.24' y1='423.17' x2='123.29' y2='423.17' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='118.26' y1='428.20' x2='118.26' y2='418.14' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='106.10' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='120.75,430.90 125.54,439.19 115.96,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='102.92' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='102.92' y1='441.19' x2='110.03' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='102.92' y1='434.08' x2='110.03' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='141.21,412.90 148.32,412.90 148.32,405.79 141.21,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='143.02' y1='423.17' x2='153.08' y2='423.17' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='148.05' y1='428.20' x2='148.05' y2='418.14' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='161.89' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='148.13,430.90 152.92,439.19 143.34,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='140.77' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='140.77' y1='441.19' x2='147.88' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='140.77' y1='434.08' x2='147.88' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='273.68,316.72 280.79,316.72 280.79,309.61 273.68,309.61 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='266.48' y1='423.06' x2='276.53' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='271.51' y1='428.09' x2='271.51' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='266.93' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='280.22,430.90 285.01,439.19 275.43,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='257.65' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='257.65' y1='441.19' x2='264.76' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='257.65' y1='434.08' x2='264.76' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='465.97,151.99 473.09,151.99 473.09,144.88 465.97,144.88 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='453.57' y1='423.47' x2='463.63' y2='423.47' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='458.60' y1='428.50' x2='458.60' y2='418.45' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='465.01' cy='449.49' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='465.44,444.11 470.23,452.41 460.65,452.41 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='464.15' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='464.15' y1='441.19' x2='471.26' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='464.15' y1='434.08' x2='471.26' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='66.68,426.61 73.79,426.61 73.79,419.50 66.68,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='59.03' y1='423.06' x2='69.08' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='64.05' y1='428.09' x2='64.05' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='63.78' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='68.31,430.86 73.10,439.15 63.53,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='69.79' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='69.79' y1='441.19' x2='76.90' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='69.79' y1='434.08' x2='76.90' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='97.39,426.61 104.50,426.61 104.50,419.50 97.39,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='113.60' y1='422.98' x2='123.66' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='118.63' y1='428.01' x2='118.63' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='120.84' cy='436.35' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='107.49,430.82 112.28,439.11 102.70,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='99.31' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='99.31' y1='441.19' x2='106.42' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='99.31' y1='434.08' x2='106.42' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='145.59,385.41 152.70,385.41 152.70,378.30 145.59,378.30 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='145.97' y1='422.98' x2='156.03' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='151.00' y1='428.01' x2='151.00' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='159.13' cy='436.35' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='158.18,430.82 162.97,439.11 153.39,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='143.76' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='143.76' y1='441.19' x2='150.87' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='143.76' y1='434.08' x2='150.87' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='269.86,385.41 276.97,385.41 276.97,378.30 269.86,378.30 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='255.78' y1='422.72' x2='265.84' y2='422.72' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='260.81' y1='427.74' x2='260.81' y2='417.69' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='279.16' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='269.74,430.82 274.53,439.11 264.95,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='255.84' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='255.84' y1='441.19' x2='262.95' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='255.84' y1='434.08' x2='262.95' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='468.31,275.33 475.42,275.33 475.42,268.22 468.31,268.22 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='457.38' y1='422.98' x2='467.44' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='462.41' y1='428.01' x2='462.41' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='463.08' cy='421.16' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='460.94,417.11 465.73,425.41 456.16,425.41 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='471.49' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='471.49' y1='441.15' x2='478.60' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='471.49' y1='434.04' x2='478.60' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='59.49,426.61 66.60,426.61 66.60,419.50 59.49,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='66.70' y1='422.91' x2='76.75' y2='422.91' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='71.73' y1='427.93' x2='71.73' y2='417.88' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='69.07' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='76.72,430.93 81.51,439.23 71.94,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='80.54' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='80.54' y1='441.19' x2='87.65' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='80.54' y1='434.08' x2='87.65' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='107.19,426.61 114.30,426.61 114.30,419.50 107.19,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='115.50' y1='422.98' x2='125.55' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='120.53' y1='428.01' x2='120.53' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='105.11' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='102.89,430.93 107.68,439.23 98.10,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='109.82' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='109.82' y1='441.15' x2='116.93' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='109.82' y1='434.04' x2='116.93' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='136.88,412.87 143.99,412.87 143.99,405.76 136.88,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='154.87' y1='423.02' x2='164.92' y2='423.02' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='159.90' y1='428.05' x2='159.90' y2='417.99' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='149.27' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='151.69,430.93 156.48,439.23 146.90,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='157.56' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='157.56' y1='441.15' x2='164.67' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='157.56' y1='434.04' x2='164.67' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='256.84,399.16 263.95,399.16 263.95,392.05 256.84,392.05 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='258.37' y1='423.10' x2='268.43' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='263.40' y1='428.12' x2='263.40' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='279.70' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='280.45,416.89 285.24,425.18 275.66,425.18 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='258.26' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='258.26' y1='441.19' x2='265.37' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='258.26' y1='434.08' x2='265.37' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='463.28,316.68 470.39,316.68 470.39,309.57 463.28,309.57 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='468.95' y1='423.17' x2='479.00' y2='423.17' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='473.98' y1='428.20' x2='473.98' y2='418.14' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='468.56' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='464.96,429.87 469.75,438.17 460.17,438.17 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='458.22' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='458.22' y1='441.15' x2='465.33' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='458.22' y1='434.04' x2='465.33' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='72.81,426.61 79.93,426.61 79.93,419.50 72.81,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='63.71' y1='423.13' x2='73.76' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='68.74' y1='428.16' x2='68.74' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='78.66' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='71.76,430.97 76.55,439.27 66.98,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='74.77' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='74.77' y1='441.19' x2='81.88' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='74.77' y1='434.08' x2='81.88' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='104.59,426.61 111.70,426.61 111.70,419.50 104.59,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='113.99' y1='423.13' x2='124.04' y2='423.13' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='119.02' y1='428.16' x2='119.02' y2='418.11' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='115.05' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='120.41,430.82 125.20,439.11 115.62,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='113.02' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='113.02' y1='441.19' x2='120.13' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='113.02' y1='434.08' x2='120.13' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='158.80,399.16 165.91,399.16 165.91,392.05 158.80,392.05 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='151.21' y1='423.10' x2='161.26' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='156.24' y1='428.12' x2='156.24' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='159.80' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='149.72,430.90 154.51,439.19 144.93,439.19 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='143.73' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='143.73' y1='441.19' x2='150.84' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='143.73' y1='434.08' x2='150.84' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='259.40,399.08 266.51,399.08 266.51,391.97 259.40,391.97 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='271.56' y1='422.72' x2='281.62' y2='422.72' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='276.59' y1='427.74' x2='276.59' y2='417.69' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='267.34' cy='436.20' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='274.69,430.48 279.48,438.77 269.90,438.77 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='258.52' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='258.52' y1='441.19' x2='265.63' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='258.52' y1='434.08' x2='265.63' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='456.52,124.01 463.63,124.01 463.63,116.90 456.52,116.90 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='450.09' y1='421.81' x2='460.14' y2='421.81' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='455.12' y1='426.84' x2='455.12' y2='416.78' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='459.12' cy='422.22' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='463.93,416.51 468.72,424.80 459.15,424.80 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='456.93' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='456.93' y1='441.23' x2='464.04' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='456.93' y1='434.12' x2='464.04' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='80.66,426.61 87.77,426.61 87.77,419.50 80.66,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='76.86' y1='423.10' x2='86.92' y2='423.10' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='81.89' y1='428.12' x2='81.89' y2='418.07' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='76.23' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='72.80,431.01 77.59,439.30 68.01,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='67.06' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='67.06' y1='441.15' x2='74.17' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='67.06' y1='434.04' x2='74.17' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='97.63,385.45 104.74,385.45 104.74,378.34 97.63,378.34 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='105.03' y1='423.06' x2='115.09' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='110.06' y1='428.09' x2='110.06' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='106.31' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='118.41,431.01 123.20,439.30 113.62,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='99.56' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='99.56' y1='441.15' x2='106.67' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='99.56' y1='434.04' x2='106.67' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='153.89,385.45 161.00,385.45 161.00,378.34 153.89,378.34 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='147.50' y1='422.98' x2='157.55' y2='422.98' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='152.53' y1='428.01' x2='152.53' y2='417.95' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='151.31' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='142.89,431.01 147.68,439.30 138.10,439.30 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='138.15' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='138.15' y1='441.15' x2='145.26' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='138.15' y1='434.04' x2='145.26' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='260.80,371.70 267.91,371.70 267.91,364.59 260.80,364.59 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='276.09' y1='422.68' x2='286.15' y2='422.68' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='281.12' y1='427.71' x2='281.12' y2='417.65' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='279.89' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='280.63,430.82 285.42,439.11 275.84,439.11 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='260.93' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='260.93' y1='441.15' x2='268.04' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='260.93' y1='434.04' x2='268.04' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='453.62,289.15 460.73,289.15 460.73,282.04 453.62,282.04 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='452.42' y1='423.55' x2='462.48' y2='423.55' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='457.45' y1='428.58' x2='457.45' y2='418.52' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='466.50' cy='436.39' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='469.57,416.39 474.36,424.69 464.79,424.69 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='460.40' y='434.04' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='460.40' y1='441.15' x2='467.51' y2='434.04' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='460.40' y1='434.04' x2='467.51' y2='441.15' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='58.26,426.61 65.37,426.61 65.37,419.50 58.26,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='65.66' y1='422.91' x2='75.71' y2='422.91' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='70.68' y1='427.93' x2='70.68' y2='417.88' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='68.38' cy='436.54' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='71.16,430.97 75.95,439.27 66.38,439.27 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='78.37' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='78.37' y1='441.19' x2='85.48' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='78.37' y1='434.08' x2='85.48' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='101.48,412.90 108.59,412.90 108.59,405.79 101.48,405.79 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='106.88' y1='422.60' x2='116.94' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='111.91' y1='427.63' x2='111.91' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='111.01' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='102.59,430.93 107.37,439.23 97.80,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='100.37' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='100.37' y1='441.19' x2='107.48' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='100.37' y1='434.08' x2='107.48' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='158.37,412.87 165.48,412.87 165.48,405.76 158.37,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='151.77' y1='422.60' x2='161.83' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='156.80' y1='427.63' x2='156.80' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='153.92' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='152.61,430.93 157.40,439.23 147.82,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='158.55' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='158.55' y1='441.19' x2='165.67' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='158.55' y1='434.08' x2='165.67' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='261.56,426.61 268.67,426.61 268.67,419.50 261.56,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='276.18' y1='422.60' x2='286.23' y2='422.60' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='281.20' y1='427.63' x2='281.20' y2='417.58' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='275.10' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='275.02,430.93 279.81,439.23 270.24,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='276.02' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='276.02' y1='441.19' x2='283.13' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='276.02' y1='434.08' x2='283.13' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='452.05,220.27 459.16,220.27 459.16,213.16 452.05,213.16 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='458.19' y1='422.72' x2='468.24' y2='422.72' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='463.21' y1='427.74' x2='463.21' y2='417.69' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='461.50' cy='320.85' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='474.85,429.91 479.64,438.21 470.06,438.21 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='463.71' y='434.08' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='463.71' y1='441.19' x2='470.82' y2='434.08' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='463.71' y1='434.08' x2='470.82' y2='441.19' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='71.02,426.61 78.13,426.61 78.13,419.50 71.02,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='65.89' y1='422.94' x2='75.95' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='70.92' y1='427.97' x2='70.92' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='70.60' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='75.23,430.86 80.01,439.15 70.44,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='70.31' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='70.31' y1='441.23' x2='77.42' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='70.31' y1='434.12' x2='77.42' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='104.68,412.87 111.79,412.87 111.79,405.76 104.68,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='101.56' y1='422.94' x2='111.61' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='106.59' y1='427.97' x2='106.59' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='114.32' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='113.58,430.86 118.37,439.15 108.79,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='111.91' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='111.91' y1='441.23' x2='119.02' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='111.91' y1='434.12' x2='119.02' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='155.07,412.87 162.18,412.87 162.18,405.76 155.07,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='154.61' y1='422.64' x2='164.67' y2='422.64' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='159.64' y1='427.67' x2='159.64' y2='417.61' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='156.70' cy='436.46' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='145.96,430.93 150.75,439.23 141.17,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='152.62' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='152.62' y1='441.23' x2='159.73' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='152.62' y1='434.12' x2='159.73' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='270.63,412.87 277.74,412.87 277.74,405.76 270.63,405.76 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='268.32' y1='422.68' x2='278.38' y2='422.68' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='273.35' y1='427.71' x2='273.35' y2='417.65' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='258.99' cy='394.81' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='258.59,416.96 263.38,425.25 253.81,425.25 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='256.98' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='256.98' y1='441.23' x2='264.09' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='256.98' y1='434.12' x2='264.09' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='469.43,124.46 476.54,124.46 476.54,117.35 469.43,117.35 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='461.24' y1='422.83' x2='471.30' y2='422.83' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='466.27' y1='427.86' x2='466.27' y2='417.80' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='474.97' cy='436.05' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='460.84,430.10 465.63,438.39 456.05,438.39 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='460.68' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='460.68' y1='441.23' x2='467.79' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='460.68' y1='434.12' x2='467.79' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='63.42,426.61 70.53,426.61 70.53,419.50 63.42,419.50 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='62.84' y1='285.41' x2='72.90' y2='285.41' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='67.87' y1='290.44' x2='67.87' y2='280.38' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='74.83' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='62.98,430.93 67.77,439.23 58.19,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='61.80' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='61.80' y1='441.23' x2='68.91' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='61.80' y1='434.12' x2='68.91' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='107.07,385.45 114.18,385.45 114.18,378.34 107.07,378.34 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='103.89' y1='422.94' x2='113.94' y2='422.94' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='108.92' y1='427.97' x2='108.92' y2='417.92' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='115.27' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='117.12,430.93 121.91,439.23 112.33,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='110.10' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='110.10' y1='441.23' x2='117.21' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='110.10' y1='434.12' x2='117.21' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='153.08,399.20 160.19,399.20 160.19,392.09 153.08,392.09 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='147.76' y1='423.02' x2='157.81' y2='423.02' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='152.79' y1='428.05' x2='152.79' y2='417.99' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='148.66' cy='436.50' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='141.23,430.93 146.02,439.23 136.44,439.23 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='152.77' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='152.77' y1='441.23' x2='159.88' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='152.77' y1='434.12' x2='159.88' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='260.57,330.58 267.69,330.58 267.69,323.47 260.57,323.47 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='270.49' y1='422.83' x2='280.55' y2='422.83' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='275.52' y1='427.86' x2='275.52' y2='417.80' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='264.39' cy='436.43' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='276.35,430.86 281.13,439.15 271.56,439.15 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='264.00' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='264.00' y1='441.23' x2='271.11' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='264.00' y1='434.12' x2='271.11' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<polygon points='468.21,193.19 475.32,193.19 475.32,186.08 468.21,186.08 ' style='stroke-width: 0.71; stroke: none; fill: #21908C; fill-opacity: 0.50;' />
+<line x1='463.20' y1='423.06' x2='473.25' y2='423.06' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<line x1='468.23' y1='428.09' x2='468.23' y2='418.03' style='stroke-width: 0.71; stroke: #5DC863; stroke-opacity: 0.50;' />
+<circle cx='468.32' cy='434.95' r='3.56' style='stroke-width: 0.71; stroke: none; fill: #440154; fill-opacity: 0.50;' />
+<polygon points='465.85,429.87 470.63,438.17 461.06,438.17 ' style='stroke-width: 0.71; stroke: none; fill: #3B528B; fill-opacity: 0.50;' />
+<rect x='457.40' y='434.12' width='7.11' height='7.11' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='457.40' y1='441.23' x2='464.51' y2='434.12' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
+<line x1='457.40' y1='434.12' x2='464.51' y2='441.23' style='stroke-width: 0.71; stroke: #FDE725; stroke-opacity: 0.50;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1MDQuMDB8MC4wMHw1MDQuMDA=)'>
 <polyline points='40.87,467.16 40.87,81.73 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
@@ -446,16 +446,16 @@
 <polyline points='37.88,224.66 40.87,224.66 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
 <polyline points='37.88,98.02 40.87,98.02 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
 <polyline points='40.87,467.16 498.02,467.16 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<polyline points='73.42,470.15 73.42,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='171.64,470.15 171.64,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='269.85,470.15 269.85,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='368.07,470.15 368.07,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
-<polyline points='466.29,470.15 466.29,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
-<text x='73.42' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>0.0</text>
-<text x='171.64' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>2.5</text>
-<text x='269.85' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>5.0</text>
-<text x='368.07' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>7.5</text>
-<text x='466.29' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='26.73px' lengthAdjust='spacingAndGlyphs'>10.0</text>
+<polyline points='73.24,470.15 73.24,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='171.41,470.15 171.41,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='269.58,470.15 269.58,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='367.76,470.15 367.76,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='465.93,470.15 465.93,467.16 ' style='stroke-width: 1.16; stroke: #333333; stroke-linecap: butt;' />
+<text x='73.24' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>0.0</text>
+<text x='171.41' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>2.5</text>
+<text x='269.58' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>5.0</text>
+<text x='367.76' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='19.09px' lengthAdjust='spacingAndGlyphs'>7.5</text>
+<text x='465.93' y='481.29' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='26.73px' lengthAdjust='spacingAndGlyphs'>10.0</text>
 <text x='269.45' y='495.52' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='233.35px' lengthAdjust='spacingAndGlyphs'>Reference % difference from sequence</text>
 <text transform='translate(14.73,274.44) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: "DejaVu Sans";' textLength='127.54px' lengthAdjust='spacingAndGlyphs'>Number of false snps</text>
 <rect x='56.25' y='5.98' width='426.39' height='63.80' style='stroke-width: 1.16; stroke: none; fill: #FFFFFF;' />

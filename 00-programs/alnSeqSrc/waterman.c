@@ -505,22 +505,22 @@ struct alnMatrixStruct * WatermanAln(
       */
       #if !defined BYTEMATRIX && !defined NOGAPOPEN
          twoBitMvToNextElm(dirMatrix);
-         changeTwoBitElm(dirMatrix, defMvIns);
+         changeTwoBitElm(dirMatrix, defMvStop);
          twoBitMvToNextElm(dirMatrix);
 
          twoBitMvToNextElm(&insDir);
       #elif !defined BYTEMATRIX
          twoBitMvToNextElm(dirMatrix);
-         changeTwoBitElm(dirMatrix, defMvIns);
+         changeTwoBitElm(dirMatrix, defMvStop);
          twoBitMvToNextElm(dirMatrix);
       #elif !defined NOGAPOPEN
          ++dirMatrix;
-         *dirMatrix = defMvIns;
+         *dirMatrix = defMvStop;
          ++dirMatrix;
          ++insDir;
       #else
          ++dirMatrix;
-         *dirMatrix = defMvIns;
+         *dirMatrix = defMvStop;
          ++dirMatrix;
       #endif
 
@@ -539,7 +539,7 @@ struct alnMatrixStruct * WatermanAln(
          + *scoreOnLP;
 
       /*Update the indel column and find next deletion*/
-      *scoreOnLP += settings->gapExtendI;
+      *scoreOnLP = 0; /*First column is always insertion*/
       delScoreL = *scoreOnLP + settings->gapExtendI;
       ++scoreOnLP; /*Move to the first base pair*/
 
@@ -684,9 +684,13 @@ struct alnMatrixStruct * WatermanAltAln(
    #if !defined BYTEMATRIX
       struct twoBitAry *dirMatrix = 0;/*Direction matrix*/
       struct twoBitAry insDir;     /*Direction above cell*/
+      unsigned char lastDirC = 0;
+      unsigned char lastLastDirC = 0;
    #else
       char *dirMatrix = 0;/*Direction matrix*/
       char *insDir = 0;   /*Direction above cell*/
+      char lastDirC = 0;
+      char lastLastDirC = 0;
    #endif
 
    /*The structure to return (has results)*/
@@ -909,6 +913,7 @@ struct alnMatrixStruct * WatermanAltAln(
    *scoreOnLP = 0;
    delScoreL = 0;
    insScoreL = 0;
+   lastLastDirC = 0;
    ++scoreOnLP;
 
    /******************************************************\
@@ -963,7 +968,9 @@ struct alnMatrixStruct * WatermanAltAln(
        *  - Find the best score for the last round
        \**************************************************/
 
+       lastDirC = lastLastDirC;
        #if !defined BYTEMATRIX
+          lastLastDirC = getTwoBitElm(&insDir);
           waterTwoBitMaxScore(
             dirMatrix,
             settings,
@@ -974,6 +981,7 @@ struct alnMatrixStruct * WatermanAltAln(
           ); /*Update the scores*/
 
        #else
+          lastLastDirC = *insDir;
           waterByteMaxScore(
             dirMatrix,
             settings,
@@ -1021,11 +1029,12 @@ struct alnMatrixStruct * WatermanAltAln(
           #else
              *dirMatrix,
           #endif
+          lastDirC,
           lastRefStartUL,
           lastQryStartUL,
           refStartUL,
           qryStartUL,
-          refIterStr,
+          refIterStr - 1,
           refST->seqCStr,
           qryIterStr,
           qryST->seqCStr
@@ -1037,7 +1046,7 @@ struct alnMatrixStruct * WatermanAltAln(
           qryBasesST,
           refBasesST,
           *refStartUL, /*Is in index 0*/
-          refIterStr - refST->seqCStr, 
+          refIterStr - refST->seqCStr - 1, 
           *qryStartUL,
           qryIterStr - qryST->seqCStr
        ); /*Macro in waterman.h*/
@@ -1104,6 +1113,7 @@ struct alnMatrixStruct * WatermanAltAln(
        ` case, this score can only apply to indels. So,
        ` I need to move off it to avoid overwirting it
        */
+       lastDirC = lastLastDirC;
        #if !defined BYTEMATRIX
           waterTwoBitMaxScore(
             dirMatrix,
@@ -1135,6 +1145,7 @@ struct alnMatrixStruct * WatermanAltAln(
         #else
            *dirMatrix,
         #endif
+        lastDirC,
         lastRefStartUL,
         lastQryStartUL,
         refStartUL,
@@ -1175,13 +1186,13 @@ struct alnMatrixStruct * WatermanAltAln(
       */
       #if !defined BYTEMATRIX
          twoBitMvToNextElm(dirMatrix);
-         changeTwoBitElm(dirMatrix, defMvIns);
+         changeTwoBitElm(dirMatrix, defMvStop);
          twoBitMvToNextElm(dirMatrix);
 
          twoBitMvToNextElm(&insDir);
       #else
          ++dirMatrix;
-         *dirMatrix = defMvIns;
+         *dirMatrix = defMvStop;
          ++dirMatrix;
          ++insDir;
       #endif
@@ -1201,8 +1212,9 @@ struct alnMatrixStruct * WatermanAltAln(
          + *scoreOnLP;
 
       /*Update the indel column and find next deletion*/
-      *scoreOnLP += settings->gapExtendI;
+      *scoreOnLP = 0; /*First column is always insertion*/
       delScoreL = *scoreOnLP + settings->gapExtendI;
+      lastLastDirC = 0;
       ++scoreOnLP; /*Move to the first base pair*/
 
 

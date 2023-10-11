@@ -289,6 +289,9 @@ static inline void waterByteMaxScore(
 | Input:
 |   - dir:
 |     o Direction the current cell points to
+|   - lastSnpDir:
+|     o The previous direction a snp would move to
+|     o This is here to allow stops to update
 |   - lastRefStart:
 |     o Starting point of the previous reference base
 |   - lastQryStart:
@@ -319,6 +322,7 @@ static inline void waterByteMaxScore(
 \--------------------------------------------------------*/
 #define updateStartPos( \
    dir, \
+   lastSnpDir,   /*Direction of previous snp*/\
    lastRefStart, \
    lastQryStart, \
    refStartPtr, \
@@ -354,6 +358,15 @@ static inline void waterByteMaxScore(
       /*Case: Added an insertion*/ \
       case defMvSnp: \
       /*Case: Added an snp/match*/ \
+         if(lastSnpDir == defMvStop)\
+         { /*If: A snp/match would move to a stop*/\
+            (lastRefStart) = *(refStartPtr); \
+            (lastQryStart) = *(qryStartPtr); \
+            *(refStartPtr) = (refBaseStr) - (refStr); \
+            *(qryStartPtr) = (qryBaseStr) - (qryStr); \
+            break; \
+         } /*If: A snp/match would move to a stop*/\
+         \
          swapUL = (lastRefStart); \
          (lastRefStart) = *(refStartPtr); \
          *(refStartPtr) = swapUL; \

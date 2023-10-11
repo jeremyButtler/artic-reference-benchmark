@@ -2,7 +2,7 @@
 # Name: vectorWrap
 # Use:
 #  - Is a wraper for SSE2 equivlent instruction sets
-#    for SSE2, AVX2, and NEON SMID instructions.
+#    for SSE2, AVX2, AVX512, and NEON SMID instructions.
 #  - This is not designed to replace better options, such
 #    as SIMDe, but it is designed to provide single
 #    functions that can be complied for all supported
@@ -18,6 +18,8 @@
 # Compiling for gcc:
 #  - sse: -DSSE
 #  - avx2: -DAVX2 -mavx2
+#  - avx512: -DAVX512 -mavx512BW
+#    - Do not use -mavx512f.
 #  - neon: -mfpu=neon-vfpv4 or -mfpu=neon
 # Supporting functions:
 #  - Are here to to provide support for the vectors or do
@@ -27,6 +29,9 @@
 #  - These functions may be slower than doing scalar
 #    operations instead.
 # Datatype:
+#  - This is the worst world between ARM and AVX512.
+#    Inorder to support all datatypes I need to support the
+#    datatypes unique to NEON and AVX512.
 #  - vectIX is an alias for the vector data type. The X in
 #    vectIX is the size of the datatype working on with the
 #    vecotor. For example a vectors of int8_t's would be
@@ -35,6 +40,26 @@
 #      vectI32.
 #    o 64 bit numbers are not supported, due to intel
 #      having no comaparisons for SSE2.
+#  - For comparisions their are three additional data types
+#    o maskI8
+#       - for __mask64 data type (8 bit comparisons)
+#      - This is returned for all 8 bit comparisons
+#    o maskI16
+#      - for __mask32 data type (16 bit comparisons)
+#      - This is returned for all 16 bit comparisons
+#      - 16 bit comparisoins will likely behave differntly
+#        in AVX512 than AVX2 or SSE.
+#        - This is due to a change in intels return type
+#    o maskI32
+#      - for __mask16 data type (32 bit comparisons)
+#      - This is returned for all 32 bit comparisons
+#      - 32 bit comparisoins will likely behave differntly
+#        in AVX512 than AVX2 or SSE.
+#        - This is due to a change in intels return type
+#  - One warning about macros:
+#    Sending in a pointer by "pointer + newPosition" does
+#    not work properly if parentheses are not used. In
+#    this case do (pionter + newPosition)
 # Definitions:
 #   - vectorBits:
 #     o Is the number of bits in the vector.
@@ -46,7 +71,7 @@
 #  - For each function there are 8 bit, 16 bit, and 23 bit
 #    variants. This is represented by X in the function
 #    namnes listed here.
-#  - Functions either take ro return a minVectIX or vactIX.
+#  - Functions either take ro return a maskIX or vactIX.
 #  - Input/Output
 #    o mmLoadIX
 #      - Loads a an array into the vector
@@ -70,15 +95,16 @@
 #      - This function casts input array, so it is only
 #        datatype specific for the vector type, not the
 #        array.
-#  - Compaisons (returns mmaskx)
+#  - Compaisons (returns maskx)
 #    o fixIXCmpMaskCnt:
 #      - These functions make sure that bit counts are
 #        corrected for the differences in return
 #        comparisons between comparisons.
 #    o mmStoreIXCmpMask:
-#      - This stores a minVectIX into an unsigned long
-#      - Note, because of differences between SSE and NEON,
-#        this function will have slighty different output.
+#      - This stores a maskIX into an unsigned long
+#      - Note, because of differences between SSE, AVX512,
+#        and NEON, this function will have slighty
+#        different output.
 #        o NEON64 returns the acutal vector full of ones
 #          or zeros.
 #        o NEON returns a long with multiple bits per
@@ -86,12 +112,18 @@
 #        o SSE and AVX2 returns an long (techincally int)
 #          with 1 bit for every 8 bits
 #          (number of bits in datatype / 8).
+#        o AVX512 returns a mask with 1 bit per datatype
+#       - You can correct counts and a bit index by calling
+#         fixIXCmpMaxkCnt
 #    o mmCmpGtIX
 #      - Do a greater then comparison on vectors
+#      - Returns an maskIX
 #    o mmCmpLtIX
 #      - Do a lesser then comparison on vectors
+#      - Returns an maskIX
 #    o mmCmpEqIX
 #      - Do an is equal comparison on vectors
+#      - Returns an maskIX
 #  - Logical
 #    o mmAndNotIX
 #      - Not the first vector and then do an & (and) on the
@@ -129,6 +161,8 @@
 #   - <stdint.h>
 #   - <immintrin.h>
 #   - <arm_neon.h>
+# TODO:
+#   - Test arm_neon instructions
 #########################################################*/
 
 /*
@@ -136,6 +170,7 @@
    - SSE is default gcc (no flag needed)
    - AVX is -mavx
    - AVX2 is -mavx2
+   - AVX512 is -mavx512bw
 */
 
 #ifndef VECTORWRAP_H
@@ -169,15 +204,36 @@
 ` case were the user is donig a scalar fallback
 */
 
-#if defined AVX2 || SSE || NEON || NEON64
+#if defined AVX512 || AVX2 || SSE || NEON || NEON64
 
 #ifdef DEBUG
 <immintrin_dbg.h> /*For debugging*/
 #endif
 
-#ifdef AVX2                  /*256 bit registers*/
+#ifdef AVX512               /*512 bit registers*/
   #include <immintrin.h>
-  #include "vectWrapAvx512Fun.h"
+
+  #define vectorBits 512
+  #define vectorBytes 64
+
+  typedef __m512i vectI8;  /*vector of bytes (8bits)*/
+  typedef __m512i vectI16; /*vector of shorts (16 bits)*/
+  typedef __m512i vectI32; /*vector of ints (32 bits)*/
+
+  typedef __m512i vectPrefU8;  /*Prefer unsigned bytes*/
+  typedef __m512i vectPrefU16; /*Prefer unsigned shorts*/
+  typedef __m512i vectPrefU32; /*Prefer unsinged ints*/
+
+  typedef __m512i vectI8;  /*vector of bytes (8bits)*/
+  typedef __m512i vectI16; /*vector of shorts (16 bits)*/
+  typedef __m512i vectI32; /*vector of ints (32 bits)*/
+
+  typedef __mask16 maskI32;
+  typedef __mask32 maskI16;
+  typedef __mask64 maskI8;  /*Mask of 8bit values*/
+
+#elif AVX2                  /*256 bit registers*/
+  #include <immintrin.h>
 
   #define vectorBits 256
   #define vectorBytes 32
@@ -186,15 +242,15 @@
   typedef __m256i vectI16; /*vector of shorts (16 bits)*/
   typedef __m256i vectI32; /*vector of ints (32 bits)*/
 
-  typedef __m256i vectPrefU8;  /*Prefer unsigned bytes*/
-  typedef __m256i vectPrefU16; /*Prefer unsigned shorts*/
-  typedef __m256i vectPrefU32; /*Prefer unsinged ints*/
+  typedef __m128i vectPrefU8;  /*Prefer unsigned bytes*/
+  typedef __m128i vectPrefU16; /*Prefer unsigned shorts*/
+  typedef __m128i vectPrefU32; /*Prefer unsinged ints*/
 
-#elif SSE || SSE4           /*128 bit registers*/
-  #ifdef SSE4
-     #define SSE
-  #endif 
+  typedef __m256i maskI32;
+  typedef __m256i maskI16;
+  typedef __m256i maskI8;
 
+#elif SSE                   /*128 bit registers*/
   #include <immintrin.h>
 
   #define vectorBits 128
@@ -207,6 +263,10 @@
   typedef __m128i vectPrefU8;  /*Prefer unsigned bytes*/
   typedef __m128i vectPrefU16; /*Prefer unsigned shorts*/
   typedef __m128i vectPrefU32; /*Prefer unsinged ints*/
+
+  typedef __m128i maskI32;
+  typedef __m128i maskI16;
+  typedef __m128i maskI8;
 
 #elif NEON
   #include <arm_neon.h>  /*Arm neon support*/
@@ -222,6 +282,10 @@
   typedef uint16x8_t vectPrefU16;/*Prefer unsigned shorts*/
   typedef uint32x4_t vectPrefU32;/*Prefer unsigned ints*/
 
+  typedef int8x16_t maskI8;
+  typedef int16x8_t maskI16;
+  typedef int32x4_t maskI32;
+
 #elif NEON64
   #include <arm_neon.h>  /*Arm neon support*/
 
@@ -236,8 +300,11 @@
   typedef uint16x4_t vectPrefU16;/*Prefer unsigned shorts*/
   typedef uint32x2_t vectPrefU32;/*Prefer unsigned ints*/
 
+  typedef int8x8_t maskI8;
+  typedef int16x4_t maskI16;
+  typedef int32x2_t maskI32;
 #else
-  #error No vector support (use AVX2, SSE4, or SSE)
+  #error No vector support (use AVX512, AVX2, or SSE)
 #endif
 
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
@@ -263,29 +330,516 @@
 ^  - Functions (Not used for this program)
 \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
+
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
 ^ Sec-05:
 ^  - Macros defing vector functions
+^  o sec-05 sub-01:
+^    - Macros for AVX512 support (512 bit vectors)
 ^  o sec-05 sub-02:
 ^    - Macros for AVX support (256 bit vectors)
 ^  o sec-05 sub-03:
 ^    - Macros for SEE support (128 bit vectors)
-*  o sec-05 sub-04:
-*    - Macros for arm neon 128bit support
-*  o sec-05 sub-05:
-*    - Macros for arm 64bit support
 \<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+/*********************************************************\
+* Sec-05 Sub-01:
+*  - Macros for AVX512 support (512 bit vectors)
+*  o sec-05 sub-01 cat-01:
+*    - Input/output functions (load, set, store)
+*  o sec-05 Sub-01 Cat-02:
+*    - Comparison functions (if)
+*  o sec-05 Sub-01 Cat-03:
+*    - Logical functions (and, or, xor)
+*  o sec-05 Sub-01 Cat-04:
+*    - Bit manipulation functions (shifts)
+*  o sec-05 sub-01 cat-05:
+*    - Math functions (add and sub)
+*  o sec-05 sub-01 cat-06:
+*    - Conversion (casting)
+\*********************************************************/
+
+#ifdef AVX512
+
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++\
+  + Sec-05 Sub-01 Cat-01:
+  +  - Input/output functions (load, set, store)
+  \*+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+  /*Aligned loading*/
+  #define mmLoadI8(inVectI8, array) { \
+    (inVectI8) = _mm512_load_si512((__m512i *) (array)); \
+  }
+
+  #define mmLoadI16(inVectI16, array) { \
+    (inVectI16) = _mm512_load_si512((__m512i *) (array)); \
+  }
+
+  #define mmLoadI32(inVectI32, array) { \
+    (inVectI32) = _mm512_load_si512((__m512i *) (array)); \
+  }
+
+  // Unaligned loading
+  #define mmLoadUI8(inVectI8, array) { \
+    (inVectI8) = _mm512_loadu_si512((__m512i *) (array)); \
+  }
+
+  #define mmLoadUI16(inVectI16, array) { \
+    (inVectI16) = _mm512_loadu_si512((__m512i *) (array));\
+  }
+
+  #define mmLoadUI32(inVectI32, array) { \
+    (inVectI32) = _mm512_loadu_si512((__m512i *) (array));\
+  }
+
+  // Making a zero vector
+  #define mmSetZeroI8(inVectI8) {\
+    (inVectI8) = _mm512_setzero_si512(); \
+  }
+
+  #define mmSetZeroI16(inVectI16) {\
+    (inVectI16) = _mm512_setzero_si512(); \
+  }
+
+  #define mmSetZeroI32(inVectI32) {\
+    (inVectI32) = _mm512_setzero_si512(); \
+  }
+
+  // Set a single element for all vector positions
+  #define mmSet1I8(inVectI8, valC) { \
+    (inVectI8) = _mm512_set1_epi8((valC)); \
+  }
+
+  #define mmSet1I16(inVectI16, valC) { \
+    (inVectI16) = _mm512_set1_epi16((valC)); \
+  }
+
+  #define mmSet1I32(inVectI32, valC) { \
+    (inVectI32) = _mm512_set1_epi32((valC)); \
+  }
+
+  // Store vector output into an array
+  #define mmStoreI8(array, inVectI8) { \
+    _mm512_store_si512((__m512i *) (array), (inVectI8)); \
+  }
+
+  #define mmStoreI16(array, inVectI16) { \
+    _mm512_store_si512((__m512i *) (array), (inVectI16)); \
+  }
+
+  #define mmStoreI32(array, inVectI32) { \
+    _mm512_store_si512((__m512i *) (array), (inVectI32)); \
+  }
+
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++\
+  + Sec-05 Sub-01 Cat-02:
+  +  - Comparison functions (if)
+  \*+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+  // This first part deals with storing a maks from a
+  // comaparison
+  // retUL is an unsigned long
+  #define storeI8CmpMask(retUL, maskI8) { \
+    _store_mask64((__mask64 *) (retUL), (maskI8)); \
+  } // Mask is from comparing 8 bit integers
+
+  // retUL is an unsinged long
+  #define storeI16CmpMask(retUL, maskI16) { \
+    _store_mask64((__mask32 *) (retUL), (maskI16)); \
+  } // Mask is from comparing 16 bit integers
+
+  // retUL is an unsinged long
+  #define storeI32CmpMask(retUL, maskI32) { \
+    _store_mask16((__mask16 *) (retUL), (maskI32)); \
+  } // Mask is from comparing 32 bit integers
+
+  // This is here to support SSE2, AVX2, and NEON. 
+  // The returned mask in AVX512 has only one bit per
+  // data type in comparison
+  #define fixI8CmpMaskCnt(retUL,inUL) ((retUL) = (inUL))
+  #define fixI16CmpMaskCnt(retUL,inUL) ((retUL) = (inUL))
+  #define fixI32CmpMaskCnt(retUL,inUL) ((retUL) = (inUL))
+
+  // This next part deals with the comparison functions
+
+  // Comparison functions
+  #define mmCmpGtI8(outMaskI8, vectOneI8, vectTwoI8) { \
+    (outMaskI8) = \
+      _mm512_cmpgt_epi8_mask((vectOneI8), (vectTwoI8)); \
+  }
+
+  #define mmCmpGtI16(outMaskI16, vectOneI16, vectTwoI16){ \
+    (outMaskI16) = \
+      _mm512_cmpgt_epi16_mask((vectOneI16),(vectTwoI16)); \
+  }
+
+  #define mmCmpGtI32(outMaskI32, vectOneI32, vectTwoI32){ \
+    (outMaskI32) = \
+      _mm512_cmpgt_epi32_mask((vectOneI32),(vectTwoI32)); \
+  }
+
+  #define mmCmpLtI8(outMaskI8, vectOneI8, vectTwoI8) { \
+    (outMaskI8) = \
+      _mm512_cmplt_epi8_mask((vectOneI8), (vectTwoI8)); \
+  }
+
+  #define mmCmpLtI16(outMaskI16, vectOneI16, vectTwoI16){ \
+    (outMaskI16) = \
+      _mm512_cmplt_epi16_mask((vectOneI16),(vectTwoI16)); \
+  }
+
+  #define mmCmpLtI32(outMaskI32, vectOneI32, vectTwoI32){ \
+    (outMaskI32) = \
+      _mm512_cmplt_epi32_mask((vectOneI32),(vectTwoI32)); \
+  }
+
+  #define mmCmpEqI8(outMaskI8, vectOneI8, vectTwoI8) { \
+    (outMaskI8) = \
+       _mm512_cmpeq_epi8_mask((vectOneI8), (vectTwoI8)); \
+  }
+
+  #define mmCmpEqI16(outMaskI16, vectOneI16, vectTwoI16){ \
+    (outMaskI16) = \
+      _mm512_cmpeq_epi16_mask((vectOneI16),(vectTwoI16)); \
+  }
+
+  #define mmCmpEqI32(outMaskI32, vectOneI32, vectTwoI32){ \
+    (outMaskI32) = \
+      _mm512_cmpeq_epi32_mask((vectOneI32),(vectTwoI32)); \
+  }
+
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++\
+  + Sec-05 Sub-01 Cat-03:
+  +  - Logical functions (and, or, xor)
+  \*+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+  // and not function. The extra functions here are to
+  // support the NEON functions
+  #define mmAndNotI8(outVectI8, notVectI8, inVectI8) { \
+    (outVectI8) = \
+      _mm512_andnot_si512((notVectI8), (inVectI8)); \
+  }
+
+  #define mmAndNotI16(outVectI16, notVectI16, inVectI16){ \
+    (outVectI16) = \
+      _mm512_andnot_si512((notVectI16), (inVectI16)); \
+  }
+
+  #define mmAndNotI32(outVectI32, notVectI32, inVectI32){ \
+    (outVectI32) = \
+      _mm512_andnot_si512((notVectI32), (inVectI32)); \
+  }
+
+  // And functions (extra functions for NEON support)
+  #define mmAndI8(outVectI8, vectOneI8, vectTwoI8) { \
+    (outVectI8) = \
+      _mm512_and_si512((vectOneI8), (vectTwoI8)); \
+  }
+
+  #define mmAndI16(outVectI16, vectOneI16, vectTwoI16) { \
+    (outVectI16) = \
+      _mm512_and_si512((vectOneI16), (vectTwoI16)); \
+  }
+
+  #define mmAndI32(outVectI32, vectOneI32, vectTwoI32) { \
+    (outVectI32) = \
+      _mm512_and_si512((vectOneI32), (vectTwoI32)); \
+  }
+
+  // Or functions
+  #define mmOrI8(outVectI8, vectOneI8, vectTwoI8) { \
+    (outVectI8) = \
+      _mm512_or_si512((vectOneI8), (vectTwoI8)); \
+  }
+
+  #define mmOrI16(outVectI16, vectOneI16, vectTwoI16) { \
+    (outVectI16) = \
+      _mm512_or_si512((vectOneI16), (vectTwoI16)); \
+  }
+
+  #define mmOrI32(outVectI32, vectOneI32, vectTwoI32) { \
+    (outVectI32) = \
+      _mm512_or_si512((vectOneI32), (vectTwoI32)); \
+  }
+
+  // Or functions
+  #define mmXOrI8(outVectI8, vectOneI8, vectTwoI8) { \
+    (outVectI8) = \
+      _mm512_xor_si512((vectOneI8), (vectTwoI8)); \
+  }
+
+  #define mmXOrI16(outVectI16, vectOneI16, vectTwoI16) { \
+    (outVectI16) = \
+      _mm512_xor_si512((vectOneI16), (vectTwoI16));\
+  }
+
+  #define mmXOrI32(outVectI32, vectOneI32, vectTwoI32) { \
+    (outVectI32) = \
+      _mm512_xor_si512((vectOneI32), (vectTwoI32)); \
+  }
+
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++\
+  + Sec-05 Sub-01 Cat-04:
+  +  - Bit manipulation functions (shifts)
+  \*+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+  #define mmShiftRightI8(outVectI8, inVectI8, numBytesI){\
+    (outVectI8) = \
+      _mm512_srli_si512((inVectI8), (numBytesI)); \
+  }
+
+  // the << 1 is to account for two bytes per short
+  // This is to ensure that this 
+  #define mmShiftRightI16(outVectI16,inVectI16,numShorts){\
+    (outVectI16) =\
+      _mm512_srli_si512((inVectI16), (numShorts) <<1);\
+  }
+
+  // The << 2 is to account for four bytes per int
+  #define mmShiftRightI32(outVectI32, inVectI32, numInts){\
+    (outVectI) = \
+      _mm512_srli_si512((inVectI32), (numInts) << 2);\
+  }
+
+  // Shift left
+  #define mmShiftLeftI8(outVectI8, inVectI8, numBytesI){\
+    (outVectI8) = \
+      _mm512_slli_si512((inVectI8), (numBytesI)); \
+  }
+
+  // the << 1 is to account for two bytes per short
+  // This is to ensure that this 
+  #define mmShiftLeftI16(outVectI16,inVectI16,numShorts){\
+    (outVectI16) =\
+      _mm512_slli_si512((inVectI16), (numShorts) <<1);\
+  }
+
+  // The << 2 is to account for four bytes per int
+  #define mmShiftLeftI32(outVectI32, inVectI32, numInts){\
+    (outVectI) = \
+      _mm512_slli_si512((inVectI32), (numInts) << 2);\
+  }
+
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++\
+  + Sec-05 Sub-01 Cat-05:
+  +  - Math functions (add and sub)
+  \*+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+   #define mmAddI8(outVectI8, vectOneI8, vectTwoI8) {\
+     (outVectI8) = \
+      _mm512_add_epi8((vectOneI8), (vectTwoI8)); \
+   }
+
+   #define mmAddI16(outVectI16, vectOneI16, vectTwoI16) { \
+     (outVectI16) = \
+       _mm512_add_epi16((vectOneI16), (vectTwoI16)); \
+   }
+
+   #define mmAddI32(outVectI32, vectOneI32, vectTwoI32) { \
+     (outVectI32) = \
+       _mm512_add_epi32((vectOneI32), (vectTwoI32)); \
+   }
+
+   // Saturation addition
+   #define mmAddSatI8(outVectI8, vectOneI8, vectTwoI8) {\
+     (outVectI8) = \
+       _mm512_adds_epi8((vectOneI8), (vectTwoI8)); \
+   }
+
+   #define mmAddSatI16(outVectI16,vectOneI16,vectTwoI16){ \
+     (outVectI16) = \
+       _mm512_adds_epi16((vectOneI16), (vectTwoI16)); \
+   }
+
+   #define mmAddSatI32(outVectI32,vectOneI32,vectTwoI32){ \
+     (outVectI32) = \
+       _mm512_adds_epi32((vectOneI32), (vectTwoI32)); \
+   }
+
+   // Subtraction
+
+   #define mmSubI8(outVectI8, vectOneI8, vectTwoI8) { \
+     (outVectI8) = \
+       _mm512_sub_epi8((vectOneI8), (vectTwoI8)); \
+   }
+
+   #define mmSubI16(outVectI16, vectOneI16, vectTwoI16){ \
+     (outVectI16) = \
+       _mm512_sub_epi16((vectOneI16), (vectTwoI16)); \
+   }
+
+   #define mmSubI32(outVectI32, vectOneI32, vectTwoI32){ \
+     (outVectI32) = \
+       _mm512_sub_epi32((vectOneI32), (vectTwoI32)); \
+   }
+
+   // Satuturation Subtraction
+   #define mmSubSatI8(outVectI8, vectOneI8, vectTwoI8) { \
+     (outVectI8) = \
+       _mm512_subs_epi8((vectOneI8), (vectTwoI8)); \
+   }
+
+   #define mmSubSatI16(outVectI16,vectOneI16,vectTwoI16){ \
+     (outVectI16) = \
+       _mm512_subs_epi16((vectOneI16), (vectTwoI16)); \
+   }
+
+   #define mmSubSatI32(outVectI32,vectOneI32,vectTwoI32){ \
+     (outVectI32) = \
+       _mm512_subs_epi32((vectOneI32), (vectTwoI32)); \
+   }
+
+   /*+++++++++++++++++++++++++++++++++++++++++++++++++++++\
+   + Sec-05 Sub-01 Cat-06:
+   +  - Conversion (casting)
+   \+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+   // These are here to support NEON
+   #define cnvtI8ToI16(outVectI16, inVectI8) { \
+     (outVectI16) = (inVectI8); \
+   }
+
+   #define cnvtI8ToI32(outVectI32, inVectI8) { \
+     (outVectI32) = (inVectI8); \
+   }
+
+   #define cnvtI16ToI8(outVectI8, inVectI16) { \
+     (outVectI8) = (inVectI16); \
+   }
+
+   #define cnvtI16ToI32(outVectI32, inVectI16) { \
+     (outVectI32) = (inVectI16); \
+   }
+
+   #define cnvtI16ToI32(outVectI32, inVectI16) { \
+     (outVectI32) = (inVectI16); \
+   }
+
+   #define cnvtI32ToI8(outVectI8, inVectI32) { \
+     (outVectI8) = (inVectI32); \
+   }
+
+   #define cnvtI32ToI16(outVectI16, inVectI32) { \
+     (outVectI16) = (inVectI32); \
+   }
+
+   /*+++++++++++++++++++++++++++++++++++++++++++++++++++++\
+   + Sec-05 Sub-01 Cat-07:
+   +  - Max
+   \+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+   /* Byte maximize
+   `  SSE2 does not support I8 max
+   */
+   #define mmMaxPrefI8(outVectI8,firstVectI8,secVectI8){\
+      (outVectI8) = \
+           _mm512_max_epi8((firstVectI8), (secVectI8)); \
+   }
+
+   #define mmMaxU8(outVectI8,firstVectI8,secVectI8){\
+      (outVectI8) = \
+        _mm512_max_epu8((firstVectI8), (secVectI8)); \
+   }
+
+   /*16 bit maximizes*/
+   #define mmMaxI16(outVectI16, firstVectI16, secVectI16){\
+      (outVectI16) = \
+         _mm512_max_epi16((firstVectI16), (secVectI16)); \
+   }
+
+   #define mmMaxPrefU16( \
+         outVectU16, \
+         firstVectU16, \
+         secVectU16 \
+      ){\
+        (outVectU16) = \
+           _mm512_max_epu16((firstVectU16), (secVectU16)); \
+   }
+
+   /*32 unsigned bit maximizes (if possible)*/
+   #define mmMaxPrefU32( \
+      outVectU32, \
+      firstVectU32, \
+      secVectU32 \
+   ){\
+      (outVectU32) = \
+         _mm512_max_epu32((firstVectU32), (secVectU32)); \
+   }
+
+   /*32 signed bit maximizes (if possible)*/
+   #define mmMaxPrefI32( \
+      outVectI32, \
+      firstVectI32, \
+      secVectI32 \
+   ){\
+      (outVectI32) = \
+         _mm512_max_epi32((firstVectI32), (secVectI32)); \
+   }
+
+   /*+++++++++++++++++++++++++++++++++++++++++++++++++++++\
+   + Sec-05 Sub-01 Cat-08:
+   +  - Min
+   \+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+   /* Byte minimize
+   `  SSE2 does not support I8 min
+   */
+   #define mmMinPrefI8(outVectI8,firstVectI8,secVectI8){\
+      (outVectI8) = \
+         _mm512_min_epi8((firstVectI8), (secVectI8)); \
+   }
+
+   #define mmMinU8(outVectI8,firstVectI8,secVectI8){\
+      (outVectI8) = \
+        _mm512_min_epu8((firstVectI8), (secVectI8)); \
+   }
+
+   /*16 bit minimize*/
+   #define mmMinI16(outVectI16, firstVectI16, secVectI16){\
+      (outVectI16) = \
+         _mm512_min_epi16((firstVectI16), (secVectI16)); \
+   }
+
+   #define mmMinPrefU16( \
+      outVectU16, \
+      firstVectU16, \
+      secVectU16 \
+   ){\
+      (outVectU16) = \
+         _mm512_min_epu16((firstVectU16), (secVectU16)); \
+   }
+
+   /*32 unsigned bit minimize (if possible)*/
+   #define mmMinPrefU32( \
+      outVectU32, \
+      firstVectU32, \
+      secVectU32 \
+   ){\
+     (outVectU32) = \
+        _mm512_min_epu32((firstVectU32), (secVectU32)); \
+   }
+
+   /*32 signed bit minimize (if possible)*/
+   #define mmMinPrefI32( \
+      outVectI32, \
+      firstVectI32, \
+      secVectI32 \
+   ){\
+     (outVectI32) = \
+        _mm512_min_epi32((firstVectI32), (secVectI32)); \
+   }
+
 
 /*********************************************************\
 * Sec-05 Sub-02:
 *  - Macros for AVX support (256 bit vectors)
 *  o sec-05 sub-02 cat-01:
 *    - Input/output functions (load, set, store)
-*  o sec-05 Sub-02 Cat-02:
+*  o sec-05 sub-02 cat-02:
 *    - Comparison functions (if)
-*  o sec-05 Sub-02 Cat-03:
+*  o sec-05 sub-02 cat-03:
 *    - Logical functions (and, or, xor)
-*  o sec-05 Sub-02 Cat-04:
+*  o sec-05 sub-02 cat-04:
 *    - Bit manipulation functions (shifts)
 *  o sec-05 sub-02 cat-05:
 *    - Math functions (add and sub)
@@ -370,20 +924,21 @@
   +  - Comparison functions (if)
   \*+++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  // Functions for converting mask to longs
-  // retUL is an unsigned long
-  #define storeI8CmpMask(retUL, inVectI8) { \
-    (retUL) = _mm256_movemask_epi8((inVectI8)); \
+  /*Functions for converting mask to longs
+  ` retUL is an unsigned long
+  */
+  #define storeI8CmpMask(retUL, maskI8) { \
+    (retUL) = _mm256_movemask_epi8((maskI8)); \
   } // Mask is from comparing 8 bit integers
 
-  // retUL is an unsinged long
-  #define storeI16CmpMask(retUL, inVectI16) { \
-    (retUL) = _mm256_movemask_epi8((inVectI16)); \
+  /*Returns an unsigned long*/
+  #define storeI16CmpMask(maskI16) { \
+     _mm256_movemask_epi8((maskI16)); \
   } // Mask is from comparing 16 bit integers
 
   // retUL is an unsinged long
-  #define storeI32CmpMask(retUL, inVectI32) { \
-    (retUL) = _mm256_movemask_epi8((inVectI32)); \
+  #define storeI32CmpMask(maskI32) { \
+     _mm256_movemask_epi8((maskI32)); \
   } // Mask is from comparing 32 bit integers
 
   // Correct the bitcounts in the comparison masks
@@ -858,18 +1413,18 @@
 
   // Functions for converting mask to longs
   // retUL is an unsigned long
-  #define storeI8CmpMask(retUL, inVectI8) { \
-    (retUL) = _mm_movemask_epi8((inVectI8)); \
+  #define storeI8CmpMask(retUL, maskI8) { \
+    (retUL) = _mm_movemask_epi8((maskI8)); \
   } // Mask is from comparing 8 bit integers
 
   // retUL is an unsinged long
-  #define storeI16CmpMask(retUL, inVectI16) { \
-    (retUL) = _mm_movemask_epi8((inVectI16)); \
+  #define storeI16CmpMask(retUL, maskI16) { \
+    (retUL) = _mm_movemask_epi8((maskI16)); \
   } // Mask is from comparing 16 bit integers
 
   // retUL is an unsinged long
-  #define storeI32CmpMask(retUL, inVectI32) { \
-    (retUL) = _mm_movemask_epi8((inVectI32)); \
+  #define storeI32CmpMask(retUL, maskI32) { \
+    (retUL) = _mm_movemask_epi8((maskI32)); \
   } // Mask is from comparing 32 bit integers
 
   // Correct the bitcounts in the comparison masks
@@ -1329,10 +1884,6 @@
 *    - Conversion (casting)
 \*********************************************************/
 
-/*Insert
-   inVectI16 = vsetq_lane_s16(valI16, inVectI16, posI)
-*/
-
 #elif NEON
   /*++++++++++++++++++++++++++++++++++++++++++++++++++++++\
   + Sec-05 Sub-04 Cat-01:
@@ -1381,15 +1932,15 @@
 
    // Set zero values (here to support intel)
    #define mmSeqZeroI8(inVectI8) { \
-     (inVectI8) = vsubq_s8(0); \
+     (inVectI8) = vdupq_n_s8(0); \
    }
 
    #define mmSeqZeroI16(inVectI16) { \
-     (inVectI16) = vsubq_s16(0); \
+     (inVectI16) = vdupq_n_s16(0); \
    }
 
    #define mmSeqZeroI32(inVectI32) { \
-     (inVectI32) = vsubq_s32(0); \
+     (inVectI32) = vdupq_n_s32(0); \
    }
 
   // Output functions; storing vectors in arrays
@@ -1413,22 +1964,22 @@
 // Store the mask functions (unsigned long returns)
    // The logic for these store functions came from
    // https://community.arm.com/arm-community-blogs/b/infrastructure-solutions-blog/posts/porting-x86-vector-bitmask-optimizations-to-arm-neon
-   #define storeI8CmpMask(retUL, inVectI8) { \
-     uint16x8_t res16x8 = vreinterpretq_u16_s8((inVectI8)); \
+   #define storeI8CmpMask(retUL, maskI8) { \
+     uint16x8_t res16x8 = vreinterpretq_u16_s8((maskI8)); \
      uint8x8_t res8x8 = vshrn_n_u16(res16x8, 4); \
      uint64x1_t res64x1 = vreinterpret_u64_u8(res8x8); \
      (retUL) = vget_lane_u64(res64x1, 0); \
    }
 
-   #define storeI16CmpMask(retUL, inVectI16) { \
-     uint32x4_t res32x4 =vreinterpretq_u32_s16((inVectI16));\
+   #define storeI16CmpMask(retUL, maskI16) { \
+     uint32x4_t res32x4 =vreinterpretq_u32_s16((maskI16));\
      uint16x4_t res16x4 = vshrn_n_u32(res32x4, 4); \
      uint64x1_t res64x1 = vreinterpret_u64_u16(res16x4); \
      (retUL) = vget_lane_u64(res64x1, 0); \
    }
 
-   #define storeI32CmpMask(retUL, inVectI32) { \
-     uint64x2_t res64x2 =vreinterpretq_u64_s32((inVectI32));\
+   #define storeI32CmpMask(retUL, maskI32) { \
+     uint64x2_t res64x2 =vreinterpretq_u64_s32((maskI32));\
      uint32x2_t res32x2 = vshrn_n_u64(tmp64x2, 4); \
      uint64x1_t res64x1 = vreinterpret_u64_u32(tmp32x2); \
      (retUL) = vget_lane_u64(res64x1, 0); \
@@ -1749,7 +2300,7 @@
 
 /*********************************************************\
 * Sec-05 Sub-05:
-*  - Macros for arm (64bit) support (NEED TO FILL)
+*  - Macros for arm support (NEED TO FILL)
 *  o sec-05 sub-05 cat-01:
 *    - Input/output functions (load, set, store)
 *  o sec-05 sub-05 cat-02:
@@ -1809,15 +2360,15 @@
 
    // Set zero values (here to support intel)
    #define mmSeqZeroI8(inVectI8) { \
-     (inVectI8) = vsub_s8(0); \
+     (inVectI8) = vdup_n_s8(0); \
    }
 
    #define mmSeqZeroI16(inVectI16) { \
-     (inVectI16) = vsub_s16(0); \
+     (inVectI16) = vdup_n_s16(0); \
    }
 
    #define mmSeqZeroI32(inVectI32) { \
-     (inVectI32) = vsub_s32(0); \
+     (inVectI32) = vdup_n_s32(0); \
    }
 
   // Output functions; storing vectors in arrays
@@ -1842,19 +2393,19 @@
    ` The logic for these store functions came from
    ` https://community.arm.com/arm-community-blogs/b/infrastructure-solutions-blog/posts/porting-x86-vector-bitmask-optimizations-to-arm-neon
    */
-   #define storeI8CmpMask(retUL, inVectI8) { \
+   #define storeI8CmpMask(retUL, maskI8) { \
      (retUL) = \
-       vget_lane_u64(vreinterpret_u64_s8((inVectI8)), 0);\
+       vget_lane_u64(vreinterpret_u64_s8((maskI8)), 0);\
    }
 
-   #define storeI16CmpMask(retUL, inVectI16) { \
+   #define storeI16CmpMask(retUL, maskI16) { \
      (retUL) = \
-      vget_lane_u64(vreinterpret_u64_s16((inVectI16)), 0);\
+       vget_lane_u64(vreinterpret_u64_s16((maskI16)), 0);\
    }
 
-   #define storeI32CmpMask(retUL, inVectI32) { \
+   #define storeI32CmpMask(retUL, maskI32) { \
      (retUL) = \
-      vget_lane_u64(vreinterpret_u64_s32((inVectI32)), 0);\
+       vget_lane_u64(vreinterpret_u64_s32((maskI32)), 0);\
    }
 
    // Correct the bitcounts in the comparison masks
@@ -2170,7 +2721,7 @@
    ){\
      (outVectI32)=vmin_s32((firstVectI32),(secVectI32));\
    }
-#endif /*Commands for AVX2, SSE2, SSE4, and NEON*/
+#endif /*Commands for AVS512, AVX2, SSE3, and NEON*/
 
 #else
   /*This only happens for scaler code. This is here so

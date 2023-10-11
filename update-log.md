@@ -8,6 +8,12 @@ This is a log of updates I made. This should be short and
   - I have not been able to replicate this, but it has
     poped up in benchmarking.
 
+# oct 10, 2023
+
+- Adjusted default settings for alnSeq to prefer deletions
+  over snps/matches. This should produce more accurate
+  assemblies.
+
 # sep 26, 2023
 
 - Switched to quast for measuring accuracy. This fixed

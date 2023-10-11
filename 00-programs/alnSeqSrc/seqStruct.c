@@ -347,6 +347,7 @@ uint8_t readFaSeq(
 
     // Used To initilize the sequence loop
     char tmpC = 'C';
+    unsigned long tmpUL = 0;
 
     uint16_t extraBuffUS = 1024;
     uint8_t errUC = 0;
@@ -414,6 +415,12 @@ uint8_t readFaSeq(
 
         /*Get on first character in the new buffer*/
         oldIterCStr = seqST->seqCStr + seqST->lenSeqUL;
+
+        /*Peek ahead in the file*/
+        tmpUL = fread(&tmpC, 1, 1, faFILE);
+        if(tmpUL == 0) break;
+        fseek(faFILE, -1, SEEK_CUR);
+        if(tmpC == '>') break;
     } /*While I have not reached the spacer entry*/
 
     // Check if is a valid fasta entry

@@ -13,16 +13,19 @@ This is not going to be the most well written repository.
   That is not my goal. This is just here to show what I
   found.
 
-# found error:
+# Found Error:
 
 I found that the Neeldeman aligner I built (alnSeq) had an
   issue with adding or misplacing two extra deletions. I
   plan to fix these errors later.
 
-To avoid future errors I am switching to quast and am
-  restarting my benchmarking (11-quast-bench).
-I changed the Ns, snps, and indels from the 100kb used in
-  quast to per 1kb.
+Turns out this was not an error. It ended up being due to
+  faving matches/snps over deletions. It can be fixed by
+  compiling alnSeq with a preference for deltions over
+  matches/snps. This error was due to poor assembler
+  settings.
+
+I have switched to quast, so this is not an issue.
 
 # License
 

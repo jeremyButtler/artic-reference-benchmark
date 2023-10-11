@@ -1,4 +1,82 @@
-# This should be called as "Rscript 00-Rscripts/10-graph.r"
+# This should be called as "Rscript 00-Rscripts/11-graph.r"
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 11-graph.r TOC: Table Of Contents
+#  o sec-00: 
+#    - Functions and libraries
+#  o sec-01: 
+#    - Variable declerations
+#  o sec-02: 
+#    - Prepare data
+#  o sec-03: 
+#    - Graph Lilo snp (% reference)
+#  o sec-04: 
+#    - Graph Lilo snp (by depth)
+#  o sec-05: 
+#    - graph lilo snp / indels
+#  o sec-06: 
+#    - Graph buildCon snp (% reference)
+#  o sec-07: 
+#    - Graph buildCon snp (by depth)
+#  o sec-08: 
+#    - graph buildCon snp / indels
+#  o sec-09: 
+#    - Graph ivar snp (% reference)
+#  o sec-10: 
+#    - Graph ivar snp (by depth)
+#  o sec-11: 
+#    - graph ivar snp / indels
+#  o sec-12: 
+#    - graph each pipelines snps by reference
+#  o sec-13: 
+#    - graph each pipelines snps by depth
+#  o sec-14: 
+#    - graph each pipelines snps by depth
+#  o sec-15: 
+#    - graph each pipelines number of masked bases
+#  o sec-16: 
+#    - graph each pipelines (over 30x depth) snps & indels 
+#  o sec-17: 
+#    - graph each pipelines snps by ref (over 30x depth)
+#  o sec-18: 
+#    - graph each pipelines snps by depth (over 30x)
+#  o sec-19: 
+#    - graph each pipelines (50x depth) snps and indels 
+#  o sec-20: 
+#    - graph each pipelines snps by ref (50x read depth)
+#  o sec-21: 
+#    - graph each pipelines (100x depth) snps and indels 
+#  o sec-22: 
+#    - graph each pipelines snps by ref (100x read depth)
+#  o sec-23: 
+#    - graph each pipelines (300x depth) snps and indels 
+#  o sec-24: 
+#    - graph each pipelines snps by ref (300x read depth)
+#  o sec-25: 
+#    - graph each pipelines (500x depth) snps and indels 
+#  o sec-26: 
+#    - graph each pipelines snps by ref (500x read depth)
+#  o sec-27: 
+#    - graph each pipelines (1000x depth) snps and indels 
+#  o sec-28: 
+#    - graph each pipelines snps by ref (1000x read depth)
+#  o sec-29: 
+#    - graph each consensus length by depth (>30x, all)
+#  o sec-30: 
+#    - graph each consensus length by ref (depth >30x, all)
+#  o sec-31: 
+#    - graph the time usage for each method
+#  o sec-32: 
+#    - graph the time usage for each method
+#  o sec-33: 
+#    - graph lilo by consensus length and reference
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Sec-00: 
+#  - Functions and libraries
+#  o sec-00 sub-01:
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Sec-00: 
@@ -2064,7 +2142,7 @@ saveggplot("11-quast-bench/all-over30x-snps-ref",asSvgBl);
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Sec-17: 
-#  - graph each pipelines snps by reference
+#  - graph each pipelines snps by ref (over 30x depth)
 #  o sec-17 sub-01:
 #    - make the graph
 #  o sec-17 sub-02:
@@ -2734,7 +2812,7 @@ saveggplot("11-quast-bench/all-100x-snps-ref",asSvgBl);
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Sec-22: 
-#  - graph each pipelines snps by reference(100x read depth)
+#  - graph each pipelines snps by ref (100x read depth)
 #  o sec-22 sub-01:
 #    - make the graph
 #  o sec-22 sub-02:
@@ -3001,7 +3079,7 @@ saveggplot("11-quast-bench/all-300x-snps-ref",asSvgBl);
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Sec-24: 
-#  - graph each pipelines snps by reference(300x read depth)
+#  - graph each pipelines snps by ref (300x read depth)
 #  o sec-24 sub-01:
 #    - make the graph
 #  o sec-24 sub-02:
@@ -3268,7 +3346,7 @@ saveggplot("11-quast-bench/all-500x-snps-ref",asSvgBl);
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Sec-26: 
-#  - graph each pipelines snps by reference(500x read depth)
+#  - graph each pipelines snps by ref (500x read depth)
 #  o sec-26 sub-01:
 #    - make the graph
 #  o sec-26 sub-02:
@@ -3535,7 +3613,7 @@ saveggplot("11-quast-bench/all-1000x-snps-ref",asSvgBl);
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Sec-28: 
-#  - graph each pipelines snps by reference(1000x read depth)
+#  - graph each pipelines snps by ref (1000x read depth)
 #  o sec-28 sub-01:
 #    - make the graph
 #  o sec-28 sub-02:
@@ -4120,6 +4198,122 @@ graphObj = graphObj + theme_pubr();
 
 saveggplot(
    "11-quast-bench/all-over30x-memory",
+   asSvgBl
+);
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Sec-33: 
+#  - graph lilo by consensus length and reference
+#  o sec-33 sub-01:
+#    - make the graph
+#  o sec-33 sub-02:
+#    - add in percent error markers
+#  o sec-33 sub-03:
+#    - add in the points
+#  o sec-33 sub-04:
+#    - add in the colors and shapes
+#  o sec-33 sub-05:
+#    - add in labels, axis formating, and save graph
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+#**********************************************************
+# Sec-33 Sub-01:
+#  - make the graph
+#**********************************************************
+
+graphObj = 
+   ggplot(
+      data =
+         dataDF[
+            dataDF$program == "Lilo" &
+            dataDF$refLen > 20000 &
+            dataDF$rep >= lastCompleteRepI
+            ,
+      ],
+      aes(
+         x = as.numeric(percMutate) / 100, # 100 = 1%
+         y = as.numeric(conLen),
+         color = as.character(test),
+         fill = as.character(test),
+         shape = as.character(test)
+     ) # aes
+); # make graph
+
+#**********************************************************
+# Sec-33 Sub-02:
+#  - Add in percent error markers
+#**********************************************************
+
+graphObj = graphObj + geom_hline(yintercept=29903, lty=5);
+graphObj =
+   graphObj +
+   annotate(
+      "label", # Adding an text with box annotation
+      x = 7.5,
+      y = 29903,
+      label = "Reference length"
+); # add an 0.05% line marker
+
+#**********************************************************
+# Sec-33 Sub-03:
+#  - Add in the points
+#**********************************************************
+
+graphObj =
+   graphObj +
+   geom_point(
+      size = 3,
+      alpha = 0.5,
+      position = position_jitter(height = 0, width = 0.3) 
+); # Plot points
+
+#**********************************************************
+# Sec-33 Sub-04:
+#  - Add in the colors and shapes
+#**********************************************************
+
+graphObj=graphObj + scale_shape_discrete(name = "Program");
+
+graphObj =
+   graphObj +
+   scale_fill_viridis(
+      discrete = TRUE,
+      direction = 1,
+      option = "D",
+      name = "Program"
+); # Add in color scheme
+
+graphObj =
+   graphObj +
+   scale_color_viridis(
+      discrete = TRUE,
+      direction = 1,
+      option = "D",
+      name = "Program"
+); # Add in color scheme
+
+#**********************************************************
+# Sec-33 Sub-05:
+#  - Add in labels, axis formating, and save graph
+#**********************************************************
+
+graphObj = graphObj + xlab("Reference % difference");
+graphObj = graphObj + ylab("Length of consensus");
+
+# Make sure legend is readable
+graphObj =
+   graphObj +
+   guides(
+      color = guide_legend(nrow = 3),
+      fill = guide_legend(nrow = 3),
+      shape = guide_legend(nrow = 3),
+      linetype = guide_legend(nrow = 3),
+);
+
+graphObj = graphObj + theme_pubr();
+
+saveggplot(
+   "11-quast-bench/lilo-length-ref",
    asSvgBl
 );
 
